@@ -1,5 +1,5 @@
-#include <QApplication>
+#include "app.hpp"
 int main(int argc, char* argv[]) {
-    QApplication app(argc, argv);
+    App app(argc, argv);
     return app.exec();
 }
