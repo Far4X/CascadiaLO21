@@ -2,6 +2,8 @@
 #define APP_HPP
 #include <QApplication>
 #include <iostream>
+#include "customerror.hpp"
+
 
 class App : public QApplication {
 public:
