@@ -1,8 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 #include "app.hpp"
-#include "customerror.hpp"
-
 
 class Game
 {
