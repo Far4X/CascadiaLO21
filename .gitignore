@@ -3,3 +3,4 @@ build/
 *.user
 .git/
 *.autosave
+.vs/
