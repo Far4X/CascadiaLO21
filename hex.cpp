@@ -6,11 +6,11 @@ const std::vector<Hex> Hex::directions = {
 };
 
 Hex Hex::operator+(const Hex& other) const {
-	return Hex(q + other.q, p + other.p);
+	return Hex(m_q + other.m_q, m_p + other.m_p);
 }
 
 Hex Hex::operator-(const Hex& other) const {
-	return Hex(q - other.q, p - other.p);
+	return Hex(m_q - other.m_q, m_p - other.m_p);
 }
 
 Hex Hex::getDirection(Direction d) const {
