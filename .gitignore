@@ -4,3 +4,5 @@ build/
 .git/
 *.autosave
 .vs/
+CMakeSettings.json
+CMakeLists.txt

@@ -3,8 +3,7 @@
 
 enum Wildlife {Bear, Salmon, Hawk, Elk, Fox};
 
-class WildlifeToken
-{
+class WildlifeToken {
     Wildlife m_type;
     int m_xdprintpos; //Décalage de la position d'affichage par rapport au centre du holder
     int m_ydprintpos;
