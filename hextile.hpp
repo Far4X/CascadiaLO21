@@ -17,7 +17,6 @@ public:
 	int getS() const { return -m_q - m_r; };  // useless
     HexTile operator+(const HexTile& other) const;
     HexTile operator-(const HexTile& other) const;
-    HexTile operator=(const HexTile& other) const = default;
 
 	/*
 	Hex operator+=(const Hex& other) ;

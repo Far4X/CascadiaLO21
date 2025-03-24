@@ -1,15 +1,15 @@
-#include "hextilecoordinates.hpp"
+#include "hextile.hpp"
 
 const std::vector<Hex> Hex::directions = {
-	Hex(0, -1), Hex(+1, -1), Hex(+1, 0),  // N, NE, SE
+    HexTile(0, -1), HexTile(+1, -1), HexTile(+1, 0),  // N, NE, SE
 	 Hex(0, +1), Hex(-1, +1), Hex(-1, 0)  // S, SW, NW
 };
 
-Hex Hex::operator+(const Hex& other) const {
-	return Hex(m_q + other.m_q, m_r + other.m_r);
+HexTile HexTile::operator+(const HexTile& other) const {
+    return HexTileCoordinates(m_q + other.m_q, m_r + other.m_r);
 }
 
-Hex Hex::operator-(const Hex& other) const {
+HexTile HexTile::operator-(const HexTile& other) const {
 	return Hex(m_q - other.m_q, m_r - other.m_r);
 }
 /*
@@ -30,16 +30,16 @@ Hex Hex::operator-=(const Hex& other)  {
 }
 */
 
-Hex Hex::getDirection(Direction d) const {
+HexTile HexTile::getDirection(Direction d) const {
 	return directions[d];
 }
 
-Hex Hex::getNeighbors(Direction d) const {
-	return *this + getDirection(d);
+HexTile HexTile::getNeighbors(Direction d) const {
+    return (*this + getDirection(d));
 }
 
-std::vector<Hex> Hex::getNeighbors() const {
-	std::vector<Hex> neighbors;
+std::vector<HexTile> HexTile::getNeighbors() const {
+    std::vector<HexTile> neighbors;
 	for (int i = 0; i < 6; i++) {
 		neighbors.push_back(*this + getDirection(static_cast<Direction>(i)));  // on genere un vecteur contenant les voisins de le tuile
 	}
