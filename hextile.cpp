@@ -1,4 +1,4 @@
-#include "hex.hpp"
+#include "hextilecoordinates.hpp"
 
 const std::vector<Hex> Hex::directions = {
 	Hex(0, -1), Hex(+1, -1), Hex(+1, 0),  // N, NE, SE

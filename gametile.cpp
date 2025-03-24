@@ -7,7 +7,7 @@ GameTile::GameTile(Biome top, Biome btm, Wildlife *type, int num_types, int posx
     for (int i = 0; i < num_types; i++){
         m_possible_wltoken[i] = type[i];
     }
-    m_posx = posx;
+    m_position = HexTile(posx, posy);
 }
 
 GameTile::~GameTile(){
