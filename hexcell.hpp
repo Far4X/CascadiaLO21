@@ -1,0 +1,27 @@
+#pragma once
+#include "hextile.hpp"
+#include <vector>
+
+enum Direction {N, NE, SE, S, SW, NW};
+
+class HexCell {
+	const int m_q;
+	const int m_r;
+    static const std::vector<HexCell> m_directions;
+	HexTile* m_tile;
+
+public:
+    HexCell(int q, int r) : m_q(q), m_r(r) {}
+	int getQ() const { return m_q; };
+	int getR() const { return m_r; };
+	int getS() const { return -m_q - m_r; };  // useless
+    HexCell operator+(const HexCell& other) const;
+    HexCell operator-(const HexCell& other) const;
+
+	// HexCell operator+=(const HexCell& other);
+	// HexCell operator-=(const HexCell& other);
+
+    HexCell getDirection(Direction d) const;
+    HexCell getNeighbors(Direction d) const;  // retourne le voisin de direction d
+    std::vector<HexCell> getNeighbors() const;  // overloaded : retourne tous les voisins (les 6)
+};
