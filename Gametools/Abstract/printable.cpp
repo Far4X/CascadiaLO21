@@ -1,3 +1,5 @@
 #include "printable.hpp"
 
-Printable::Printable() {}
+Printable::Printable() : BaseClass(){
+
+}

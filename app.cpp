@@ -1,5 +1,11 @@
 #include "app.hpp"
 
+App& App::getInstance(int argc, char* argv[]){
+    static App ins(argc, argv);
+    return ins;
+}
+
+
 App::App(int argc, char* argv[]) : QApplication(argc, argv){
     for (int i = 0; i < argc; i++){
         if (argv[i][0] == 'k' && argv[i][1] == '\0'){
