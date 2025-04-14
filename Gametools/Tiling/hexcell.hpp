@@ -8,7 +8,7 @@ class HexCell {
 	const int m_q;
 	const int m_r;
     static const std::vector<HexCell> m_directions;
-	HexTile* m_tile;
+    //HexTile* m_tile;
 
 public:
     HexCell(int q, int r) : m_q(q), m_r(r) {}
