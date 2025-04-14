@@ -2,9 +2,13 @@
 #define TILEHOLDER_HPP
 
 #include "../Tiling/gametile.hpp"
+#include "salvablething.hpp"
 #include "printable.hpp"
 
-class TileHolder : public Printable{
+//Q analog x
+//R analog y
+
+class TileHolder : public Printable, SalvableThing{
     GameTile ***m_tiles;
     int m_size_x;
     int m_size_y;
@@ -12,7 +16,7 @@ class TileHolder : public Printable{
 public:
     TileHolder(int size_x, int size_y);
     ~TileHolder();
-    GameTile& getTile(int posx, int posy) const;
+    GameTile* getTile(int posx, int posy) const;
     void addTile(GameTile& tile, unsigned int* q = nullptr, unsigned int* r = nullptr, bool overwrite = false);
     virtual void print() = 0;
 };

@@ -1,7 +1,9 @@
 #ifndef PRINTABLE_HPP
 #define PRINTABLE_HPP
 
-class Printable{
+#include "baseclass.hpp"
+
+class Printable : BaseClass{
     bool m_is_graphic();
 public:
     Printable();

@@ -1,10 +1,11 @@
 #pragma once
 //#include "hextile.hpp"
 #include <vector>
+#include "../Abstract/baseclass.hpp"
 
 enum Direction {N, NE, SE, S, SW, NW};
 
-class HexCell {
+class HexCell : public BaseClass {
     int m_q;
     int m_r;
     static const std::vector<HexCell> m_directions;
