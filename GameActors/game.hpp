@@ -5,11 +5,14 @@
 
 class Game : public SalvableThing {
     App *m_app;
-    const unsigned int m_nb_players;
+    unsigned short m_nb_players = 0;
 public:
-    Game(App *app = nullptr, unsigned int nb_player = 2);
+    Game(App *app = nullptr);
     std::string getSaveString() const override;
-
+    void play();
+    void init();
+    void getInfoConsole();
+    void getInfoGX();
 };
 
 #endif // GAME_H

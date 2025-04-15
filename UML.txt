@@ -44,7 +44,7 @@ abstract BaseClass{
 }
 
 abstract Printable {
-    - bool m_is_graphic()
+    - bool m_is_graphic
     + {abstract} void print()
     + Printable()
 }

@@ -12,7 +12,6 @@ public:
     virtual void print() const = 0;
     inline void setX(unsigned int x){m_x_size = x;}
     inline unsigned int getX() const {return m_x_size;}
-
 };
 
 #endif // CMENU_HPP

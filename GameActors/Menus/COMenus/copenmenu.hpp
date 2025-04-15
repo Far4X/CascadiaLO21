@@ -4,12 +4,11 @@
 
 
 class COpenMenu : public CMenu{
-    unsigned short m_result = 0;
-    std::string m_raw_out;
+    int m_result = 0;
 public:
     COpenMenu();
-    void print() const override;
-    bool checkResult();
+    void print() override;
+    inline int getResult() const {return m_result;}
 };
 
 #endif // COPENMENU_HPP
