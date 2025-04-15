@@ -1,0 +1,197 @@
+@startuml
+
+class App {
+    + bool getIsConsole() const
+    + {static} App& getInstance(int argc, char* argv[]);
+    - App(const App& tar)
+    - App& operator=(const App& tar)
+    - bool m_is_console
+    - App(int argc, char * argv[]
+}
+
+class Game {
+    - App *m_app;
+    - const unsigned int m_nb_players;
+    + Game(App *app, unsigned int nb_player)
+    + std::string getSaveString() const
+}
+
+Class Player {
+
+}
+
+class GameTile {
+    - Biome m_biomes[6]
+    - unsigned char m_rotation
+    - WildlifeToken *m_wltoken
+    - Wildlife *m_possible_wltoken
+    - int m_numtypes
+    - const unsigned int m_id
+    - GameTile(const unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy)
+    - ~GameTile()
+    - GameTile& operator=(const GameTile& oth)
+    - GameTile(const GameTile& oth)
+
+    + void Rotate(Rotation dir)
+    + int draw();
+    + unsigned int getID() const
+
+}
+
+abstract BaseClass{
+    BaseClass()
+    ~BaseClass()
+}
+
+abstract Printable {
+    - bool m_is_graphic()
+    + {abstract} void print()
+    + Printable()
+}
+
+abstract SalvableThing {
+    + SalvableThing();
+    + {abstract} std::string getSaveString() const;
+}
+
+class PlayerBoard {
+    + PlayerBoard()
+    + GameTile* getTile(int q, int r) const
+    + void print()
+    + std::string getSaveString() const
+}
+
+abstract TileHolder {
+    - GameTile ***m_tiles
+    - int m_size_x
+    - int m_size_y
+
+    + TileHolder(int size_x, int size_y)
+    + ~TileHolder()
+    + GameTile* getTile(int posx, int posy) const
+    + void addTile(GameTile& tile, unsigned int* q, unsigned int* r, bool overwrite)
+    + {abstract} void print();
+}
+
+
+class HexCell {
+    - int m_q;
+    - int m_r;
+    - {static} const std::vector<HexCell> m_directions;
+
+    + HexCell(int q, int r)
+    + int getQ() const
+    + int getR() const
+    + int getS() const
+
+    + void setQ(const int& q)
+    + void setR(const int& r)
+    + HexCell operator+(const HexCell& other) const
+    + HexCell operator-(const HexCell& other) const
+
+    + HexCell getDirection(Direction d) const
+    + HexCell getNeighbors(Direction d) const
+    + std::vector<HexCell> getNeighbors() const
+}
+
+class WildLifeToken {
+    - Wildlife m_type;
+    - int m_xdprintpos
+    - int m_ydprintpos
+    + WildlifeToken(Wildlife type, int x_dpos, int y_dpos)
+}
+
+enum WildLife
+enum BackGround
+enum Direction
+enum Rotation
+
+class Score {
+    - ScorigStrategy* m_card
+    + void obtainScore(Cards card, Wildlife type)
+}
+
+abstract ScoringStrategy {
+        - WildlifeScoringStrategy* m_scorer;
+        + {abstract} void computeScore(Cards card, Wildlife type)
+}
+
+class ScoringCardA {
+        + void computeScore(Cards card, Wildlife type)
+}
+class ScoringCardB {
+        + void computeScore(Cards card, Wildlife type)
+}
+class ScoringCardC {
+        + void computeScore(Cards card, Wildlife type)
+}
+class ScoringCardD {
+        + void computeScore(Cards card, Wildlife type)
+}
+
+abstract WildLifeScoringStrategy {
+        + {abstract} void score(Cards card, Wildlife type)
+
+}
+
+
+class BearScoringCardA {
+        + void score(Cards card, Wildlife type)
+}
+class BearScoringCardB {
+        + void score(Cards card, Wildlife type)
+}
+class BearScoringCardC {
+        + void score(Cards card, Wildlife type)
+}
+class BearScoringCardD {
+        + void score(Cards card, Wildlife type)
+}
+
+
+class QApplication
+
+
+QApplication --|> App
+BaseClass --|> SalvableThing
+BaseClass --|> Printable
+SalvableThing --|> Game
+SalvableThing --|> GameTile
+SalvableThing --|> PlayerBoard
+
+Printable --|> GameTile
+Printable --|> PlayerBoard
+
+Game *-- "1..4" Player
+PlayerBoard o--  "1..1" Player
+
+Game *-- "41..81" GameTile
+TileHolder --o GameTile
+Game *-- PlayerBoard
+TileHolder --|> PlayerBoard
+App *-- Game
+Game *-- Score
+
+ScoringStrategy ..|> WildLifeScoringStrategy
+
+
+GameTile <|-- HexCell
+GameTile --> BackGround
+GameTile --> "1..3" WildLife
+WildLifeToken --> "1" WildLife
+
+Score ..|> ScoringStrategy
+
+ScoringStrategy --|> ScoringCardA
+ScoringStrategy --|> ScoringCardB
+ScoringStrategy --|> ScoringCardC
+ScoringStrategy --|> ScoringCardD
+
+WildLifeScoringStrategy --|> BearScoringCardA
+WildLifeScoringStrategy --|> BearScoringCardB
+WildLifeScoringStrategy --|> BearScoringCardC
+WildLifeScoringStrategy --|> BearScoringCardD
+
+
+
+@enduml

@@ -5,8 +5,10 @@
 
 #include "../Gametools/Tiling/gametile.hpp"
 #include "../Gametools/Abstract/tileholder.hpp"
+#include "player.hpp"
 
 class PlayerBoard : public TileHolder {
+    Player *m_player;
 public:
     PlayerBoard();
     GameTile* getTile(int q, int r) const;
