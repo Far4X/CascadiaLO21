@@ -1,9 +1,27 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
-class Menu {
+#include "../../Gametools/Abstract/printable.hpp"
+template <typename T>
+class Menu : public Printable{
+    T* m_results = nullptr;
+    int m_nb_result = 0;
+    friend class Iterator;
 public:
+    class Iterator {
+        const Menu& m_menu;
+        int m_nb;
+    public :
+        inline Iterator(const Menu& tar) : m_menu(tar), m_nb(0){}
+        inline bool isDone() const {return m_nb == m_menu.m_nb_result;}
+        inline Iterator& operator++(int a){a;m_nb++; return *this;}
+        inline T getValue() const {return m_menu.m_results[m_nb];}
+    };
+    Iterator getIterator() const;
     Menu();
+    ~Menu();
+    void addResult(const T& tar);
+    virtual void show() = 0;
 };
 
 #endif // MENU_HPP

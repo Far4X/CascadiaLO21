@@ -1,5 +1,5 @@
 #pragma once
-#include "wildlifetoken.hpp"
+#include "../GameTools/wildlifetoken.hpp"
 
 enum Cards { A, B, C, D };
 

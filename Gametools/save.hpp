@@ -1,4 +1,4 @@
-#include "scoringcarda.hpp"
+#include "../Scoring/scoringcards/scoringcarda.hpp"
 #include <vector>
 
 void computeScore(Wildlife& type) {

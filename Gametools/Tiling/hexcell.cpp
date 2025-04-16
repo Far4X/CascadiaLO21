@@ -31,7 +31,7 @@ HexCell HexCell::operator-=(const HexCell& other)  {
 */
 
 HexCell HexCell::getDirection(Direction d) const {
-	return m_directions[d];
+    return directions[d];
 }
 
 HexCell HexCell::getNeighbors(Direction d) const {

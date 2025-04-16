@@ -1,7 +1,9 @@
 #include "bearscoringcarda.hpp"
+#include "../../Gametools/Tiling/gametile.hpp"
 
 void BearScoringCardA::score(Cards card, Wildlife type) {
-	int cpt = 0;
+    int cpt = 0;
+    std::vector<std::vector<GameTile*>> bears;
 	for (int i = 0; i < bears.size(); i++) {
 		if (bears[i].size() == 2) {
 			cpt += 1;

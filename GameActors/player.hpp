@@ -5,7 +5,7 @@
 class Player{
     std::string m_name;
     int m_id;
-    static nb;
+    static int nb;
 public:
     Player(std::string name);
 };

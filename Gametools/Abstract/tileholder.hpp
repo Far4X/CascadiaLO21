@@ -18,7 +18,7 @@ public:
     ~TileHolder();
     GameTile* getTile(int posx, int posy) const;
     void addTile(GameTile& tile, unsigned int* q = nullptr, unsigned int* r = nullptr, bool overwrite = false);
-    virtual void print() = 0;
+    virtual void show() = 0;
 };
 
 #endif // TILEHOLDER_HPP

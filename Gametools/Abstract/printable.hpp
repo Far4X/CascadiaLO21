@@ -6,7 +6,7 @@
 class Printable : BaseClass{
     bool m_is_graphic();
 public:
-    virtual void print() = 0;
+    virtual void show() = 0;
     Printable();
 };
 

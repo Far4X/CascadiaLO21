@@ -11,8 +11,7 @@ class PlayerBoard : public TileHolder {
     Player *m_player;
 public:
     PlayerBoard();
-    GameTile* getTile(int q, int r) const;
-    void print() override;
+    void show() override;
     std::string getSaveString() const override;
 };
 

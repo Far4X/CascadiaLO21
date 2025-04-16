@@ -16,6 +16,46 @@ class Game {
     + std::string getSaveString() const
 }
 
+abstract Menu {
+    - T* m_results = nullptr;
+    - int m_nb_result;
+
+    + Iterator getIterator() const
+    + Menu()
+    + ~Menu()
+    + void addResult(const T& tar);
+    + {abstract} void show() = 0;
+
+}
+
+
+abstract MenuSelectionPlayer{
+
+}
+
+class MenuSelectionPlayerCO{
+
+}
+
+class MenuSelectionPlayerGX{
+
+}
+
+Menu --|> MenuSelectionPlayer
+MenuSelectionPlayer ..|> MenuSelectionPlayerCO
+MenuSelectionPlayer ..|> MenuSelectionPlayerGX
+
+
+class Menu::Iterator{
+    - const Menu& m_menu
+    - int m_nb
+
+    + Iterator(const Menu& tar)
+    + bool isDone() const
+    + Iterator& operator++(int a)
+    + T getValue() const
+}
+
 Class Player {
 
 }
@@ -39,8 +79,8 @@ class GameTile {
 }
 
 abstract BaseClass{
-    BaseClass()
-    ~BaseClass()
+    + BaseClass()
+    + ~BaseClass()
 }
 
 abstract Printable {
@@ -171,6 +211,7 @@ Game *-- PlayerBoard
 TileHolder --|> PlayerBoard
 App *-- Game
 Game *-- Score
+Game *-- MenuSelectionPlayer
 
 ScoringStrategy ..|> WildLifeScoringStrategy
 
@@ -181,6 +222,8 @@ GameTile --> "1..3" WildLife
 WildLifeToken --> "1" WildLife
 
 Score ..|> ScoringStrategy
+Menu ..|> Menu::Iterator
+
 
 ScoringStrategy --|> ScoringCardA
 ScoringStrategy --|> ScoringCardB

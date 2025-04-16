@@ -4,7 +4,6 @@ PlayerBoard::PlayerBoard() : TileHolder(MAX_SIZE, MAX_SIZE){
 
 }
 
-
 std::string PlayerBoard::getSaveString() const {
     std::string desc = "c:";
     for (int i = 0; i < MAX_SIZE; i++){
@@ -15,4 +14,8 @@ std::string PlayerBoard::getSaveString() const {
         }
     }
     return desc;
+}
+
+void PlayerBoard::show(){
+
 }

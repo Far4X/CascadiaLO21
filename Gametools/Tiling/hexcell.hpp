@@ -8,7 +8,7 @@ enum Direction {N, NE, SE, S, SW, NW};
 class HexCell : public BaseClass {
     int m_q;
     int m_r;
-    static const std::vector<HexCell> m_directions;
+    static const std::vector<HexCell> directions;
     //HexTile* m_tile;
 
 public:
