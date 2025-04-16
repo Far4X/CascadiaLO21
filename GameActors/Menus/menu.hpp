@@ -2,11 +2,17 @@
 #define MENU_HPP
 
 #include "../../Gametools/Abstract/printable.hpp"
+#include "../../Gametools/Abstract/notifiableinterface.hpp"
+
 template <typename T>
 class Menu : public Printable{
     T* m_results = nullptr;
     int m_nb_result = 0;
     friend class Iterator;
+
+protected :
+    NotifiableInterface* m_target = nullptr;
+
 public:
     class Iterator {
         const Menu& m_menu;
@@ -18,7 +24,7 @@ public:
         inline T getValue() const {return m_menu.m_results[m_nb];}
     };
     Iterator getIterator() const;
-    Menu();
+    Menu(NotifiableInterface* target = nullptr);
     ~Menu();
     void addResult(const T& tar);
     virtual void show() = 0;

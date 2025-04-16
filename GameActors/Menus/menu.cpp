@@ -4,8 +4,8 @@
 
 
 template <typename T>
-Menu<T>::Menu() : Printable(){
-
+Menu<T>::Menu(NotifiableInterface* target) : Printable(){
+    m_target = target;
 }
 
 template <typename T>

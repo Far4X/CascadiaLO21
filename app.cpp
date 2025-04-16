@@ -1,6 +1,6 @@
 #include "app.hpp"
 #include <QWidget>
-#include "GameActors/gameactors.hpp"
+#include "GameActors/game.hpp"
 #include <iostream>
 
 App& App::getInstance(int argc, char* argv[]){
@@ -22,7 +22,6 @@ App::App(int argc, char* argv[]) : QApplication(argc, argv){
     }
 
     //Tests :
-    m_is_console = true;
 }
 
 int App::exec(){
@@ -32,13 +31,7 @@ int App::exec(){
     QString word;
     qtin >> word;*/
 
-    if (m_is_console){
-        CPlayerMenu player_menu;
-        player_menu.show();
-        std::cout << "Results : " << std::endl;
-        for (CPlayerMenu::Iterator it = player_menu.getIterator(); !it.isDone(); it++){
-            std::cout << it.getValue() << std::endl;
-        }
-    }
+    Game gm{this};
+    gm.play();
     return QApplication::exec();
 }

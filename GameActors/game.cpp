@@ -12,6 +12,13 @@ std::string Game::getSaveString() const {
     return "";
 }
 void Game::play(){
+    if (m_app->getIsConsole()){
+        m_pm = new CPlayerMenu();
+    }
+    else {
+        m_pm = new GPlayerMenu(this);
+    }
+    m_pm->show();
 
 }
 void Game::init(){
@@ -23,3 +30,10 @@ void Game::getInfoConsole(){
 void Game::getInfoGX(){
 
 }
+
+void Game::notify(unsigned int code){
+    if (code == 1){
+
+    }
+}
+
