@@ -1,10 +1,13 @@
 #include "menu.hpp"
 #include <string>
 
-
+#include <iostream>
 
 template <typename T>
 Menu<T>::Menu(NotifiableInterface* target) : Printable(){
+    if (target == nullptr){
+        std::cout << "STNPTR" << std::endl;
+    }
     m_target = target;
 }
 

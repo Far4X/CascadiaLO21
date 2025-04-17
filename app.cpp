@@ -1,13 +1,11 @@
 #include "app.hpp"
 #include <QWidget>
-#include "GameActors/game.hpp"
 #include <iostream>
 
 App& App::getInstance(int argc, char* argv[]){
     static App ins(argc, argv);
     return ins;
 }
-
 
 App::App(int argc, char* argv[]) : QApplication(argc, argv){
     std::cout << "Created app" << std::endl;
@@ -20,18 +18,18 @@ App::App(int argc, char* argv[]) : QApplication(argc, argv){
     if (!m_is_console){
         std::cout << "GraphX" << std::endl;
     }
+    m_game = new Game(m_is_console);
 
     //Tests :
 }
 
+App::~App(){
+    std::cout << "App deleted" << std::endl;
+    delete m_game;
+}
+
 int App::exec(){
-    /*QTextStream qtin(stdin);
-    QString line = qtin.readLine();  // This is how you read the entire line
-
-    QString word;
-    qtin >> word;*/
-
-    Game gm{this};
-    gm.play();
+    m_game->play();
+    std::cout << "Play out" << std::endl;
     return QApplication::exec();
 }

@@ -1,7 +1,7 @@
 #include "gmenu.hpp"
 
 template <typename T>
-GMenu<T>::GMenu(NotifiableInterface* target, QWidget* parent, unsigned int size_x, unsigned int size_y, unsigned int pos_x, unsigned int pos_y) : QWidget(parent), Menu<T>(){
+GMenu<T>::GMenu(NotifiableInterface* target, QWidget* parent, unsigned int size_x, unsigned int size_y, unsigned int pos_x, unsigned int pos_y) : QWidget(parent), Menu<T>(target){
     if (target == nullptr){
         throw CustomError("Target can't be nullptr", 203);
     }

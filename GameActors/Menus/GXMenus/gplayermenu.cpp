@@ -1,4 +1,6 @@
 #include "gplayermenu.hpp"
+#include <iostream>
+#include <string>
 
 GPlayerMenu::GPlayerMenu(NotifiableInterface* tar) : GMenu(tar, nullptr, 300, 200, 200, 200){
     m_main_layout = new QGridLayout(this);
@@ -15,8 +17,8 @@ GPlayerMenu::GPlayerMenu(NotifiableInterface* tar) : GMenu(tar, nullptr, 300, 20
     m_label->setGeometry(600, 100, 0, 0);
 
     m_main_layout->addWidget(m_spinbox, 1, 0, 1, 2);
-    m_main_layout->addWidget(m_btn_quit, 2, 1, 1, 1);
-    m_main_layout->addWidget(m_btn_validate, 2, 0, 1, 1);
+    m_main_layout->addWidget(m_btn_quit, 10, 1, 1, 1);
+    m_main_layout->addWidget(m_btn_validate, 10, 0, 1, 1);
 
 
     QObject::connect(m_btn_quit, &QPushButton::clicked, this, &QWidget::hide);
@@ -44,14 +46,41 @@ GPlayerMenu::~GPlayerMenu(){
     m_spinbox = nullptr;
     m_lines_names = nullptr;
     m_label_names = nullptr;
+
 }
 
 void GPlayerMenu::validateNumber(){
-    m_label->setText("Validé !");
+    QObject::disconnect(m_btn_validate, &QPushButton::clicked, this, &GPlayerMenu::validateNumber);
+    m_nb_player = m_spinbox->value();
+
+    m_label_names = new QLabel* [m_nb_player];
+    m_lines_names = new QLineEdit* [m_nb_player];
+    for (int i = 0; i < m_nb_player; i++){
+        std::string name = "Nom du joueur " + std::to_string(i+1) + " : ";
+        m_label_names[i] = new QLabel(QString(name.c_str()), this);
+        m_lines_names[i] = new QLineEdit(this);
+        m_main_layout->addWidget(m_label_names[i], i+2, 0, 1, 1);
+        m_main_layout->addWidget(m_lines_names[i], i+2, 1, 1, 1);
+    }
+
+    m_spinbox->hide();
+    m_label->setText("Merci de saisir le nom des joueurs :");
+    QObject::connect(m_btn_validate, &QPushButton::clicked, this, &GPlayerMenu::validateNames);
 }
 
 void GPlayerMenu::validateNames(){
+    for (unsigned short i = 0; i < m_nb_player; i++){
+        QString name = m_lines_names[i]->text();
+        /*for (int j = 0; j < txt.size(); j++){
+            name += std::to_string(txt[j].toLatin1());
+        }*/
+        this->addResult(name.toStdString());
+    }
     this->hide();
+    if (m_target == nullptr){
+        std::cout << "Nullptr" << std::endl;
+        return;
+    }
     m_target->notify(1);
 }
 

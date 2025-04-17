@@ -4,6 +4,8 @@
 class NotifiableInterface{
 public:
     NotifiableInterface() = default;
+    virtual ~NotifiableInterface() = default;
+
     virtual void notify(unsigned int code) = 0;
 };
 

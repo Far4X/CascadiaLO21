@@ -10,9 +10,6 @@ class GMenu : public QWidget, public Menu<T>{
     unsigned int m_size_y;
     unsigned int m_pos_x;
     unsigned int m_pos_y;
-protected :
-    NotifiableInterface* m_target = nullptr;
-
 public:
     GMenu(NotifiableInterface* target, QWidget* parent = nullptr, unsigned int size_x = 800, unsigned int size_y = 600, unsigned int pos_x = 600, unsigned int pos_y = 600);
     void actualize();

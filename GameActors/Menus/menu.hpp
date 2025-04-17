@@ -20,12 +20,12 @@ public:
     public :
         inline Iterator(const Menu& tar) : m_menu(tar), m_nb(0){}
         inline bool isDone() const {return m_nb == m_menu.m_nb_result;}
-        inline Iterator& operator++(int a){a;m_nb++; return *this;}
+        inline Iterator& operator++(int){m_nb++; return *this;}
         inline T getValue() const {return m_menu.m_results[m_nb];}
     };
     Iterator getIterator() const;
     Menu(NotifiableInterface* target = nullptr);
-    ~Menu();
+    virtual ~Menu();
     void addResult(const T& tar);
     virtual void show() = 0;
 };

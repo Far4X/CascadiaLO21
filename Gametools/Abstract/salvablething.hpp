@@ -12,7 +12,9 @@ Type of saving
 class SalvableThing{
 public:
     SalvableThing();
+    virtual ~SalvableThing() = default;
     virtual std::string getSaveString() const = 0;
+
 };
 
 #endif // SALVABLETHING_HPP

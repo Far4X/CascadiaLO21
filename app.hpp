@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <iostream>
 #include <QTextStream>
+#include "GameActors/game.hpp"
 
 
 class App : public QApplication {
@@ -12,8 +13,11 @@ public:
     App(const App& tar) = delete;
     App& operator=(const App& tar) = delete;
     int exec();
+    App();
+    ~App();
 
 private :
+    Game* m_game;
     bool m_is_console = false;
     App(int argc, char * argv[]);
 };
