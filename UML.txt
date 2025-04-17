@@ -9,12 +9,23 @@ class App {
     - App(int argc, char * argv[]
 }
 
+class QWidget{
+
+}
+
 class Game {
     - App *m_app;
     - const unsigned int m_nb_players;
     + Game(App *app, unsigned int nb_player)
     + std::string getSaveString() const
 }
+
+abstract NotifiableInterface {
+    + NotifiableInterface()
+    + {abstract} void notify(unsigned int code)
+}
+
+NotifiableInterface --|> Menu
 
 abstract Menu {
     - T* m_results = nullptr;
@@ -23,27 +34,76 @@ abstract Menu {
     + Iterator getIterator() const
     + Menu()
     + ~Menu()
-    + void addResult(const T& tar);
-    + {abstract} void show() = 0;
+    + void addResult(const T& tar)
+    + {abstract} void show()
 
 }
 
 
-abstract MenuSelectionPlayer{
+abstract GMenu{
+    - unsigned int m_size_x
+    - unsigned int m_size_y
+    - unsigned int m_pos_x
+    - unsigned int m_pos_y
+    ~ NotifiableInterface* m_target
+
+    + GMenu(NotifiableInterface* target, QWidget* parent, unsigned int size_x, unsigned int size_y, unsigned int pos_x, unsigned int pos_y)
+    + void actualize();
+    + void show();
+    + void setSizeX(unsigned int x)
+    + void setSizeY(unsigned int y)
+    + void setPosX(unsigned int x)
+    + void setPosY(unsigned int y)
+    + unsigned int getSizeX() const
+    + unsigned int getSizeY() const
+    + unsigned int getPosX() const
+    + unsigned int getPosY() const
+}
+
+abstract CMenu{
+    - unsigned int m_x_size
+    + {abstract} void show()
+    + void setX(unsigned int x)
+    + unsigned int getX() const
+}
+
+class GPlayerMenu{
+    - QGridLayout* m_main_layout;
+    - QPushButton* m_btn_quit;
+    - QPushButton* m_btn_validate;
+    - QLabel* m_label;
+    - QSpinBox* m_spinbox;
+    - QLineEdit** m_lines_names;
+    - QLabel** m_label_names;
+   -  unsigned short m_nb_player;
+
+    + GPlayerMenu(NotifiableInterface* tar)
+    + ~GPlayerMenu()
+    + void validateNumber()
+    + void validateNames()
+    + void show()
 
 }
 
-class MenuSelectionPlayerCO{
+class CPlayerMenu{
+    - int m_result 
+    + CPlayerMenu()
+    + void show()
 
 }
 
-class MenuSelectionPlayerGX{
+Menu --|> GMenu
+Menu --|> CMenu
+QWidget --|> GMenu
+Game *-- Menu
 
-}
+GMenu --|> GPlayerMenu
+CMenu --|> CPlayerMenu
 
-Menu --|> MenuSelectionPlayer
-MenuSelectionPlayer ..|> MenuSelectionPlayerCO
-MenuSelectionPlayer ..|> MenuSelectionPlayerGX
+CPlayerMenu ..|> Menu
+GPlayerMenu ..|> Menu
+
+
 
 
 class Menu::Iterator{
@@ -211,7 +271,6 @@ Game *-- PlayerBoard
 TileHolder --|> PlayerBoard
 App *-- Game
 Game *-- Score
-Game *-- MenuSelectionPlayer
 
 ScoringStrategy ..|> WildLifeScoringStrategy
 

@@ -6,11 +6,10 @@
 #include "gameactors.hpp"
 
 
-
 class Game : public SalvableThing, public NotifiableInterface {
     App *m_app;
     unsigned short m_nb_players = 0;
-    PlayerMenu* m_pm = nullptr;
+    Menu<std::string>* m_pm = nullptr;
 
 
 public:
