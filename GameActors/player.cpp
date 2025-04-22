@@ -2,11 +2,12 @@
 
 unsigned int Player::nb_players = 0;
 
-Player::Player(const std::string& name) : m_name(name), m_id(++nb_players) {};
+Player::Player(const std::string& name) : m_name(name), m_id(++nb_players), m_board(nullptr) {};
 
 
 Player::~Player() {
     Player::nb_players--;
+    delete m_board;
 }
 
 
@@ -26,3 +27,6 @@ void Player::addToken(WildlifeToken* token){
     m_tokens.push_back(token);
 };
 
+void Player::setBoard(PlayerBoard* board){
+    m_board = board;
+};
