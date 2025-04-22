@@ -22,7 +22,7 @@ void Player::addScore(unsigned int points) {
 void Player::addTile(GameTile* tile){
     m_tiles.push_back(tile);
 };
-void addToken(WildlifeToken* token){
+void Player::addToken(WildlifeToken* token){
     m_tokens.push_back(token);
 };
 
