@@ -6,6 +6,7 @@
 
 class WildlifeToken;
 class GameTile;
+class PlayerBoard;
 
 class Player : public SalvableThing {
     friend class Game;
@@ -17,6 +18,7 @@ class Player : public SalvableThing {
 
     std::vector<GameTile*> m_tiles;
     std::vector<WildlifeToken*> m_tokens;
+    PlayerBoard* m_board;
 
     // Constructeur
     Player(const std::string& name);
@@ -33,6 +35,7 @@ public:
     const std::string getName() const {return m_name;}
     unsigned int getId() const {return m_id;}
     unsigned int getScore() const {return m_score;}
+    PlayerBoard* getBoard()  const { return m_board;}
 
     // Accesseurs en écriture
     void setName(const std::string& name);
@@ -40,6 +43,9 @@ public:
 
     void addTile(GameTile* tile);
     void addToken(WildlifeToken* token);
+    void setBoard(PlayerBoard* board);
+
+    std::string getSaveString() const override;
 
 
     };
