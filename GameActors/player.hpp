@@ -2,15 +2,21 @@
 #define PLAYER_HPP
 #include <string>
 
-using namespace std;
+#include "Gametools/Abstract/salvablething.hpp"
 
-class Player{
+class WildlifeToken;
+class GameTile;
+
+class Player : public SalvableThing {
     friend class Game;
 
     std::string m_name;
     const unsigned int m_id;
     unsigned int m_score = 0;
     static unsigned int nb_players;
+
+    std::vector<GameTile*> m_tiles;
+    std::vector<WildlifeToken*> m_tokens;
 
     // Constructeur
     Player(const std::string& name);
@@ -31,6 +37,9 @@ public:
     // Accesseurs en écriture
     void setName(const std::string& name);
     void addScore(unsigned int points);
+
+    void addTile(GameTile* tile);
+    void addToken(WildlifeToken* token);
 
 
     };
