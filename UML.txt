@@ -117,8 +117,36 @@ class Menu::Iterator{
 }
 
 Class Player {
+    - std::string m_name
+    - const unsigned int m_id
+    - unsigned int m_score
+    - static unsigned int nb_players
+    - std::vector<GameTile*> m_tiles
+    - std::vector<WildlifeToken*> m_tokens
+    - PlayerBoard* m_board 
+    - Player(const std::string& name)
+    - ~Player()
+    - Player(const Player&)
+    - Player& operator=(const Player&)
 
+    + static int getNbPlayers() : int
+    + const std::string getName() const : const std::string
+    + unsigned int getId() const : unsigned int
+    + unsigned int getScore() const : unsigned int
+    + PlayerBoard* getBoard() const : PlayerBoard*
+    + void setName(const std::string& name)
+    + void addScore(unsigned int points)
+    + void addTile(GameTile* tile)
+    + void addToken(WildlifeToken* token)
+    + void setBoard(PlayerBoard* board)
+    + std::string getSaveString() : const std::string
 }
+
+Player ..|> SalvableThing
+Player *-- "0..1" PlayerBoard
+Player *-- "0..*" GameTile
+Player *-- "0..*" WildlifeToken
+
 
 class GameTile {
     - Biome m_biomes[6]
