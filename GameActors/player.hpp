@@ -3,10 +3,9 @@
 #include <string>
 
 #include "Gametools/Abstract/salvablething.hpp"
-
-class WildlifeToken;
-class GameTile;
-class PlayerBoard;
+#include "Gametools/Tiling/gametile.hpp"
+#include "wildlifetoken.hpp"
+#include "playerboard.hpp"
 
 class Player : public SalvableThing {
     friend class Game;
