@@ -3,6 +3,5 @@
 
 #include "Menus/menus.hpp"
 #include "player.hpp"
-#include "playerboard.hpp"
 
 #endif // GAMEACTORS_HPP

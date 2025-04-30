@@ -1,14 +1,13 @@
 #ifndef PLAYERBOARD_HPP
 #define PLAYERBOARD_HPP
+#include "GameActors/player.hpp"
 #define MAX_SIZE 41
 #define POS_CENTER 20;
 
-#include "../Gametools/Tiling/gametile.hpp"
-#include "../Gametools/Abstract/tileholder.hpp"
-#include "player.hpp"
+#include "../Tiling/gametile.hpp"
+#include "tileholder.hpp"
 
 class PlayerBoard : public TileHolder {
-    Player *m_player;
 public:
     PlayerBoard();
     void show() override;

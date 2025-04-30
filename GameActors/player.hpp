@@ -4,8 +4,8 @@
 
 #include "Gametools/Abstract/salvablething.hpp"
 #include "Gametools/Tiling/gametile.hpp"
-#include "wildlifetoken.hpp"
-#include "playerboard.hpp"
+#include "../Gametools/wildlifetoken.hpp"
+#include "Gametools/Abstract/playerboard.hpp"
 
 class Player : public SalvableThing {
     friend class Game;
@@ -19,24 +19,19 @@ class Player : public SalvableThing {
     std::vector<WildlifeToken*> m_tokens;
     PlayerBoard* m_board;
 
-    // Constructeur
     Player(const std::string& name);
-
-    // Destructeur
     ~Player();
 
     Player(const  Player&) = delete;
     Player& operator=(const Player&) = delete;
 
 public:
-    // Accesseurs en lecture
     static int getNbPlayers() { return nb_players;}
     const std::string getName() const {return m_name;}
     unsigned int getId() const {return m_id;}
     unsigned int getScore() const {return m_score;}
     PlayerBoard* getBoard()  const { return m_board;}
 
-    // Accesseurs en écriture
     void setName(const std::string& name);
     void addScore(unsigned int points);
 
