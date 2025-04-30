@@ -4,9 +4,59 @@ GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_typ
     for (int i = 0; i < 6; i++){
         m_biomes[i] = biomes[i];
     }
+    m_numtypes = num_types;
     m_possible_wltoken = new Wildlife[num_types];
     for (int i = 0; i < num_types; i++){
         m_possible_wltoken[i] = type[i];
+    }
+
+}
+
+GameTile::GameTile(int id, std::string description) : HexCell(), m_id(id){
+    for (int i = 0; i < 6; i++){
+        switch (description[i]) {
+        case '1' :
+            m_biomes[i] = Forest;
+            break;
+        case '2' :
+            m_biomes[i] = Wetland;
+            break;
+        case '3' :
+            m_biomes[i] = River;
+            break;
+        case '4':
+            m_biomes[i] = Mountain;
+            break;
+        case '5':
+            m_biomes[i] = Prairie;
+            break;
+        default:
+            break;
+        }
+    }
+    m_numtypes = description[6] - '0';
+
+    m_possible_wltoken = new Wildlife[m_numtypes];
+    for (int i = 7; i < m_numtypes + 7; i++){
+        switch (description[i]) {
+        case '1' :
+            m_possible_wltoken[i] = Bear;
+            break;
+        case '2' :
+            m_possible_wltoken[i] = Salmon;
+            break;
+        case '3' :
+            m_possible_wltoken[i] = Elk;
+            break;
+        case '4':
+            m_possible_wltoken[i] = Hawk;
+            break;
+        case '5':
+            m_possible_wltoken[i] = Fox;
+            break;
+        default:
+            break;
+        }
     }
 }
 

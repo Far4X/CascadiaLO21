@@ -9,6 +9,10 @@ Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console){
 
 Game::~Game(){
     std::cout << "Game deleted" << std::endl;
+    for (int i = 0; i < m_nb_cards; i++){
+        delete m_cards[i];
+    }
+    delete[] m_cards;
     delete m_player_menu;
 }
 
@@ -49,6 +53,8 @@ void Game::readCards(std::string path){
     std::ifstream istream(path);
     char chr;
     int tmp_nb = 0;
+    unsigned short int current_m_tiles = 0;
+    std::string desc_tile;
     while (istream.get(chr)){
         if (m_nb_cards == 0){
             if (chr >= '0' && chr <= '9'){
@@ -58,6 +64,15 @@ void Game::readCards(std::string path){
             else if (chr == ';'){
                 m_nb_cards = tmp_nb;
                 m_cards = new GameTile*[m_nb_cards];
+            }
+        }
+        else {
+            if (chr == ';'){
+                m_cards[current_m_tiles] = new GameTile(current_m_tiles, desc_tile);
+                current_m_tiles++;
+            }
+            else {
+                desc_tile += std::to_string(chr);
             }
         }
     }

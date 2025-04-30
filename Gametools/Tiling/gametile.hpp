@@ -18,9 +18,11 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     const unsigned int m_id;
 
     GameTile(const unsigned int id, Biome biomes[6], Wildlife *type = nullptr, int num_types = 0, int posx = 0, int posy = 0);
+    GameTile(int id, std::string description);
     ~GameTile();
     GameTile& operator=(const GameTile& oth) = delete;
     GameTile(const GameTile& oth) = delete;
+    std::string getSaveString() const override;
 
 public:
     void Rotate(Rotation dir = Anti_Trigonometric);

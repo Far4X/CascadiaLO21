@@ -1,7 +1,8 @@
 QT += widgets
 
 DISTFILES += \
-    .gitignore
+    .gitignore \
+    PlanTile
 CONFIG += console
 
 # Fichiers sources

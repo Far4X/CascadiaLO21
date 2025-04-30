@@ -1,10 +1,18 @@
 #ifndef CPLAYERBOARD_HPP
 #define CPLAYERBOARD_HPP
 
-class CPlayerBoard
-{
+#include "Gametools/Abstract/playerboard.hpp"
+
+class CPlayerBoard : public PlayerBoard{
+    unsigned short int const m_max_height = 42;
+    unsigned short int const m_max_width = 80;
+    unsigned short int m_x_swift = 0;
+    unsigned short int m_y_swift = 0;
 public:
     CPlayerBoard();
+    void show() override;
+    void swiftX(short int step = 20);
+    void swiftY(short int step = 20);
 };
 
 #endif // CPLAYERBOARD_HPP

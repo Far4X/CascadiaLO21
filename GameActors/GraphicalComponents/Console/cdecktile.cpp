@@ -1,3 +1,3 @@
-#include "cdeckcard.hpp"
+#include "cdecktile.hpp"
 
-CDeckCard::CDeckCard() {}
+CDeckTile::CDeckTile() {}

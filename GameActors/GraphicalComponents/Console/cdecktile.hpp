@@ -1,9 +1,12 @@
 #ifndef CDECKCARD_HPP
 #define CDECKCARD_HPP
 
-class CDeckCard {
+
+class CDeckTile {
+    unsigned short int const m_max_height = 42;
+    unsigned short int const m_max_width = 80
 public:
-    CDeckCard();
+    CDeckTile();
 };
 
 #endif // CDECKCARD_HPP
