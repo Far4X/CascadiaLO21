@@ -5,6 +5,33 @@ PlayerBoard::PlayerBoard() : TileHolder(MAX_SIZE, MAX_SIZE){
     m_r_center = MAX_SIZE/2;
 }
 
+int PlayerBoard::floorDiv(int n) {
+    // fonction utilitaire pour la forumule de conversion entre hex et offset (la division normale ne marche pas avec les negatifs de notre cas)
+    if (n >= 0) {
+        return n / 2;
+    }
+    else {
+        return (n - 1) / 2;
+    }
+}
+
+PlayerBoard::Offset PlayerBoard::axialToOffset(HexCell& hex) {
+    int q = hex.getQ();
+    int r = hex.getR();
+    int col = q + MAX_SIZE;
+    int row = r + floorDiv(q) + MAX_SIZE;
+    return PlayerBoard::Offset(col, row);
+}
+
+HexCell PlayerBoard::offsetToAxial(Offset& off) {
+    int col = off.getCol();
+    int row = off.getRow();
+    int q = col - MAX_SIZE;
+    int r = row - floorDiv(q) - MAX_SIZE;
+    return HexCell(q, r);
+}
+
+
 std::string PlayerBoard::getSaveString() const {
     std::string desc = "c:";
     for (int i = 0; i < MAX_SIZE; i++){

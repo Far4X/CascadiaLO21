@@ -10,6 +10,17 @@ class PlayerBoard : public TileHolder {
     unsigned short int m_q_center;
     unsigned short int m_r_center;
 public:
+    struct Offset {
+        int getCol() const { return col; }
+        int getRow() const { return row; }
+        Offset(int c, int r) : col(c), row(r) {};
+    private:
+        int col;
+        int row;
+    };
+    int floorDiv(int n);
+    Offset axialToOffset(HexCell& hex);
+    HexCell offsetToAxial(Offset& off);
     PlayerBoard();
     void show() override;
     std::string getSaveString() const override;
