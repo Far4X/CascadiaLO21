@@ -83,3 +83,8 @@ void GameTile::Rotate(Rotation rota){
     m_biomes[5] = tmp;
     return;
 }
+
+std::string GameTile::getSaveString() const{
+    return "";
+}
+

@@ -21,7 +21,6 @@ std::string Game::getSaveString() const {
 }
 void Game::play(){
 
-
     if (m_is_console){
         m_player_menu = new CPlayerMenu();
     }
@@ -46,6 +45,7 @@ void Game::notify(unsigned int code){
         for (Menu<std::string>::Iterator it = m_player_menu->getIterator(); !it.isDone(); it++){
             m_players.push_back(Player(it.getValue()));
         }
+        m_players[0].getBoard()->show();
     }
 }
 

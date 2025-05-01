@@ -1,3 +1,3 @@
-#include "gdeckcard.hpp"
+#include "gdecktile.hpp"
 
 GDeckCard::GDeckCard() {}

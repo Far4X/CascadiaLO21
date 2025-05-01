@@ -13,8 +13,8 @@ public:
     PlayerBoard();
     void show() override;
     std::string getSaveString() const override;
-    void swiftQ(short int step = 3);
-    void swiftR(short int step = 3);
+    void moveHz(short int step = 1);
+    void moveVt(short int step = 1);
 };
 
 #endif // PLAYERBOARD_HPP

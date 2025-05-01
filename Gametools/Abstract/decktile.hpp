@@ -1,10 +1,10 @@
 #ifndef DECKCARD_HPP
 #define DECKCARD_HPP
 
-class DeckCard
+class DeckTile
 {
 public:
-    DeckCard();
+    DeckTile();
 };
 
 #endif // DECKCARD_HPP

@@ -20,12 +20,9 @@ class Player : public SalvableThing {
     PlayerBoard* m_board;
 
     Player(const std::string& name);
-    ~Player();
-
-    Player(const  Player&) = delete;
-    Player& operator=(const Player&) = delete;
 
 public:
+    Player(const Player&) = default;
     static int getNbPlayers() { return nb_players;}
     const std::string getName() const {return m_name;}
     unsigned int getId() const {return m_id;}
@@ -38,6 +35,8 @@ public:
     void addTile(GameTile* tile);
     void addToken(WildlifeToken* token);
     void setBoard(PlayerBoard* board);
+    ~Player();
+
 
     std::string getSaveString() const override;
 

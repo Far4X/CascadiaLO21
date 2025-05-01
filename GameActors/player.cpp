@@ -11,7 +11,6 @@ Player::~Player() {
 }
 
 
-// Accesseurs en écriture
 void Player::setName(const std::string& name) {
     m_name = name;
 }
@@ -30,3 +29,7 @@ void Player::addToken(WildlifeToken* token){
 void Player::setBoard(PlayerBoard* board){
     m_board = board;
 };
+
+std::string Player::getSaveString() const{
+    return "";
+}

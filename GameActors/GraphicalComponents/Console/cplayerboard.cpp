@@ -1,6 +1,7 @@
 #include "cplayerboard.hpp"
+#include <iostream>
 
-CPlayerBoard::CPlayerBoard() {}
+CPlayerBoard::CPlayerBoard() : PlayerBoard(){}
 
 void CPlayerBoard::show(){
     char **tab = new char*[m_max_width];
@@ -9,19 +10,20 @@ void CPlayerBoard::show(){
     }
 
     for (int i = 0; i < m_max_width; i++){
+        for (int j = 0; j < m_max_height; j++){
+            tab[i][j] = '*';
+        }
+    }
+
+    for (int i = 0; i < m_max_width; i++){
+        for (int j = 0; j < m_max_height; j++){
+            std::cout << tab[i][j];
+        }
+        std::cout << std::endl;
+    }
+
+    for (int i = 0; i < m_max_width; i++){
         delete[] tab[i];
     }
     delete[] tab;
-}
-
-void CPlayerBoard::swiftX(short int step){
-    if (m_x_swift >= -step){
-        m_x_swift += step;
-    }
-}
-
-void CPlayerBoard::swiftY(short int step){
-    if (m_y_swift >= -step){
-        m_y_swift += step;
-    }
 }

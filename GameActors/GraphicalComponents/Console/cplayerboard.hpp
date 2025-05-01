@@ -11,8 +11,6 @@ class CPlayerBoard : public PlayerBoard{
 public:
     CPlayerBoard();
     void show() override;
-    void swiftX(short int step = 20);
-    void swiftY(short int step = 20);
 };
 
 #endif // CPLAYERBOARD_HPP

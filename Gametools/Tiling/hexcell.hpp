@@ -13,6 +13,7 @@ class HexCell : public BaseClass {
 
 public:
     HexCell(int q, int r) : m_q(q), m_r(r) {}
+    HexCell() : m_q(0), m_r(0){}
 	int getQ() const { return m_q; };
 	int getR() const { return m_r; };
     int getS() const { return -m_q - m_r; };  // useless

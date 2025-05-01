@@ -4,7 +4,7 @@
 
 class CDeckTile {
     unsigned short int const m_max_height = 42;
-    unsigned short int const m_max_width = 80
+    unsigned short int const m_max_width = 80;
 public:
     CDeckTile();
 };
