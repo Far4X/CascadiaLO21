@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-class Constraint {
-	std::string name;
-
+class Constraint
+{
+    std::string name;
 };
