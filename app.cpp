@@ -2,20 +2,23 @@
 #include <QWidget>
 #include <iostream>
 
-App& App::getInstance(int argc, char* argv[]){
+App &App::getInstance(int argc, char *argv[])
+{
     static App ins(argc, argv);
     return ins;
 }
 
-App::App(int argc, char* argv[]) : QApplication(argc, argv){
+App::App(int argc, char *argv[])
+    : QApplication(argc, argv)
+{
     std::cout << "Created app" << std::endl;
-    for (int i = 0; i < argc; i++){
-        if (argv[i][0] == 'k' && argv[i][1] == '\0'){
+    for (int i = 0; i < argc; i++) {
+        if (argv[i][0] == 'k' && argv[i][1] == '\0') {
             m_is_console = true;
             std::cout << "Console" << std::endl;
         }
     }
-    if (!m_is_console){
+    if (!m_is_console) {
         std::cout << "GraphX" << std::endl;
     }
     m_game = new Game(m_is_console);
@@ -23,12 +26,14 @@ App::App(int argc, char* argv[]) : QApplication(argc, argv){
     //Tests :
 }
 
-App::~App(){
+App::~App()
+{
     std::cout << "App deleted" << std::endl;
     delete m_game;
 }
 
-int App::exec(){
+int App::exec()
+{
     m_game->play();
     std::cout << "Play out" << std::endl;
     return QApplication::exec();
