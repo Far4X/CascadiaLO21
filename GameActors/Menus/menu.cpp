@@ -34,4 +34,6 @@ typename Menu<T>::Iterator Menu<T>::getIterator() const {
 
 
 template class Menu<std::string>;
+template class Menu<std::tuple<std::string, std::string>>;
+
 

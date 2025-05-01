@@ -3,6 +3,7 @@
 #include "Gametools/Abstract/salvablething.hpp"
 #include "Gametools/Abstract/notifiableinterface.hpp"
 #include "gameactors.hpp"
+#include "GraphicalComponents/graphicalcomponents.hpp"
 #include "player.hpp"
 #include <vector>
 

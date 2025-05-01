@@ -5,5 +5,5 @@ void Score::obtainScore(Cards card, Wildlife type) {
 }
 
 std::vector<std::vector<GameTile*>> Score::getAdjacentTiles(const Player& player) {
-    std::vector<std::vector<GameTile*>> gametiles = player.
+    //std::vector<std::vector<GameTile*>> gametiles = player.;
 }

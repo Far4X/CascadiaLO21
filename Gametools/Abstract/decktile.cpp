@@ -1,5 +1,5 @@
 #include "decktile.hpp"
 
-DeckTile::DeckTile() {
+DeckTile::DeckTile() : TileHolder(4, 1) {
 
 }

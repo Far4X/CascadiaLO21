@@ -5,7 +5,7 @@
 
 class CPlayerBoard : public PlayerBoard{
     unsigned short int const m_max_height = 42;
-    unsigned short int const m_max_width = 80;
+    unsigned short int const m_max_width = 140;
     unsigned short int m_x_swift = 0;
     unsigned short int m_y_swift = 0;
 public:

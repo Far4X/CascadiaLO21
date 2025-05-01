@@ -4,7 +4,7 @@
 #include <fstream>
 
 Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console){
-
+    readCards();
 }
 
 Game::~Game(){
@@ -20,9 +20,8 @@ std::string Game::getSaveString() const {
     return "";
 }
 void Game::play(){
-
     if (m_is_console){
-        m_player_menu = new CPlayerMenu();
+        m_player_menu = new CPlayerMenu(this);
     }
     else {
         m_player_menu = new GPlayerMenu(this);
@@ -44,7 +43,16 @@ void Game::notify(unsigned int code){
     if (code == 1){
         for (Menu<std::string>::Iterator it = m_player_menu->getIterator(); !it.isDone(); it++){
             m_players.push_back(Player(it.getValue()));
+            PlayerBoard* bd;
+            if (m_is_console){
+                bd = new CPlayerBoard();
+            }
+            else {
+                bd = new GPlayerBoard();
+            }
+            m_players.back().setBoard(bd);
         }
+        std::cout << "Show board" << std::endl;
         m_players[0].getBoard()->show();
     }
 }

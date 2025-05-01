@@ -27,7 +27,7 @@ public:
     const std::string getName() const {return m_name;}
     unsigned int getId() const {return m_id;}
     unsigned int getScore() const {return m_score;}
-    PlayerBoard* getBoard()  const { return m_board;}
+    PlayerBoard* getBoard() const {return m_board;}
 
     void setName(const std::string& name);
     void addScore(unsigned int points);

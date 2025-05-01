@@ -88,3 +88,28 @@ std::string GameTile::getSaveString() const{
     return "";
 }
 
+char** getRepresentation(const GameTile& tile,  unsigned short int size){
+    unsigned short int height = 2*size+1;
+    unsigned short int width = 4*size;
+    char **rt = new char*[height];
+    for (unsigned short int i = 0; i < height; i++){
+        rt[i] = new char[width];
+        for (int j = 0; j < width; j++){
+            rt[i][j] = ' ';
+        }
+    }
+
+    //Draw hex
+    for (int i = 0; i < size; i++){
+        rt[size + 1 + i][i] = '\\';
+        rt[size - i][i] = '/';
+        rt[0][i+size] = '_';
+        rt[height-1][i+size] = '_';
+        rt[0][3*size -i -1] = '_';
+        rt[height-1][3*size -i -1] = '_';
+
+    }
+    tile.getID();
+    return rt;
+}
+

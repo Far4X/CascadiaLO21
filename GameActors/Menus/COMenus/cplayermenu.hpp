@@ -6,7 +6,7 @@
 class CPlayerMenu : public CMenu<std::string>{
     int m_result = 0;
 public:
-    CPlayerMenu();
+    CPlayerMenu(NotifiableInterface* tar);
     void show() override;
 };
 

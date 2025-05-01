@@ -1,3 +1,5 @@
 #include "gplayerboard.hpp"
 
-GPlayerBoard::GPlayerBoard() {}
+GPlayerBoard::GPlayerBoard() : PlayerBoard() {
+
+}

@@ -1,7 +1,7 @@
 #include "cplayermenu.hpp"
 #include <iostream>
 
-CPlayerMenu::CPlayerMenu() : CMenu(){
+CPlayerMenu::CPlayerMenu(NotifiableInterface* tar) : CMenu(tar){
 
 }
 
@@ -36,4 +36,5 @@ void CPlayerMenu::show() {
         std::cout << "-";
     }
     std::cout << std::endl;
+    m_target->notify(1);
 }

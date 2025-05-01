@@ -1,8 +1,9 @@
 #ifndef GPLAYERBOARD_HPP
 #define GPLAYERBOARD_HPP
 
-class GPlayerBoard
-{
+#include "Gametools/Abstract/playerboard.hpp"
+
+class GPlayerBoard : public PlayerBoard{
 public:
     GPlayerBoard();
 };

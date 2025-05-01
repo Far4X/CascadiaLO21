@@ -27,14 +27,12 @@ App::App(int argc, char *argv[]) : QApplication(argc, argv)
     //Tests :
 }
 
-App::~App()
-{
+App::~App(){
     std::cout << "App deleted" << std::endl;
     delete m_game;
 }
 
-int App::exec()
-{
+int App::exec(){
     m_game->play();
     std::cout << "Play out" << std::endl;
     return QApplication::exec();

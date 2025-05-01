@@ -30,4 +30,6 @@ public:
     inline unsigned int getID() const {return m_id;}
 };
 
+char** getRepresentation(const GameTile& tile,  unsigned short int size = 5);
+
 #endif // GAMETILE_HPP

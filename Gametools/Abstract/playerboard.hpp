@@ -1,7 +1,7 @@
 #ifndef PLAYERBOARD_HPP
 #define PLAYERBOARD_HPP
+
 #define MAX_SIZE 41
-#define POS_CENTER 20;
 
 #include "../Tiling/gametile.hpp"
 #include "tileholder.hpp"
