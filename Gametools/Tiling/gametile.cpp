@@ -88,7 +88,7 @@ std::string GameTile::getSaveString() const{
     return "";
 }
 
-char** getRepresentation(const GameTile& tile,  unsigned short int size){
+char** getRepresentation(const GameTile& tile, unsigned short int size){
     unsigned short int height = 2*size+1;
     unsigned short int width = 4*size;
     char **rt = new char*[height];

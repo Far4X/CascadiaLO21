@@ -1,8 +1,9 @@
 #ifndef DECKCARD_HPP
 #define DECKCARD_HPP
 
-class DeckTile
-{
+#include "tileholder.hpp"
+
+class DeckTile : public TileHolder {
 public:
     DeckTile();
 };

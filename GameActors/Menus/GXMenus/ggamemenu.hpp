@@ -3,8 +3,7 @@
 
 #include "gmenu.hpp"
 
-class GGameMenu : public GMenu
-{
+class GGameMenu : public GMenu<std::tuple<std::string, std::string>>{
 public:
     GGameMenu();
 };
