@@ -18,9 +18,9 @@ public:
         int col;
         int row;
     };
-    int floorDiv(int n);
-    Offset axialToOffset(HexCell& hex);
-    HexCell offsetToAxial(Offset& off);
+    static int floorDiv(int n);
+    static Offset axialToOffset(const HexCell& hex);
+    static HexCell offsetToAxial(const Offset& off);
     PlayerBoard();
     void show() override;
     std::string getSaveString() const override;

@@ -4,7 +4,8 @@
 #include "hexcell.hpp"
 #include "../Abstract/salvablething.hpp"
 
-enum Biome {Forest, Wetland, River, Mountain, Prairie};
+
+enum Biome {Forest = 1, Wetland, River, Mountain, Prairie};
 enum Rotation {Trigonometric, Anti_Trigonometric};
 
 class GameTile : public HexCell, public SalvableThing{ //Or inherits public hextile; if not rename HexTile HexTileCoord
@@ -25,9 +26,18 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     std::string getSaveString() const override;
 
 public:
+    static constexpr int MAX_ID = 90;
     void Rotate(Rotation dir = Anti_Trigonometric);
     int draw();
-    inline unsigned int getID() const {return m_id;}
+    inline unsigned int getId() const {return m_id;}
+    WildlifeToken* getToken() const { return m_wltoken; }
+    bool matchesType(Biome biome) const {
+        for (int i = 0; i < 6; ++i) {
+            if (m_biomes[i] == biome)
+                return true;
+        }
+        return false;
+    }
 };
 
 char** getRepresentation(const GameTile& tile,  unsigned short int size = 5);
