@@ -109,7 +109,7 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
         rt[height-1][3*size -i -1] = '_';
 
     }
-    tile.getID();
+
     return rt;
 }
 

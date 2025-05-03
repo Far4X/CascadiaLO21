@@ -15,7 +15,7 @@ int PlayerBoard::floorDiv(int n) {
     }
 }
 
-PlayerBoard::Offset PlayerBoard::axialToOffset(HexCell& hex) {
+PlayerBoard::Offset PlayerBoard::axialToOffset(const HexCell& hex){
     int q = hex.getQ();
     int r = hex.getR();
     int col = q + MAX_SIZE;
@@ -23,7 +23,7 @@ PlayerBoard::Offset PlayerBoard::axialToOffset(HexCell& hex) {
     return PlayerBoard::Offset(col, row);
 }
 
-HexCell PlayerBoard::offsetToAxial(Offset& off) {
+HexCell PlayerBoard::offsetToAxial(const Offset& off){
     int col = off.getCol();
     int row = off.getRow();
     int q = col - MAX_SIZE;
@@ -37,7 +37,7 @@ std::string PlayerBoard::getSaveString() const {
     for (int i = 0; i < MAX_SIZE; i++){
         for (int j = 0; j < MAX_SIZE; j++){
             if (getTile(i, j) != nullptr){
-                desc += std::to_string(getTile(i, j)->getID()) + ";";
+                desc += std::to_string(getTile(i, j)->getId()) + ";";
             }
         }
     }

@@ -11,8 +11,8 @@ class PlayerBoard : public TileHolder {
     unsigned short int m_r_center;
 public:
     struct Offset {
-        int getCol() const { return col; }
-        int getRow() const { return row; }
+        int getCol() const {return col;}
+        int getRow() const {return row;}
         Offset(int c, int r) : col(c), row(r) {};
     private:
         int col;
