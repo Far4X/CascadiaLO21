@@ -6,7 +6,7 @@ void Score::obtainScore(Cards card, Wildlife type) {
 
 
 std::vector<std::vector<GameTile*>> Score::gatherAllTiles(const PlayerBoard& board, int size) {
-    std::vector<std::vector<GameTile*>> tiles(size, std::vector<GameTile*>(size));
+    std::vector<std::vector<GameTile*>> tiles(size, std::vector<GameTile*>(size, nullptr));
     for (int y = 0; y < size; y++) {
         for (int x = 0; x < size; x++) {
             tiles[y][x] = board.getTile(x, y);
@@ -16,10 +16,13 @@ std::vector<std::vector<GameTile*>> Score::gatherAllTiles(const PlayerBoard& boa
 }
 
 std::vector<std::vector<WildlifeToken*>> Score::gatherAllTokens(const PlayerBoard& board, int size) {
-    std::vector<std::vector<WildlifeToken*>> tokens(size, std::vector<WildlifeToken*>(size));
+    std::vector<std::vector<WildlifeToken*>> tokens(size, std::vector<WildlifeToken*>(size, nullptr));
     for (int y = 0; y < size; y++) {
         for (int x = 0; x < size; x++) {
-            tokens[y][x] = board.getTile(x, y)->getToken();
+            GameTile* tile = board.getTile(x, y);
+            if (tile != nullptr) {
+                tokens[y][x] = tile->getToken();
+            }
         }
     }
     return tokens;

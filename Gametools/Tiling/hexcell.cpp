@@ -19,13 +19,13 @@ HexCell HexCell::operator-(const HexCell& other) const {
 
 HexCell HexCell::operator+=(const HexCell& other) {
 	m_q += other.m_q;
-	m_r += other.m_q;
+    m_r += other.m_r;
 	return *this;
 }
 
 HexCell HexCell::operator-=(const HexCell& other)  {
 	m_q -= other.m_q;
-	m_r -= other.m_q;
+    m_r -= other.m_r;
 	return *this;
 }
 */
