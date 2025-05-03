@@ -1,7 +1,7 @@
 #include "cdecktile.hpp"
 
-CDeckTile::CDeckTile() {}
+CDeckTile::CDeckTile() : DeckTile() {}
 
-void show(){
+void CDeckTile::show(){
 
 }

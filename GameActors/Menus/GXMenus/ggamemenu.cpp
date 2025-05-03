@@ -1,3 +1,3 @@
 #include "ggamemenu.hpp"
 
-GGameMenu::GGameMenu() {}
+GGameMenu::GGameMenu(NotifiableInterface *tar) : GMenu<std::tuple<std::string, std::string>>(tar) {}

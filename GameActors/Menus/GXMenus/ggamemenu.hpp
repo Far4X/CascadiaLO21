@@ -5,7 +5,7 @@
 
 class GGameMenu : public GMenu<std::tuple<std::string, std::string>>{
 public:
-    GGameMenu();
+    GGameMenu(NotifiableInterface *tar);
 };
 
 #endif // GGAMEMENU_HPP

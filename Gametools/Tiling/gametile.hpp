@@ -29,6 +29,7 @@ public:
     static constexpr int MAX_ID = 90;
     void Rotate(Rotation dir = Anti_Trigonometric);
     int draw();
+    Biome getBiome(unsigned short int number) const {{return m_biomes[number%6];}}
     inline unsigned int getId() const {return m_id;}
     WildlifeToken* getToken() const { return m_wltoken; }
     bool matchesType(Biome biome) const {

@@ -8,6 +8,7 @@ class WildlifeToken {
     int m_xdprintpos; //Décalage de la position d'affichage par rapport au centre du holder
     int m_ydprintpos;
     const unsigned int m_id;
+    static unsigned int currentId;
 public:
     static constexpr int MAX_ID = 100;
     WildlifeToken(Wildlife type, int x_dpos = 0, int y_dpos = 0);

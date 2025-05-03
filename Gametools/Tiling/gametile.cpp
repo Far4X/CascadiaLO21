@@ -1,4 +1,5 @@
 #include "gametile.hpp"
+#include <iostream>
 
 GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy) : HexCell(posx, posy), m_id(id){
     for (int i = 0; i < 6; i++){
@@ -101,13 +102,98 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
 
     //Draw hex
     for (int i = 0; i < size; i++){
-        rt[size + 1 + i][i] = '\\';
-        rt[size - i][i] = '/';
+
         rt[0][i+size] = '_';
         rt[height-1][i+size] = '_';
         rt[0][3*size -i -1] = '_';
         rt[height-1][3*size -i -1] = '_';
+        rt[size][i] = '_';
+        rt[size][2*size-i-1] = '_';
+        rt[size][i+2*size] = '_';
+        rt[size][4*size - i - 1] = '_';
 
+
+
+        rt[i+1][size + i] = '\\';
+        rt[i+1][3*size+ i] = '\\';
+        rt[size - i][i+2*size] = '/';
+        rt[size - i][i] = '/';
+
+        rt[size + 1 + i][2*size - i - 1] = '/';
+        rt[size + 1 + i][i] = '\\';
+        rt[size + 1 + i][4*size - i - 1] = '/';
+        rt[height - i - 1][3*size - 1 - i] = '\\';
+    }
+
+    //Fill hex
+
+    for (int i = 0; i < 6; i++){
+        char filling;
+        switch (tile.getBiome(i)) {
+        case Forest:
+            filling = '@';
+            break;
+        case Wetland:
+            filling = ':';
+            break;
+        case Mountain:
+            filling = '^';
+            break;
+        case River:
+            filling = '~';
+            break;
+        case Prairie:
+            filling = '|';
+            break;
+        default:
+            break;
+        }
+        unsigned short int padding_x;
+        unsigned short int padding_y;
+        if (i % 2 == 0){
+            //Down triangle
+            if (i == 0){
+                padding_y = size + 1;
+                padding_x = 1;
+            }
+            else if (i == 2){
+                padding_y = 2*size + 1;
+                padding_x = size + 1;
+            }
+            else if (i == 4){
+                padding_y = 1;
+                padding_x = size + 1;
+            }
+            for (int j = 0; j < size - 1; j++){
+                for (int k = size - j - 1; k>0; k--){
+                    rt[padding_x + j][padding_y + j + k -1] = filling;
+                    rt[padding_x + j][padding_y - j - k + 2*size - 2] = filling;
+                }
+            }
+        }
+        else {
+            //Up triangle
+            if (i == 1){
+
+
+                padding_x = 1;
+                padding_y = 2*size + 1;
+            }
+            else if (i == 3){
+                padding_x = size + 1;
+                padding_y = size + 1;
+            }
+            else if (i == 5){
+                padding_x = 1;
+                padding_y = 1;
+            }
+            for (int j = 0; j < size - 1; j++){
+                for (int k = 1; k <= j; k++){
+                    rt[padding_x + j][padding_y - k + size - 1] = filling;
+                    rt[padding_x + j][padding_y + k + size - 2] = filling;
+                }
+            }
+        }
     }
 
     return rt;
