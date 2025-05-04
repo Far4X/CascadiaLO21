@@ -5,6 +5,11 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QMouseEvent>
+#include <QVBoxLayout>
+#include <QFrame>
+#include "ghexboard.hpp"
+
 
 #include "Gametools/Abstract/playerboard.hpp"
 
@@ -15,10 +20,19 @@ public:
     QWidget* getWidget() const;
     void show() override;
 private:
-    QWidget* m_widget;
-    QGridLayout* m_layout;  // Layout pour organiser les widgets
-    QPushButton* m_btn_quit;  // Exemple de bouton
-    QLabel* m_label;  // Exemple de label
+
+    QWidget* m_widget; // widget principal
+    QWidget* m_gridWidget; // widget qui contient la grille
+    QGridLayout* m_gridLayout;  // Grid pour organiser les widgets
+    QVBoxLayout* m_layout;      // Main layout
+    QPushButton* m_btn_quit;  // Bouton Quit
+    QLabel* m_label;  // Label
+    GHexBoard* m_board; // Contient le tableau
+
+    int tileWidth = 20;
+    int tileHeight = 20;
+    const int xOffset = tileWidth * 3 / 4;  // Décalage horizontal des hexagones
+    const int yOffset = tileHeight / 2;    // Décalage vertical des hexagones
 };
 
 #endif // GPLAYERBOARD_HPP

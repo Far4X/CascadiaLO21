@@ -1,24 +1,10 @@
 #include "gplayerboard.hpp"
 #include <iostream>
+#include <QMouseEvent>
 
 GPlayerBoard::GPlayerBoard() : PlayerBoard() {
-    // Crée un widget interne pour l'affichage
-    m_widget = new QWidget();
-
-    // Initialise le layout et les autres widgets à l'intérieur de m_widget
-    m_layout = new QGridLayout(m_widget);
-    m_btn_quit = new QPushButton("Quitter", m_widget);
-    m_label = new QLabel("Bienvenue sur le plateau de jeu!", m_widget);
-
-    m_layout->addWidget(m_label, 0, 0);
-    m_layout->addWidget(m_btn_quit, 1, 0);
-
-    QObject::connect(m_btn_quit, &QPushButton::clicked, m_widget, &QWidget::close);
-
-    m_widget->setLayout(m_layout);
 
     /* FOR DEBUG ONLY */
-
     Biome deb_biomes[6] = {River,Mountain,Prairie,Forest,Wetland,Wetland};
     GameTile* debugT = new GameTile(1,deb_biomes);
     HexCell deb_cell(0,0);
@@ -32,32 +18,34 @@ GPlayerBoard::GPlayerBoard() : PlayerBoard() {
     addTile(*debugT,deb_x,deb_y);
      /* FOR DEBUG ONLY */
 
-    for(int y = 0; y<MAX_SIZE;y++)
-    {
-        for(int x = 0; x<MAX_SIZE;x++)
-        {
-            if(getTile(x,y)==nullptr)
-            {
-                std::cout<<"O";
 
-            }
-            else{
-                std::cout<<"I";
+    m_widget = new QWidget(); // Crée un widget interne pour l'affichage
+    m_layout = new QVBoxLayout(m_widget); // Initialise le layout principal pour le widget
+    m_btn_quit = new QPushButton("Quitter", m_widget); // Crée le bouton quitter et le label de bienvenue
+    m_label = new QLabel("Bienvenue sur le plateau de jeu!", m_widget);
 
-            }
+    // Créer l'objet HexagonalBoard pour contenir les tuiles
+    m_board = new GHexBoard(m_widget);  // Initialise ton objet de tuiles hexagonales
 
-        }
-        std::cout<<std::endl;
+    // Ajout des widget au layout principal
+    m_layout->addWidget(m_label);
+    m_layout->addWidget(m_btn_quit);
+    m_layout->addWidget(m_board); // Ajoute l'objet HexagonalBoard au layout du widget principal
+
+    // Connecte le bouton Quitter pour fermer la fenêtre
+    QObject::connect(m_btn_quit, &QPushButton::clicked, m_widget, &QWidget::close);
     }
 
-}
+
 
 GPlayerBoard::~GPlayerBoard() {
-    // Libère la mémoire allouée
     delete m_layout;
     delete m_btn_quit;
     delete m_label;
+    delete m_gridLayout;
+    delete m_gridWidget;
     delete m_widget;
+    delete m_board;
 }
 
 void GPlayerBoard::show() {

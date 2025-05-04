@@ -2,10 +2,15 @@ QT += widgets
 
 DISTFILES += \
     .gitignore \
-    Assets/blank-map.jpg \
-    Assets/tileOutline.png \
+    Assets/* \
     PlanTile
+
 CONFIG += console
 
-SOURCES += $$files($$PWD/*.cpp, true)
-HEADERS += $$files($$PWD/*.hpp, true)
+SOURCES += $$files($$PWD/*.cpp, true) \
+    GameActors/GraphicalComponents/GraphX/ghexboard.cpp
+HEADERS += $$files($$PWD/*.hpp, true) \
+    GameActors/GraphicalComponents/GraphX/ghexboard.hpp
+
+RESOURCES += \
+    ressources.qrc
