@@ -25,7 +25,7 @@ GPlayerBoard::GPlayerBoard() : PlayerBoard() {
     m_label = new QLabel("Bienvenue sur le plateau de jeu!", m_widget);
 
     // Créer l'objet HexagonalBoard pour contenir les tuiles
-    m_board = new GHexBoard(m_widget);  // Initialise ton objet de tuiles hexagonales
+    m_board = new WidgetHexBoard(m_widget);  // Initialise ton objet de tuiles hexagonales
 
     // Ajout des widget au layout principal
     m_layout->addWidget(m_label);

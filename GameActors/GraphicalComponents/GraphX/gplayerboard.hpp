@@ -8,10 +8,10 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QFrame>
-#include "ghexboard.hpp"
 
-
+#include "widgethexboard.hpp"
 #include "Gametools/Abstract/playerboard.hpp"
+
 
 class GPlayerBoard : public PlayerBoard{
 public:
@@ -27,7 +27,7 @@ private:
     QVBoxLayout* m_layout;      // Main layout
     QPushButton* m_btn_quit;  // Bouton Quit
     QLabel* m_label;  // Label
-    GHexBoard* m_board; // Contient le tableau
+    WidgetHexBoard* m_board; // Contient le tableau
 
     int tileWidth = 20;
     int tileHeight = 20;

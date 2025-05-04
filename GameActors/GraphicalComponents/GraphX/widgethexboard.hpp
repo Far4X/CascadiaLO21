@@ -1,31 +1,28 @@
-#ifndef GHEXBOARD_H
-#define GHEXBOARD_H
+#ifndef WIDGETHEXBOARD_H
+#define WIDGETHEXBOARD_H
 
-#include <QWidget>
 #include <QWidget>
 #include <QLabel>
 #include <QPixmap>
 #include <QVBoxLayout>
-#include <QMouseEvent>
+//#include <QMouseEvent>
 
-const int tileWidth = 64;  // Largeur de la tuile hexagonale
+    const int tileWidth = 64;  // Largeur de la tuile hexagonale
 const int tileHeight = 64; // Hauteur de la tuile hexagonale
 const int xOffset = tileWidth * 3 / 4; // Décalage horizontal entre les tuiles
 const int yOffset = tileHeight / 2;    // Décalage vertical pour les lignes impaires
 
-class GHexBoard : public QWidget
+class WidgetHexBoard : public QWidget
 {
     Q_OBJECT
 public:
-    GHexBoard(QWidget *parent = nullptr,int size = 41);
-    ~GHexBoard() = default;
+    explicit WidgetHexBoard(QWidget *parent = nullptr,int size = 41);
+    ~WidgetHexBoard() = default;
 
     // Méthode pour initialiser les tuiles (à appeler dans le constructeur)
     void initHexTiles();
-
-
 protected:
-    void mousePressEvent(QMouseEvent *event) override; // Surcharge pour capter les clics
+    //void mousePressEvent(QMouseEvent *event) override; // Surcharge pour capter les clics
 
 private:
     int max_size;
@@ -34,4 +31,4 @@ private:
 signals:
 };
 
-#endif // GHEXBOARD_H
+#endif // WIDGETHEXBOARD_H

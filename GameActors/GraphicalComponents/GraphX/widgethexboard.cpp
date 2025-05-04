@@ -1,19 +1,11 @@
-#include "ghexboard.hpp"
+#include "widgethexboard.hpp"
 #include <iostream>
 
-GHexBoard::GHexBoard(QWidget *parent,int size)
+WidgetHexBoard::WidgetHexBoard(QWidget *parent,int size)
     : QWidget{parent}, max_size(size)
-{
-    setAutoFillBackground(true); // Permet de remplir l'arrière-plan
-    setGeometry(0, 0, 600, 600);  // Fixe la taille du widget
-    m_layout = new QVBoxLayout(this);  // Optionnel : peut être utilisé si tu veux gérer des widgets enfants
-    setLayout(m_layout);  // Applique le layout
+{}
 
-    // Exemple d'initialisation de tuiles hexagonales (image de démonstration)
-    initHexTiles();
-}
-
-void GHexBoard::initHexTiles(){
+void WidgetHexBoard::initHexTiles(){
     for (int col = 0; col < max_size; ++col) {
         for (int row = 0; row < max_size; ++row) {
             QLabel* tileLabel = new QLabel(this);  // Création d'un QLabel pour chaque tuile
@@ -36,8 +28,6 @@ void GHexBoard::initHexTiles(){
 
             tileLabel->move(x, y);  // Déplacement relatif au widget
 
-            // Ajouter la tuile à l'objet widget (sans passer par un layout ici, tout est géré par move())
-            m_layout->addWidget(tileLabel);  // Cela permet d'ajouter d'autres éléments au widget, mais move() gère la position
         }
     }
 }
