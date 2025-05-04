@@ -1,10 +1,13 @@
 #include "bearscoringcarda.hpp"
-#include "../../Gametools/Tiling/gametile.hpp"
+#include "scoring/scoreutils.hpp"
 
-void BearScoringCardA::score(Cards card, Wildlife type) {
+double BearScoringCardA::computeScore(const PlayerBoard& board) const {
+
+    auto tokens = ScoreUtils::gatherAllTokens(board);
+    auto bears = ScoreUtils::getAdjacentComponents<WildlifeToken>(tokens, Bear, MAX_SIZE);
+
     int cpt = 0;
-    std::vector<std::vector<GameTile*>> bears;
-	for (int i = 0; i < bears.size(); i++) {
+    for (size_t i = 0; i < bears.size(); i++) {
 		if (bears[i].size() == 2) {
 			cpt += 1;
 		}
@@ -24,5 +27,6 @@ void BearScoringCardA::score(Cards card, Wildlife type) {
 			break;
 		default:
 			final_score += 27;
-	}	
+    }
+    return final_score;
 }

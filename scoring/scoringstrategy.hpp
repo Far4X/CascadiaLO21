@@ -1,9 +1,12 @@
 #pragma once
-#include "../GameTools/wildlifetoken.hpp"
+
+#include "scoring/score.hpp"
 
 enum Cards { A, B, C, D };
+class WildlifeScoringStrategy;
 
 class ScoringStrategy {
 public:
-	virtual void computeScore(Cards card, Wildlife type) = 0;
+    virtual double computeScore(const PlayerBoard& board) const = 0;
+    virtual ~ScoringStrategy() = default;
 };

@@ -1,29 +1,18 @@
 #include "score.hpp"
+#include <iostream>
+#include "scoring/scoringstrategy.hpp"
 
-void Score::obtainScore(Cards card, Wildlife type) {
-	m_mode->computeScore(card, type);
+void Score::setStrategy(std::unique_ptr<ScoringStrategy> card) {
+    m_card = std::move(card);
 }
 
 
-std::vector<std::vector<GameTile*>> Score::gatherAllTiles(const PlayerBoard& board, int size) {
-    std::vector<std::vector<GameTile*>> tiles(size, std::vector<GameTile*>(size, nullptr));
-    for (int y = 0; y < size; y++) {
-        for (int x = 0; x < size; x++) {
-            tiles[y][x] = board.getTile(x, y);
-        }
+double Score::obtainScore(const PlayerBoard& board) const {
+    if (m_card) {
+        return m_card->computeScore(board);
     }
-    return tiles;
-}
-
-std::vector<std::vector<WildlifeToken*>> Score::gatherAllTokens(const PlayerBoard& board, int size) {
-    std::vector<std::vector<WildlifeToken*>> tokens(size, std::vector<WildlifeToken*>(size, nullptr));
-    for (int y = 0; y < size; y++) {
-        for (int x = 0; x < size; x++) {
-            GameTile* tile = board.getTile(x, y);
-            if (tile != nullptr) {
-                tokens[y][x] = tile->getToken();
-            }
-        }
+    else {
+        std::cout<<"Strategy not set";
+        return 0.0;
     }
-    return tokens;
 }

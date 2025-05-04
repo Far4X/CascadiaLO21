@@ -1,7 +1,7 @@
 #pragma once
-#include "../wildlifescoringstrategy.hpp"
+#include "scoring/scoringstrategies/wildlifescoringstrategy.hpp"
 
 class BearScoringCardB : public WildlifeScoringStrategy {
 public:
-	void score(Cards card, Wildlife type) override;
+    double computeScore(const PlayerBoard& board) const override;
 };
