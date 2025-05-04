@@ -31,13 +31,12 @@ std::string Game::getSaveString() const {
 }
 void Game::play(){
     if (m_is_console){
-        m_player_menu = new CPlayerMenu(this);
+        m_game_menu = new CGameMenu(this);
     }
     else {
-        m_player_menu = new GPlayerMenu(this);
+        m_game_menu = new GGameMenu(this);
     }
-    m_player_menu->show();
-
+    m_game_menu->show();
 }
 void Game::init(){
 
@@ -64,6 +63,18 @@ void Game::notify(unsigned int code){
         }
         std::cout << "Show board" << std::endl;
         m_players[0].getBoard()->show();
+    }
+    if (code == 2){
+
+        //Treat gamemenu
+
+        if (m_is_console){
+            m_player_menu = new CPlayerMenu(this);
+        }
+        else {
+            m_player_menu = new GPlayerMenu(this);
+        }
+        m_player_menu->show();
     }
 }
 

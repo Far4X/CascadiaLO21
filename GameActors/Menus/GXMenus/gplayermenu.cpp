@@ -5,7 +5,7 @@
 GPlayerMenu::GPlayerMenu(NotifiableInterface* tar) : GMenu(tar, nullptr, 300, 200, 200, 200){
     m_main_layout = new QGridLayout(this);
 
-    m_btn_quit = new QPushButton(QString("Quitter") ,this);
+    m_btn_quit = new QPushButton(QString("Quitter"), this);
     m_btn_validate = new QPushButton(QString("Valider"), this);
     m_spinbox = new QSpinBox(this);
     m_label = new QLabel(QString("Merci de choisr le nombre de joueurs : "), this);

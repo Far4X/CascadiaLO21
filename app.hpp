@@ -5,8 +5,7 @@
 #include "GameActors/game.hpp"
 #include <iostream>
 
-class App : public QApplication
-{
+class App : public QApplication {
 public:
     inline bool getIsConsole() const { return m_is_console; };
     static App &getInstance(int argc = 0, char *argv[] = nullptr);

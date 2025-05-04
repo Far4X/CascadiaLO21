@@ -6,6 +6,7 @@
 class CGameMenu : public CMenu<std::tuple<std::string, std::string>> {
 public:
     CGameMenu(NotifiableInterface *tar);
+    void show() override;
 };
 
 #endif // CGAMEMENU_HPP

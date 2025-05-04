@@ -2,16 +2,14 @@
 #include <QWidget>
 #include <iostream>
 
-App &App::getInstance(int argc, char *argv[])
-{
+App &App::getInstance(int argc, char *argv[]){
     static App ins(argc, argv);
     return ins;
 }
 
-App::App(int argc, char *argv[]) : QApplication(argc, argv)
-{
+App::App(int argc, char *argv[]) : QApplication(argc, argv){
     std::cout << "Created app" << std::endl;
-    m_is_console = true; //DEBUG
+    //m_is_console = true; //DEBUG
 
     for (int i = 0; i < argc; i++){
         if (argv[i][0] == 'k' && argv[i][1] == '\0'){
