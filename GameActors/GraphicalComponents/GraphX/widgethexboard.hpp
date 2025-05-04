@@ -21,6 +21,7 @@ public:
 
     // Méthode pour initialiser les tuiles (à appeler dans le constructeur)
     void initHexTiles();
+    void addTile(int x,int y); // x,y de la matrice pas q,r !
 protected:
     //void mousePressEvent(QMouseEvent *event) override; // Surcharge pour capter les clics
 

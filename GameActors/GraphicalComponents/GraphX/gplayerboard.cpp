@@ -18,19 +18,19 @@ GPlayerBoard::GPlayerBoard() : PlayerBoard() {
     addTile(*debugT,deb_x,deb_y);
      /* FOR DEBUG ONLY */
 
-
+    // Allocation des Widgets
     m_widget = new QWidget(); // Crée un widget interne pour l'affichage
     m_layout = new QVBoxLayout(m_widget); // Initialise le layout principal pour le widget
     m_btn_quit = new QPushButton("Quitter", m_widget); // Crée le bouton quitter et le label de bienvenue
     m_label = new QLabel("Bienvenue sur le plateau de jeu!", m_widget);
-
-    // Créer l'objet HexagonalBoard pour contenir les tuiles
-    m_board = new WidgetHexBoard(m_widget);  // Initialise ton objet de tuiles hexagonales
+    m_board = new WidgetHexBoard(m_widget,MAX_SIZE);  // Initialise les tuiles
 
     // Ajout des widget au layout principal
-    m_layout->addWidget(m_label);
-    m_layout->addWidget(m_btn_quit);
-    m_layout->addWidget(m_board); // Ajoute l'objet HexagonalBoard au layout du widget principal
+    m_layout->addWidget(m_label,0);
+    m_layout->addWidget(m_btn_quit,0);
+    m_layout->addWidget(m_board,1);
+
+
 
     // Connecte le bouton Quitter pour fermer la fenêtre
     QObject::connect(m_btn_quit, &QPushButton::clicked, m_widget, &QWidget::close);
