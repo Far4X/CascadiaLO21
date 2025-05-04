@@ -3,10 +3,10 @@
 
 #include "cmenu.hpp"
 
-class CGameMenu : public CMenu
-{
+class CGameMenu : public CMenu<std::tuple<std::string, std::string>> {
 public:
-    CGameMenu();
+    CGameMenu(NotifiableInterface *tar);
+    void show() override;
 };
 
 #endif // CGAMEMENU_HPP
