@@ -21,7 +21,7 @@ GPlayerBoard::GPlayerBoard() : PlayerBoard() {
 
     Biome deb_biomes[6] = {River,Mountain,Prairie,Forest,Wetland,Wetland};
     GameTile* debugT = new GameTile(1,deb_biomes);
-    HexCell deb_cell(2,2);
+    HexCell deb_cell(0,0);
     Offset* deb_off = new Offset(axialToOffset(deb_cell));
 
     unsigned int deb_xs = (deb_off->getCol());
@@ -29,11 +29,7 @@ GPlayerBoard::GPlayerBoard() : PlayerBoard() {
 
     unsigned int deb_ys = (deb_off->getRow());
     unsigned int* deb_y = & deb_ys;
-
-    std::cout<<deb_xs;
-    std::cout<<deb_ys;
-
-    //addTile(*debugT,deb_x,deb_y);
+    addTile(*debugT,deb_x,deb_y);
      /* FOR DEBUG ONLY */
 
     for(int y = 0; y<MAX_SIZE;y++)
@@ -43,9 +39,11 @@ GPlayerBoard::GPlayerBoard() : PlayerBoard() {
             if(getTile(x,y)==nullptr)
             {
                 std::cout<<"O";
+
             }
             else{
                 std::cout<<"I";
+
             }
 
         }
