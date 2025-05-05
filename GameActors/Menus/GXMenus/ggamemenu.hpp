@@ -21,6 +21,9 @@ class GGameMenu : public GMenu<std::tuple<std::string, std::string>>{
     QPushButton* m_btn_load_extension = nullptr;
     QPushButton* m_btn_validate = nullptr;
 
+    QPushButton* m_btn_restart = nullptr;
+    QPushButton* m_btn_quit = nullptr;
+
     QLineEdit* m_line_edit_cards = nullptr;
 public:
     GGameMenu(NotifiableInterface *tar);
