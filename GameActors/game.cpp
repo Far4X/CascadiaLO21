@@ -119,7 +119,7 @@ void Game::quit(){
 }
 
 void Game::restart(){
-    std::cout<<"Redemarrage d'une nouvelle partie..."<<std::enl;
+    std::cout<<"Redemarrage d'une nouvelle partie..."<<std::endl;
     delete m_player_menu;
     delete m_game_menu;
     m_player_menu = nullptr;
