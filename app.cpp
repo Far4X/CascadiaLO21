@@ -31,7 +31,13 @@ App::~App(){
 }
 
 int App::exec(){
-    m_game->play();
-    std::cout << "Play out" << std::endl;
+    while (m_game->getGameStatus() != GameStatus::Quit){
+        if (m_game->getGameStatus() == GameStatus::Restart){
+            m_game->restart();
+        } else {
+            m_game->play();
+        }
+    }
+    std::cout << "Game Over" << std::endl;
     return QApplication::exec();
 }
