@@ -28,6 +28,8 @@ public:
     void getInfoConsole();
     void getInfoGX();
     void notify(unsigned int code) override;
+    void restart();
+    void stop();
 
 };
 
