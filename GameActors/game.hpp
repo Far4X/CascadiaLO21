@@ -7,6 +7,13 @@
 #include "player.hpp"
 #include <vector>
 
+enum class GameStatus {
+    NotStarted,
+    Running,
+    Quit,
+    Restart
+};
+
 class Game : public SalvableThing, public NotifiableInterface {
     unsigned short m_nb_players = 0;
     Menu<std::string>* m_player_menu = nullptr;
@@ -16,6 +23,7 @@ class Game : public SalvableThing, public NotifiableInterface {
     std::vector<Player> m_players;
     GameTile** m_cards = nullptr;
     unsigned short int m_nb_cards = 0;
+    GameStatus m_status = GameStatus::NotStarted;
 
 
 public:
@@ -29,7 +37,7 @@ public:
     void getInfoGX();
     void notify(unsigned int code) override;
     void restart();
-    void stop();
+    void quit();
 
 };
 
