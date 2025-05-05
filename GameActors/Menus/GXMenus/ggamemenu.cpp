@@ -27,6 +27,9 @@ GGameMenu::GGameMenu(NotifiableInterface *tar) : GMenu<std::tuple<std::string, s
 
     m_main_layout->addWidget(m_btn_validate, 4, 1, 1, 1);
 
+    m_main_layout->addWidget(m_btn_restart, 5, 0, 1, 1);
+    m_main_layout->addWidget(m_btn_quit, 5, 1, 1, 1);
+
     QObject::connect(m_btn_validate, &QPushButton::clicked, this, &GGameMenu::validate);
     QObject::connect(m_btn_load_extension, &QPushButton::clicked, this, &GGameMenu::loadExtension);
     QObject::connect(m_btn_recover, &QPushButton::clicked, this, &GGameMenu::usePreviousGame);
@@ -53,6 +56,20 @@ void GGameMenu::loadExtension(){
     m_btn_recover->hide();
 }
 
+void GGameMenu::restartGame(){
+     this->addResult(std::tuple<std::string, std::string>("Restart", "true"));
+     this->hide();
+     if (m_target != nullptr){
+         m_target->notify(2);
+     }
+ }
+ void GGameMenu::quitGame(){
+     this->addResult(std::tuple<std::string, std::string>("Quit", "true"));
+     this->hide();
+     if (m_target != nullptr){
+         m_target->notify(2);
+     }
+ }
 
 void GGameMenu::show(){
     QWidget::show();
