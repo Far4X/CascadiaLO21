@@ -35,6 +35,7 @@ public:
     void init();
     void getInfoConsole();
     void getInfoGX();
+    GameStatus getGameStatus() const;
     void notify(unsigned int code) override;
     void restart();
     void quit();
