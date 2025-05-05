@@ -108,3 +108,20 @@ void Game::readCards(std::string path){
 
 }
 
+void Game::quit(){
+    std::cout<<"Partie terminée"<<std::endl;
+    m_status = GameStatus::Quit;
+
+}
+
+void Game::restart(){
+    std::cout<<"Redemarrage d'une nouvelle partie..."<<std::enl;
+    delete m_player_menu;
+    delete m_game_menu;
+    m_player_menu = nullptr;
+    m_game_menu = nullptr;
+    m_players.clear();
+    m_nb_players = 0;
+    m_status = GameStatus::Restart;
+
+}
