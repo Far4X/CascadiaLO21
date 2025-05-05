@@ -62,6 +62,20 @@ void GGameMenu::loadExtension(){
     QObject::disconnect(m_btn_recover, &QPushButton::clicked, this, &GGameMenu::usePreviousGame);
     m_btn_recover->hide();
 }
+void GGameMenu::restartGame(){
+    this->addResult(std::tuple<std::string, std::string>("Restart", "true"));
+    this->hide();
+    if (m_target != nullptr){
+        m_target->notify(2);
+    }
+}
+void GGameMenu::quitGame(){
+    this->addResult(std::tuple<std::string, std::string>("Quit", "true"));
+    this->hide();
+    if (m_target != nullptr){
+        m_target->notify(2);
+    }
+}
 
 
 void GGameMenu::show(){
