@@ -32,6 +32,8 @@ std::string Game::getSaveString() const {
     return "";
 }
 void Game::play(){
+    m_status = GameStatus::Running;
+    
     if (m_is_console){
         m_game_menu = new CGameMenu(this);
     }
