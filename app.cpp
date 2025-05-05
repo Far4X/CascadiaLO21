@@ -31,6 +31,7 @@ App::~App(){
 }
 
 int App::exec(){
+    m_game->m_status = GameStatus::Running;
     m_game->play();
     std::cout << "Play out" << std::endl;
     return QApplication::exec();
