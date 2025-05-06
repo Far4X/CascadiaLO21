@@ -11,6 +11,9 @@ GGameMenu::GGameMenu(NotifiableInterface *tar) : GMenu<std::tuple<std::string, s
     m_btn_recover = new QPushButton(QString("Récupérer"), this);
     m_btn_load_extension = new QPushButton(QString("Charger l'extension"), this);
     m_btn_validate = new QPushButton(QString("Valider"), this);
+    m_btn_restart = new QPushButton(QString("Recommencer"), this);
+    m_btn_quit = new QPushButton(QString("Quitter"), this);
+
 
     m_line_edit_cards = new QLineEdit(QString("AAAAA"), this);
 
@@ -33,6 +36,9 @@ GGameMenu::GGameMenu(NotifiableInterface *tar) : GMenu<std::tuple<std::string, s
     QObject::connect(m_btn_validate, &QPushButton::clicked, this, &GGameMenu::validate);
     QObject::connect(m_btn_load_extension, &QPushButton::clicked, this, &GGameMenu::loadExtension);
     QObject::connect(m_btn_recover, &QPushButton::clicked, this, &GGameMenu::usePreviousGame);
+    QObject::connect(m_btn_restart, &QPushButton::clicked, this, &GGameMenu::restartGame);
+    QObject::connect(m_btn_quit, &QPushButton::clicked, this, &GGameMenu::quitGame);
+
 
 }
 
@@ -54,6 +60,20 @@ void GGameMenu::loadExtension(){
     this->addResult(std::tuple<std::string, std::string>("Load extension", "true"));
     QObject::disconnect(m_btn_recover, &QPushButton::clicked, this, &GGameMenu::usePreviousGame);
     m_btn_recover->hide();
+}
+void GGameMenu::restartGame(){
+    this->addResult(std::tuple<std::string, std::string>("Restart", "true"));
+    this->hide();
+    if (m_target != nullptr){
+        m_target->notify(2);
+    }
+}
+void GGameMenu::quitGame(){
+    this->addResult(std::tuple<std::string, std::string>("Quit", "true"));
+    this->hide();
+    if (m_target != nullptr){
+        m_target->notify(2);
+    }
 }
 
 void GGameMenu::restartGame(){

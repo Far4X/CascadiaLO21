@@ -18,8 +18,8 @@ int PlayerBoard::floorDiv(int n) {
 PlayerBoard::Offset PlayerBoard::axialToOffset(const HexCell& hex){
     int q = hex.getQ();
     int r = hex.getR();
-    int col = q + MAX_SIZE;
-    int row = r + floorDiv(q) + MAX_SIZE;
+    int col = q + MAX_SIZE/2;
+    int row = r + floorDiv(q) + MAX_SIZE/2;
     return PlayerBoard::Offset(col, row);
 }
 
@@ -32,7 +32,7 @@ HexCell PlayerBoard::offsetToAxial(const Offset& off){
 }
 
 
-std::string PlayerBoard::getSaveString() const {
+std::string PlayerBoard::getSaveString() const { // genere un string qui permet de déchiffrer l'affichage
     std::string desc = "c:";
     for (int i = 0; i < MAX_SIZE; i++){
         for (int j = 0; j < MAX_SIZE; j++){

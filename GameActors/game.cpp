@@ -52,6 +52,8 @@ void Game::getInfoGX(){
 
 }
 
+GameStatus Game::getGameStatus() const { return m_status; }
+
 void Game::notify(unsigned int code){
     if (code == 1){
         for (Menu<std::string>::Iterator it = m_player_menu->getIterator(); !it.isDone(); it++){

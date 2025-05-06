@@ -26,7 +26,6 @@ class Game : public SalvableThing, public NotifiableInterface {
     GameStatus m_status = GameStatus::NotStarted;
 
 
-
 public:
     Game(const bool is_console = false);
     ~Game();
