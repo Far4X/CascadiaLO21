@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/Assets">
+        <file>Assets/blank-map.jpg</file>
+        <file>Assets/tileOutline.png</file>
+        <file>Assets/Tiles/desert.png</file>
+        <file>Assets/Tiles/lake.png</file>
+    </qresource>
+</RCC>

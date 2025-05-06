@@ -32,6 +32,6 @@ App::~App(){
 
 int App::exec(){
     m_game->play();
-    std::cout << "Play out" << std::endl;
+    std::cout << "Game Over" << std::endl;
     return QApplication::exec();
 }

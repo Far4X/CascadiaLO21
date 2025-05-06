@@ -28,6 +28,8 @@ public:
     void validate();
     void usePreviousGame();
     void loadExtension();
+    /*void quitGame();
+    void restartGame();*/
 
 };
 

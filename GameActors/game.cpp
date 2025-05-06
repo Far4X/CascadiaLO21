@@ -26,10 +26,14 @@ Game::~Game(){
     delete m_player_menu;
 }
 
+GameStatus Game::getGameStatus() const { return m_status; }
+
 std::string Game::getSaveString() const {
     return "";
 }
 void Game::play(){
+    m_status = GameStatus::Running;
+    
     if (m_is_console){
         m_game_menu = new CGameMenu(this);
     }
@@ -108,3 +112,20 @@ void Game::readCards(std::string path){
 
 }
 
+void Game::quit(){
+    std::cout<<"Partie terminée"<<std::endl;
+    m_status = GameStatus::Quit;
+
+}
+
+void Game::restart(){
+    std::cout<<"Redemarrage d'une nouvelle partie..."<<std::endl;
+    delete m_player_menu;
+    delete m_game_menu;
+    m_player_menu = nullptr;
+    m_game_menu = nullptr;
+    m_players.clear();
+    m_nb_players = 0;
+    m_status = GameStatus::Restart;
+
+}
