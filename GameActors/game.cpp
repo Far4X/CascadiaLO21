@@ -67,6 +67,7 @@ void Game::notify(unsigned int code){
         }
         std::cout << "Show board" << std::endl;
         m_players[0].getBoard()->show();
+
     }
     if (code == 2){
 
