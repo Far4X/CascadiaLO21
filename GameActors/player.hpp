@@ -43,6 +43,4 @@ public:
 
     };
 
-
-    \//omnd
 #endif // PLAYER_HPP
