@@ -54,8 +54,11 @@ void Game::getInfoGX(){
 
 void Game::notify(unsigned int code){
     if (code == 1){
+        Player *pl = nullptr;
         for (Menu<std::string>::Iterator it = m_player_menu->getIterator(); !it.isDone(); it++){
-            m_players.push_back(Player(it.getValue()));
+            std::cout << it.getValue() << std::endl;
+            pl = new Player(it.getValue());
+            m_players.push_back(pl);
             PlayerBoard* bd;
             if (m_is_console){
                 bd = new CPlayerBoard();
@@ -63,15 +66,13 @@ void Game::notify(unsigned int code){
             else {
                 bd = new GPlayerBoard();
             }
-            m_players.back().setBoard(bd);
+            m_players.back()->setBoard(bd);
+            std::cout << m_players.back()->getName() << std::endl;
         }
         std::cout << "Show board" << std::endl;
-        m_players[0].getBoard()->show();
+        m_players[0]->getBoard()->show();
     }
     if (code == 2){
-
-        //Treat gamemenu
-
         if (m_is_console){
             m_player_menu = new CPlayerMenu(this);
         }

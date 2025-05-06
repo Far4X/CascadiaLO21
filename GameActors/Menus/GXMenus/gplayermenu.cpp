@@ -26,11 +26,11 @@ GPlayerMenu::GPlayerMenu(NotifiableInterface* tar) : GMenu(tar, nullptr, 300, 20
 }
 
 GPlayerMenu::~GPlayerMenu(){
-    delete m_main_layout;
+    /*delete m_main_layout;
     delete m_btn_quit;
     delete m_btn_validate;
     delete m_label;
-    delete m_spinbox;
+    delete m_spinbox;*/
 
     for (int i = 0; i < m_nb_player; i++){
         delete m_lines_names[i];

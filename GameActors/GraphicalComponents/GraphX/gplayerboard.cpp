@@ -1,10 +1,10 @@
 #include "gplayerboard.hpp"
 #include <iostream>
 #include <QMouseEvent>
-
+/*
 GPlayerBoard::GPlayerBoard() : PlayerBoard() {
 
-    /* FOR DEBUG ONLY */
+     FOR DEBUG ONLY
     Biome deb_biomes[6] = {River,Mountain,Prairie,Forest,Wetland,Wetland};
     GameTile* debugT = new GameTile(1,deb_biomes);
     HexCell deb_cell(0,0);
@@ -16,7 +16,7 @@ GPlayerBoard::GPlayerBoard() : PlayerBoard() {
     unsigned int deb_ys = (deb_off->getRow());
     unsigned int* deb_y = & deb_ys;
     addTile(*debugT,deb_x,deb_y);
-     /* FOR DEBUG ONLY */
+     FOR DEBUG ONLY
 
     // Allocation des Widgets
     m_widget = new QWidget(); // Crée un widget interne pour l'affichage
@@ -39,7 +39,7 @@ GPlayerBoard::GPlayerBoard() : PlayerBoard() {
 
 
 GPlayerBoard::~GPlayerBoard() {
-    delete m_layout;
+    /*delete m_layout;
     delete m_btn_quit;
     delete m_label;
     delete m_gridLayout;
@@ -50,4 +50,4 @@ GPlayerBoard::~GPlayerBoard() {
 
 void GPlayerBoard::show() {
     m_widget->show();
-}
+}*/
