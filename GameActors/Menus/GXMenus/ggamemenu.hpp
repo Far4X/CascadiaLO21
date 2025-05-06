@@ -20,12 +20,6 @@ class GGameMenu : public GMenu<std::tuple<std::string, std::string>>{
     QPushButton* m_btn_recover = nullptr;
     QPushButton* m_btn_load_extension = nullptr;
     QPushButton* m_btn_validate = nullptr;
-    
-    QPushButton* m_btn_restart = nullptr;
-    QPushButton* m_btn_quit = nullptr;
-
-    QPushButton* m_btn_restart = nullptr;
-    QPushButton* m_btn_quit = nullptr;
 
     QLineEdit* m_line_edit_cards = nullptr;
 public:
@@ -34,8 +28,8 @@ public:
     void validate();
     void usePreviousGame();
     void loadExtension();
-    void quitGame();
-    void restartGame();
+    /*void quitGame();
+    void restartGame();*/
 
 };
 
