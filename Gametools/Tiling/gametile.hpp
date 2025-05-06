@@ -27,7 +27,6 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
 
 public:
     GameTile(const unsigned int id, Biome biomes[6], Wildlife *type = nullptr, int num_types = 0, int posx = 0, int posy = 0);
-    static constexpr int MAX_ID = 90;
     void Rotate(Rotation dir = Anti_Trigonometric);
     int draw();
     Biome getBiome(unsigned short int number) const {{return m_biomes[number%6];}}
