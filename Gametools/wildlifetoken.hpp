@@ -1,7 +1,10 @@
 #ifndef WILDLIFETOKEN_HPP
 #define WILDLIFETOKEN_HPP
 
+#include <initializer_list>
+
 enum Wildlife {Bear, Salmon, Hawk, Elk, Fox};
+inline std::initializer_list<Wildlife> Animals = { Wildlife::Bear, Wildlife::Salmon, Wildlife::Hawk, Wildlife::Elk, Wildlife::Fox };
 
 class WildlifeToken {
     Wildlife m_type;

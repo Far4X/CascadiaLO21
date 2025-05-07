@@ -6,9 +6,7 @@
 class TileScoringStrategy : ScoringStrategy {
 public:
     TileScoringStrategy();
-    double computeScore(const PlayerBoard& board) const override {
-        return 123.0;  // placeholder bien sûr
-    }
+    double computeScore(const PlayerBoard& board) const override;
 };
 
 #endif // TILESCORINGSTRATEGY_H
