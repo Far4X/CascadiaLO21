@@ -2,7 +2,7 @@
 
 unsigned int Player::nb_players = 0;
 
-Player::Player(const std::string& name) : m_name(name), m_id(++nb_players), m_board(nullptr){
+Player::Player(const std::string& name) : m_name(name), m_id(++nb_players){
 
 }
 
@@ -10,6 +10,7 @@ Player::Player(const std::string& name) : m_name(name), m_id(++nb_players), m_bo
 Player::~Player() {
     Player::nb_players--;
     delete m_board;
+    m_board = nullptr;
 }
 
 

@@ -17,11 +17,12 @@ class Player : public SalvableThing {
 
     std::vector<GameTile*> m_tiles;
     std::vector<WildlifeToken*> m_tokens;
-    PlayerBoard* m_board;
+    PlayerBoard* m_board = nullptr;
 
-    Player(const std::string& name);
 
 public:
+    Player(const std::string& name);
+
     Player(const Player&) = default;
     static int getNbPlayers() { return nb_players;}
     const std::string getName() const {return m_name;}
@@ -39,7 +40,6 @@ public:
 
 
     std::string getSaveString() const override;
-
 
     };
 

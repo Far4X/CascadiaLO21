@@ -20,7 +20,7 @@ class Game : public SalvableThing, public NotifiableInterface {
     Menu<std::tuple<std::string, std::string>>* m_game_menu = nullptr;
 
     const bool m_is_console;
-    std::vector<Player> m_players;
+    std::vector<Player*> m_players;
     GameTile** m_cards = nullptr;
     unsigned short int m_nb_cards = 0;
     GameStatus m_status = GameStatus::NotStarted;
