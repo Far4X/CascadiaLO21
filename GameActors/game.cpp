@@ -70,7 +70,14 @@ void Game::notify(unsigned int code){
             std::cout << m_players.back()->getName() << std::endl;
         }
         std::cout << "Show board" << std::endl;
-        m_players[0]->getBoard()->show();
+        QWidget* m_widget = new QWidget;
+        QVBoxLayout* m_layout = new QVBoxLayout(m_widget);
+        PlayerBoard* board = m_players[0]->getBoard();
+        GPlayerBoard* gboard = dynamic_cast<GPlayerBoard*>(board);
+        m_layout->addWidget(gboard,0);
+        m_widget->show();
+        //m_players[1]->getBoard()->show();
+
     }
     if (code == 2){
         if (m_is_console){
