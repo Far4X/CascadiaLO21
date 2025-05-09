@@ -2,6 +2,8 @@
 #include <iostream>
 #include <QMouseEvent>
 
+#include "graphxvue.hpp"
+
 GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{parent}, max_size(size) {
 
     // FOR DEBUG ONLY
@@ -25,6 +27,9 @@ GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{pa
 
     // Exemple d'initialisation de tuiles hexagonales (image de démonstration)
     initHexTiles();
+
+    m_manager = GraphXVue::instance();
+    m_manager->addPlayerBoard(this);
     }
 
 
@@ -32,10 +37,17 @@ void GPlayerBoard::initHexTiles(){
     for (int col = 0; col < max_size; ++col) {
         for (int row = 0; row < max_size; ++row) {
             QLabel* tileLabel = new QLabel(this);  // Création d'un QLabel pour chaque tuile
-            QPixmap pixmap(":/Assets/Assets/Tiles/desert.png");  // Charge une image de tuile
-            if (pixmap.isNull()) {
-                std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;
-            }
+            QPixmap pixmap;  // Charge une image de tuile
+            if (getTile(col,row)==nullptr)
+                {
+                QPixmap pixmapL(":/Assets/Assets/Tiles/desert.png");
+                pixmap = pixmapL;
+                }
+            else {
+                QPixmap pixmapL(":/Assets/Assets/Tiles/lake.png");
+                pixmap = pixmapL;
+                }
+            if (pixmap.isNull()) {std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;}
             tileLabel->setPixmap(pixmap);
             tileLabel->setFixedSize(tileWidth, tileHeight);
             tileLabel->setScaledContents(true);  // Pour que l'image remplisse le QLabel
@@ -76,4 +88,21 @@ void GPlayerBoard::addGxTile(int col,int row){
 
     tileLabel->move(x, y);  // Déplacement relatif au widget
 }
+
+void GPlayerBoard::show(){
+    m_manager->show();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
