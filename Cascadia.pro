@@ -3,7 +3,8 @@ QT += widgets
 DISTFILES += \
     .gitignore \
     Assets/* \
-    Assets/ListTiles \
+    Assets/ListTiles.csv \
+    Assets/StarterTiles.csv \
     PlanTile
 
 CONFIG += console

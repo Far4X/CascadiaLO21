@@ -199,3 +199,14 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
     return rt;
 }
 
+bool GameTile::isKeystone(const std::string& description) {
+    if (description.size() < 6) return false; // sécurité
+
+    char first = description[0];
+    for (int i = 1; i < 6; ++i) {
+        if (description[i] != first) {
+            return false;
+        }
+    }
+    return true;
+}

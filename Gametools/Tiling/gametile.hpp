@@ -39,6 +39,8 @@ public:
         }
         return false;
     }
+    bool isKeystone(const std::string& description);
+
 };
 
 char** getRepresentation(const GameTile& tile,  unsigned short int size = 5);
