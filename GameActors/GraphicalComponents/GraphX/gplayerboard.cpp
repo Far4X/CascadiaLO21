@@ -1,7 +1,8 @@
 #include "gplayerboard.hpp"
 #include <iostream>
 #include <QMouseEvent>
-
+#include <cstdlib>
+#include <ctime>
 #include "graphxvue.hpp"
 
 GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{parent}, max_size(size) {
@@ -34,11 +35,12 @@ GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{pa
 
 
 void GPlayerBoard::initHexTiles(){
+    std::srand(std::time(0)); // Initialiser le générateur aléatoire avec l'heure actuelle
     for (int col = 0; col < max_size; ++col) {
         for (int row = 0; row < max_size; ++row) {
             QLabel* tileLabel = new QLabel(this);  // Création d'un QLabel pour chaque tuile
             QPixmap pixmap;  // Charge une image de tuile
-            if (getTile(col,row)==nullptr)
+            if (std::rand() % 2 == 0)
                 {
                 QPixmap pixmapL(":/Assets/Assets/Tiles/desert.png");
                 pixmap = pixmapL;
