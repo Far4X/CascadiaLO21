@@ -5,6 +5,7 @@
 
 Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console){
     //readCards();
+    std::srand(std::time(0)); // debug
     m_cards = new GameTile*;
     *m_cards = new GameTile(0, "112233213");
     char** repr;

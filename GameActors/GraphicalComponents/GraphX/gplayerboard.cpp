@@ -22,7 +22,7 @@ GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{pa
     // FOR DEBUG ONLY
 
     setAutoFillBackground(true); // Permet de remplir l'arrière-plan
-    setGeometry(0, 0, 600, 600);  // Fixe la taille du widget
+    setGeometry(0, 0, sizeHint().width(), sizeHint().height());  // Fixe la taille du widget
     m_layout = new QVBoxLayout(this);  // Optionnel : peut être utilisé si tu veux gérer des widgets enfants
     setLayout(m_layout);  // Applique le layout (mais ne sera pas utilisé pour les tuiles)
 
@@ -35,14 +35,17 @@ GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{pa
 
 
 void GPlayerBoard::initHexTiles(){
-    std::srand(std::time(0)); // Initialiser le générateur aléatoire avec l'heure actuelle
     for (int col = 0; col < max_size; ++col) {
         for (int row = 0; row < max_size; ++row) {
             QLabel* tileLabel = new QLabel(this);  // Création d'un QLabel pour chaque tuile
             QPixmap pixmap;  // Charge une image de tuile
-            if (std::rand() % 2 == 0)
+            if (std::rand() % 2 == 0 && col!=20 && row!=20)
                 {
                 QPixmap pixmapL(":/Assets/Assets/Tiles/desert.png");
+                pixmap = pixmapL;
+                }
+            else if (col==20 && row==20){
+                QPixmap pixmapL(":/Assets/Assets/tileOutline.png");
                 pixmap = pixmapL;
                 }
             else {
@@ -93,6 +96,10 @@ void GPlayerBoard::addGxTile(int col,int row){
 
 void GPlayerBoard::show(){
     m_manager->show();
+}
+
+QSize GPlayerBoard::sizeHint() const {
+    return QSize(41*tileWidth,42*tileHeight);
 }
 
 

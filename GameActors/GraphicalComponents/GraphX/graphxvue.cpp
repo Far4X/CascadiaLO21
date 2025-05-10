@@ -34,9 +34,8 @@ GraphXVue::GraphXVue(QObject *parent)
     m_view->setRenderHint(QPainter::Antialiasing);
     m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     m_right_panel_layout->addWidget(m_view);
-
-
-
+    QRectF sceneRect(0, 0, 2600, 2600);  //plus tard remplacer par de vrai fonction qui permettent de gérer le zoom dezoom
+    m_scene->setSceneRect(sceneRect);
 }
 
 
@@ -53,14 +52,17 @@ void GraphXVue::addPlayerBoard(GPlayerBoard* board){
 
     //On s'assure que chaque board n'a pas d'autre parent;
     board->setParent(nullptr);
+
+
     QGraphicsProxyWidget* proxy = m_scene->addWidget(board);
     proxy->setVisible(false);
+    //proxy->setPos(200,100); // a revoir c trop fais main si on change quoi que ce soit ça
     proxies.push_back(proxy);
     //m_layout->addWidget(board);
 }
 
 void GraphXVue::show(){
-    if(!boards.empty()){
+    if(!boards.empty() && !proxies.empty()){
         proxies[0]->setVisible(true);
         m_view->centerOn(proxies[0]);
     }

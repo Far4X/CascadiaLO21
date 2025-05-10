@@ -30,8 +30,9 @@ public:
     void initHexTiles();
     void addGxTile(int x,int y); // x,y de la matrice pas q,r !
 
-    void show() override;
+    QSize sizeHint() const override;
 
+    void show() override;
     QWidget* getWidget() const;
 private:
     GraphXVue* m_manager = nullptr;
