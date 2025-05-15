@@ -26,8 +26,8 @@ PlayerBoard::Offset PlayerBoard::axialToOffset(const HexCell& hex){
 HexCell PlayerBoard::offsetToAxial(const Offset& off){
     int col = off.getCol();
     int row = off.getRow();
-    int q = col - MAX_SIZE;
-    int r = row - floorDiv(q) - MAX_SIZE;
+    int q = col - MAX_SIZE/2;
+    int r = row - floorDiv(q) - MAX_SIZE/2;
     return HexCell(q, r);
 }
 

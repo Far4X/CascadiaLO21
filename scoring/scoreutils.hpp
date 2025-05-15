@@ -2,12 +2,15 @@
 
 #include "Gametools/Tiling/gametile.hpp"
 #include "Gametools/Abstract/playerboard.hpp"
+#include "scoring/scoringstrategy.hpp"
 #include <vector>
+#include <memory>
+
 
 namespace ScoreUtils {
     using TileGrid  = std::vector<std::vector<GameTile*>>;
     using TokenGrid = std::vector<std::vector<WildlifeToken*>>;
-
+    std::unique_ptr<WildlifeScoringStrategy> makeWildlifeStrategy(const std::string& wildlife, char card);
     std::vector<std::vector<GameTile*>> gatherAllTiles(const PlayerBoard& board, int size = MAX_SIZE);
     std::vector<std::vector<WildlifeToken*>> gatherAllTokens(const PlayerBoard& board, int size = MAX_SIZE);
 

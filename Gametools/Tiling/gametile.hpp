@@ -3,9 +3,11 @@
 #include "../wildlifetoken.hpp"
 #include "hexcell.hpp"
 #include "../Abstract/salvablething.hpp"
+#include <initializer_list>
 
 
-enum Biome {Forest = 1, Wetland, River, Mountain, Prairie};
+enum Biome {Forest, Wetland, River, Mountain, Prairie};
+inline std::initializer_list<Biome> Biomes = { Biome::Forest, Biome::Wetland, Biome::River, Biome::Mountain, Biome::Prairie };
 enum Rotation {Trigonometric, Anti_Trigonometric};
 
 class GameTile : public HexCell, public SalvableThing{ //Or inherits public hextile; if not rename HexTile HexTileCoord

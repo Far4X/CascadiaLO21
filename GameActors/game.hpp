@@ -5,6 +5,8 @@
 #include "gameactors.hpp"
 #include "GraphicalComponents/graphicalcomponents.hpp"
 #include "player.hpp"
+#include "scoring/scoringstrategies/tilescoringstrategy.hpp"
+#include "scoring/scoringstrategies/wildlifescoringstrategy.hpp"
 #include <vector>
 
 enum class GameStatus {
@@ -24,6 +26,7 @@ class Game : public SalvableThing, public NotifiableInterface {
     GameTile** m_cards = nullptr;
     unsigned short int m_nb_cards = 0;
     GameStatus m_status = GameStatus::NotStarted;
+    Score m_scorer;
 
 
 public:
@@ -35,12 +38,11 @@ public:
     void init();
     void getInfoConsole();
     void getInfoGX();
+    void scoreGame();
     GameStatus getGameStatus() const;
     void notify(unsigned int code) override;
     void restart();
     void quit();
-
-
 };
 
 #endif // GAME_H

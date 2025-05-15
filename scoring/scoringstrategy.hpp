@@ -7,6 +7,6 @@ class WildlifeScoringStrategy;
 
 class ScoringStrategy {
 public:
-    virtual double computeScore(const PlayerBoard& board) const = 0;
+    virtual std::vector<double> computeScore(const PlayerBoard& board) const = 0;
     virtual ~ScoringStrategy() = default;
 };

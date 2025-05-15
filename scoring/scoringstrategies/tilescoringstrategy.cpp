@@ -3,10 +3,10 @@
 
 TileScoringStrategy::TileScoringStrategy() {}
 
-double TileScoringStrategy::computeScore(const PlayerBoard& board) const {
+std::vector<double> TileScoringStrategy::computeScore(const PlayerBoard& board) const {
     ScoreUtils::TileGrid tiles = ScoreUtils::gatherAllTiles(board);
-    double total_score = 0;
-    for (auto biome : Animals) {
+    std::vector<double> total_score(5, 0.0);
+    for (auto biome : Biomes) {
         auto groups = ScoreUtils::getAdjacentComponents(tiles, biome, MAX_SIZE);
         size_t max_size = 0;
         for (size_t i = 0; i < groups.size(); i++) {
@@ -14,8 +14,8 @@ double TileScoringStrategy::computeScore(const PlayerBoard& board) const {
                 max_size = groups[i].size();
             }
         }
-        total_score += max_size;
+        total_score.push_back(max_size);
     }
-    return total_score;  // placeholder bien sûr
+    return total_score;
 }
 

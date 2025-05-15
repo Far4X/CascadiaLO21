@@ -27,6 +27,6 @@ public:
 	// HexCell operator-=(const HexCell& other);
 
     HexCell getDirection(Direction d) const;
-    HexCell getNeighbors(Direction d) const;  // retourne le voisin de direction d
+    HexCell getNeighbor(Direction d) const;  // retourne le voisin de direction d
     std::vector<HexCell> getNeighbors() const;  // overloaded : retourne tous les voisins (les 6)
 };
