@@ -27,8 +27,8 @@ GameTile* TileHolder::getTile(int posx, int posy) const{
 }
 
 
-void TileHolder::addTile(GameTile& tile, unsigned int* q, unsigned int* r, bool overwrite){
-    if (q == nullptr || r == nullptr){
+void TileHolder::addTile(GameTile& tile, int* x, int* y, bool overwrite){
+    if (x == nullptr || y == nullptr){
         if (m_tiles[tile.getQ()][tile.getR()] != nullptr && overwrite == false){
             throw CustomError("Tile overwrite not allowed", 202);
         }
@@ -38,14 +38,17 @@ void TileHolder::addTile(GameTile& tile, unsigned int* q, unsigned int* r, bool 
         m_tiles[tile.getQ()][tile.getR()] = &tile;
         return;
     }
+    if (*x < 0 || *y < 0){
+        throw CustomError("X or Y non positive", 202);
+    }
 
-    tile.setQ(*q);
-    tile.setR(*r);
+    //tile.setQ(*x);
+    //tile.setR(*y);
     if (tile.getQ() >= m_size_x || tile.getR() >= m_size_y){
         throw CustomError("Holder not big enought", 201);
     }
 
-    m_tiles[*q][*r] = &tile;
+    m_tiles[*x][*y] = &tile;
 }
 
 

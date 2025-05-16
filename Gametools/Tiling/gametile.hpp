@@ -41,6 +41,6 @@ public:
     }
 };
 
-char** getRepresentation(const GameTile& tile,  unsigned short int size = 5);
+char** getRepresentation(const GameTile* tile,  unsigned short int size = 5);
 
 #endif // GAMETILE_HPP

@@ -1,4 +1,4 @@
-@startum
+@startuml
 
 class App {
     + bool getIsConsole() const

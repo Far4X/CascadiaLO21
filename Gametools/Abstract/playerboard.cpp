@@ -61,3 +61,23 @@ void PlayerBoard::moveVt(short int step){
         m_q_center += step;
     }
 }
+
+void PlayerBoard::addTile(GameTile& tile, int* q = nullptr, int* r = nullptr, bool overwrite = false){
+    int* x = new int ;
+    int* y = new int;
+
+
+    Offset offset_value(0, 0);
+    if (q != nullptr && r != nullptr){
+        tile.setQ(*q);
+        tile.setR(*r);
+    }
+    offset_value = this->axialToOffset(HexCell(tile.getQ(), tile.getR()));
+    *x = offset_value.getCol();
+    *y = offset_value.getRow();
+
+    TileHolder::addTile(tile, x, y, overwrite);
+    delete x;
+    delete y;
+}
+

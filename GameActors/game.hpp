@@ -30,7 +30,7 @@ public:
     Game(const bool is_console = false);
     ~Game();
     std::string getSaveString() const override;
-    void readCards(std::string path = "tiles.cts");
+    void readCards(std::string path = "");
     void play();
     void init();
     void getInfoConsole();
