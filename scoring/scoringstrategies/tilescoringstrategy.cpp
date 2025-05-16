@@ -4,7 +4,7 @@
 TileScoringStrategy::TileScoringStrategy() {}
 
 double TileScoringStrategy::computeScore(const PlayerBoard& board) const {
-    ScoreUtils::TileGrid tiles = ScoreUtils::gatherAllTiles(board);
+    /*ScoreUtils::TileGrid tiles = ScoreUtils::gatherAllTiles(board);
     double total_score = 0;
     for (auto biome : Animals) {
         auto groups = ScoreUtils::getAdjacentComponents(tiles, biome, MAX_SIZE);
@@ -17,5 +17,9 @@ double TileScoringStrategy::computeScore(const PlayerBoard& board) const {
         total_score += max_size;
     }
     return total_score;  // placeholder bien sûr
+
+    Bugged code, comment to compile
+    */
+
 }
 

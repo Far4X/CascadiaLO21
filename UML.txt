@@ -1,4 +1,6 @@
+
 @startuml UML
+
 
 package Data_types {
     enum Wildlife
