@@ -1,7 +1,7 @@
 #include "gametile.hpp"
 #include <iostream>
 
-GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy, bool gives_token) : HexCell(posx, posy), m_id(id), m_gives_token(gives_token){
+GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy) : HexCell(posx, posy), m_id(id), m_gives_token(gives_token){
     for (int i = 0; i < 6; i++){
         m_biomes[i] = biomes[i];
     }
@@ -34,16 +34,10 @@ GameTile::GameTile(int id, std::string description) : HexCell(), m_id(id){
             break;
         }
     }
-    if (description[6] == '0'){
-        m_gives_token = false;
-    }
-    else {
-        m_gives_token = true;
-    }
-    m_numtypes = description[7] - '0';
+    m_numtypes = description[6] - '0';
 
     m_possible_wltoken = new Wildlife[m_numtypes];
-    for (int i = 8; i < m_numtypes + 7; i++){
+    for (int i = 7; i < m_numtypes + 7; i++){
         switch (description[i]) {
         case '1' :
             m_possible_wltoken[i] = Bear;
