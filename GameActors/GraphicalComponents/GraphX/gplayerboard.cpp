@@ -8,6 +8,7 @@
 GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{parent}, max_size(size) {
 
     // FOR DEBUG ONLY
+/*
     Biome deb_biomes[6] = {River,Mountain,Prairie,Forest,Wetland,Wetland};
     GameTile* debugT = new GameTile(1,deb_biomes);
     HexCell deb_cell(0,0);
@@ -19,6 +20,7 @@ GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{pa
     unsigned int deb_ys = (deb_off->getRow());
     unsigned int* deb_y = & deb_ys;
     addTile(*debugT,deb_x,deb_y);
+*/
     // FOR DEBUG ONLY
 
     setAutoFillBackground(true); // Permet de remplir l'arrière-plan
