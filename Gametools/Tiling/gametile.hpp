@@ -27,7 +27,7 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     std::string getSaveString() const override;
 
 public:
-    GameTile(const unsigned int id, Biome biomes[6], Wildlife *type = nullptr, int num_types = 0, int posx = 0, int posy = 0);
+    GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy, bool gives_token);
     void Rotate(Rotation dir = Anti_Trigonometric);
     int draw();
     Biome getBiome(unsigned short int number) const {{return m_biomes[number%6];}}
