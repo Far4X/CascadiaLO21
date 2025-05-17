@@ -37,7 +37,7 @@ std::string Game::getSaveString() const {
 }
 void Game::play(){
     m_status = GameStatus::Running;
-    
+
     if (m_is_console){
         m_game_menu = new CGameMenu(this);
     }
@@ -124,15 +124,15 @@ void Game::readCards(std::string path){
         // debug
         m_cards = new GameTile*[9];
         m_nb_cards = 9;
-        m_cards[0] = new GameTile(1, "1111110");
-        m_cards[1] = new GameTile(2, "2222220");
-        m_cards[2] = new GameTile(3, "3333330");
-        m_cards[3] = new GameTile(4, "4444440");
-        m_cards[4] = new GameTile(5, "5555550");
-        m_cards[5] = new GameTile(6, "1112220");
-        m_cards[6] = new GameTile(7, "3332220");
-        m_cards[7] = new GameTile(8, "4442220");
-        m_cards[8] = new GameTile(9, "5552220");
+        m_cards[0] = new GameTile(1, "11111100");
+        m_cards[1] = new GameTile(2, "22222200");
+        m_cards[2] = new GameTile(3, "33333300");
+        m_cards[3] = new GameTile(4, "44444400");
+        m_cards[4] = new GameTile(5, "55555500");
+        m_cards[5] = new GameTile(6, "11122200");
+        m_cards[6] = new GameTile(7, "33322200");
+        m_cards[7] = new GameTile(8, "44422200");
+        m_cards[8] = new GameTile(9, "55522200");
 
     }
     std::ifstream istream(path);

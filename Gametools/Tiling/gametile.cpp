@@ -10,7 +10,6 @@ GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_typ
     for (int i = 0; i < num_types; i++){
         m_possible_wltoken[i] = type[i];
     }
-
 }
 
 GameTile::GameTile(int id, std::string description) : HexCell(), m_id(id){
@@ -96,7 +95,6 @@ std::string GameTile::getSaveString() const{
 }
 
 char** getRepresentation(const GameTile* tile, unsigned short int size){
-
     unsigned short int height = 2*size+1;
     unsigned short int width = 4*size;
     char **rt = new char*[height];
