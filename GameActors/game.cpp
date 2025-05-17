@@ -4,6 +4,8 @@
 #include <fstream>
 
 Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console){
+    std::srand(std::time(0)); // debug
+    m_cards = new GameTile*;
     readCards();
 }
 
@@ -92,7 +94,9 @@ void Game::notify(unsigned int code){
         delete qpos;
         delete rpos;
         std::cout << "Show board" << std::endl;
+
         m_players[0]->getBoard()->show();
+
     }
     if (code == 2){
         if (m_is_console){

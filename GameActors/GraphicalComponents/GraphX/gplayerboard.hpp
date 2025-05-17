@@ -9,30 +9,37 @@
 #include <QVBoxLayout>
 #include <QFrame>
 
-#include "widgethexboard.hpp"
+
+//#include "widgethexboard.hpp"
 #include "Gametools/Abstract/playerboard.hpp"
 
 
-class GPlayerBoard : public PlayerBoard{
+class GraphXVue;
+
+const int tileWidth = 64;  // Largeur de la tuile hexagonale
+const int tileHeight = 55; // Hauteur de la tuile hexagonale
+const int xOffset = tileWidth * 3 / 4; // Décalage horizontal entre les tuiles
+const int yOffset = tileHeight / 2;    // Décalage vertical pour les lignes impaires
+
+
+class GPlayerBoard : public PlayerBoard,public QWidget{
 public:
-    /*GPlayerBoard();
-    ~GPlayerBoard();
-    QWidget* getWidget() const;
+    GPlayerBoard(QWidget *parent = nullptr,int size = 41);
+    ~GPlayerBoard() = default;;
+
+    void initHexTiles();
+    void addGxTile(int x,int y); // x,y de la matrice pas q,r !
+
+    QSize sizeHint() const override;
+
     void show() override;
+    QWidget* getWidget() const;
 private:
-
+    GraphXVue* m_manager = nullptr;
+    int max_size;
     QWidget* m_widget = nullptr; // widget principal
-    QWidget* m_gridWidget = nullptr; // widget qui contient la grille
-    QGridLayout* m_gridLayout = nullptr;  // Grid pour organiser les widgets
-    QVBoxLayout* m_layout = nullptr;      // Main layout
-    QPushButton* m_btn_quit = nullptr;  // Bouton Quit
-    QLabel* m_label = nullptr;  // Label
-    WidgetHexBoard* m_board = nullptr; // Contient le tableau
+    QVBoxLayout* m_layout = nullptr;  // Grid pour organiser les widgets
 
-    int tileWidth = 20;
-    int tileHeight = 20;
-    const int xOffset = tileWidth * 3 / 4;  // Décalage horizontal des hexagones
-    const int yOffset = tileHeight / 2;    // Décalage vertical des hexagones*/
 };
 
 #endif // GPLAYERBOARD_HPP

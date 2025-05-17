@@ -1,7 +1,7 @@
 #include "gametile.hpp"
 #include <iostream>
 
-GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy) : HexCell(posx, posy), m_id(id), m_gives_token(gives_token){
+GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy) : HexCell(posx, posy), m_id(id){
     for (int i = 0; i < 6; i++){
         m_biomes[i] = biomes[i];
     }
