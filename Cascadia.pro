@@ -9,9 +9,9 @@ DISTFILES += \
 
 CONFIG += console
 
-SOURCES += $$files($$PWD/*.cpp, true)
+SOURCES += $$files($$PWD/*.cpp, true)\
 
-HEADERS += $$files($$PWD/*.hpp, true)
+HEADERS += $$files($$PWD/*.hpp, true)\
 
 RESOURCES += \
     ressources.qrc

@@ -5,7 +5,9 @@
 
 Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console){
     //readCards();
-    /*m_cards = new GameTile*;
+    std::srand(std::time(0)); // debug
+    m_cards = new GameTile*;
+      /*m_cards = new GameTile*;
     *m_cards = new GameTile(0, "112233213");
     char** repr;
     repr = getRepresentation(**m_cards);
@@ -106,7 +108,15 @@ void Game::notify(unsigned int code){
         delete qpos;
         delete rpos;
         std::cout << "Show board" << std::endl;
+        //QWidget* m_widget = new QWidget;
+        //QVBoxLayout* m_layout = new QVBoxLayout(m_widget);
+        //PlayerBoard* board = m_players[0]->getBoard();
+        //GPlayerBoard* gboard = dynamic_cast<GPlayerBoard*>(board);
+        //m_layout->addWidget(gboard,0);
+        //m_widget->show();
         m_players[0]->getBoard()->show();
+        //m_players[1]->getBoard()->show();
+
     }
     if (code == 2){
         if (m_is_console){

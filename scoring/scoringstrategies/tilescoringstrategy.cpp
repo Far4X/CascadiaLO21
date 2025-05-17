@@ -1,6 +1,8 @@
 #include "tilescoringstrategy.hpp"
 #include "scoring/scoreutils.hpp"
 
+/*
+
 TileScoringStrategy::TileScoringStrategy() {}
 
 double TileScoringStrategy::computeScore(const PlayerBoard& board) const {
@@ -22,4 +24,6 @@ double TileScoringStrategy::computeScore(const PlayerBoard& board) const {
     */
 
 }
+
+*/
 
