@@ -17,6 +17,7 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     Wildlife *m_possible_wltoken = nullptr;
     int m_numtypes;
     const unsigned int m_id;
+    bool m_gives_token = false;
 
     //GameTile(const unsigned int id, Biome biomes[6], Wildlife *type = nullptr, int num_types = 0, int posx = 0, int posy = 0);
     GameTile(int id, std::string description);
@@ -26,7 +27,7 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     std::string getSaveString() const override;
 
 public:
-    GameTile(const unsigned int id, Biome biomes[6], Wildlife *type = nullptr, int num_types = 0, int posx = 0, int posy = 0);
+    GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy, bool gives_token);
     void Rotate(Rotation dir = Anti_Trigonometric);
     int draw();
     Biome getBiome(unsigned short int number) const {{return m_biomes[number%6];}}
@@ -43,6 +44,6 @@ public:
 
 };
 
-char** getRepresentation(const GameTile& tile,  unsigned short int size = 5);
+char** getRepresentation(const GameTile* tile,  unsigned short int size = 5);
 
 #endif // GAMETILE_HPP

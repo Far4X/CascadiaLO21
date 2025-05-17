@@ -1,7 +1,7 @@
 #include "gametile.hpp"
 #include <iostream>
 
-GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy) : HexCell(posx, posy), m_id(id){
+GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy, bool gives_token) : HexCell(posx, posy), m_id(id), m_gives_token(gives_token){
     for (int i = 0; i < 6; i++){
         m_biomes[i] = biomes[i];
     }
@@ -10,7 +10,6 @@ GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_typ
     for (int i = 0; i < num_types; i++){
         m_possible_wltoken[i] = type[i];
     }
-
 }
 
 GameTile::GameTile(int id, std::string description) : HexCell(), m_id(id){
@@ -35,10 +34,16 @@ GameTile::GameTile(int id, std::string description) : HexCell(), m_id(id){
             break;
         }
     }
-    m_numtypes = description[6] - '0';
+    if (description[6] == '0'){
+        m_gives_token = false;
+    }
+    else {
+        m_gives_token = true;
+    }
+    m_numtypes = description[7] - '0';
 
     m_possible_wltoken = new Wildlife[m_numtypes];
-    for (int i = 7; i < m_numtypes + 7; i++){
+    for (int i = 8; i < m_numtypes + 7; i++){
         switch (description[i]) {
         case '1' :
             m_possible_wltoken[i] = Bear;
@@ -89,7 +94,7 @@ std::string GameTile::getSaveString() const{
     return "";
 }
 
-char** getRepresentation(const GameTile& tile, unsigned short int size){
+char** getRepresentation(const GameTile* tile, unsigned short int size){
     unsigned short int height = 2*size+1;
     unsigned short int width = 4*size;
     char **rt = new char*[height];
@@ -98,6 +103,10 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
         for (int j = 0; j < width; j++){
             rt[i][j] = ' ';
         }
+    }
+
+    if (tile == nullptr){
+        return rt;
     }
 
     //Draw hex
@@ -129,7 +138,7 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
 
     for (int i = 0; i < 6; i++){
         char filling;
-        switch (tile.getBiome(i)) {
+        switch (tile->getBiome(i)) {
         case Forest:
             filling = '@';
             break;
@@ -174,8 +183,6 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
         else {
             //Up triangle
             if (i == 1){
-
-
                 padding_x = 1;
                 padding_y = 2*size + 1;
             }

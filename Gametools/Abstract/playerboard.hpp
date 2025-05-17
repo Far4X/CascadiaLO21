@@ -26,6 +26,7 @@ public:
     std::string getSaveString() const override;
     void moveHz(short int step = 1);
     void moveVt(short int step = 1);
+    void addTile(GameTile& tile,int* q,int* r, bool overwrite);
 };
 
 #endif // PLAYERBOARD_HPP
