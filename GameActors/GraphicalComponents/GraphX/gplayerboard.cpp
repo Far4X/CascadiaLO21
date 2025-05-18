@@ -11,7 +11,7 @@ GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{pa
     Biome deb_biomes[6] = {River,Mountain,Prairie,Forest,Wetland,Wetland};
     //GameTile* debugT = new GameTile(1,deb_biomes);
     HexCell deb_cell(0,0);
-    Offset* deb_off = new Offset(axialToOffset(deb_cell));
+    HexCell::Offset* deb_off = new HexCell::Offset(axialToOffset(deb_cell));
 
     unsigned int deb_xs = (deb_off->getCol());
     unsigned int* deb_x = & deb_xs;

@@ -5,6 +5,7 @@
 #include <vector>
 
 class DeckTile : public TileHolder {
+protected :
     std::vector<GameTile*> m_deck_tiles;
     std::vector<const WildlifeToken*> m_deck_token;
 

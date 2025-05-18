@@ -26,6 +26,8 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     std::string getSaveString() const override;
 
 public:
+    inline int getNbWildlife() const {return m_numtypes;};
+    inline Wildlife getWildlife(unsigned short int nb) const {if (nb < m_numtypes) return m_possible_wltoken[nb]; else throw CustomError("Not in range", 104);};
     GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy);
     void Rotate(Rotation dir = Anti_Trigonometric);
     int draw();
@@ -39,9 +41,9 @@ public:
         }
         return false;
     }
-    bool isKeystone(const std::string& description);
+    bool isKeystone(const std::string& description = "") const;
 };
 
-char** getRepresentation(const GameTile* tile,  unsigned short int size = 5);
+char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size);
 
 #endif // GAMETILE_HPP

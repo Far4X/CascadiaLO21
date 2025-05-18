@@ -64,14 +64,14 @@ namespace ScoreUtils {
                 if (component == nullptr || !component->matchesType(filter)) {
                     continue;
                 }
-                PlayerBoard::Offset component_off(x, y);
+                HexCell::Offset component_off(x, y);
                 HexCell component_hex = PlayerBoard::offsetToAxial(component_off);  // on retouve la gametile associée au Component
                 int id = y * size + x;
                 // traitement voisins
                 auto neighs = component_hex.getNeighbors();
                 for (size_t i = 0; i < neighs.size(); i++) {
                     HexCell neighHex = neighs[i];
-                    PlayerBoard::Offset off = PlayerBoard::axialToOffset(neighHex);  // on convertit en Offset pour voir à quelle case dans le tableau 2D le voisin correspond
+                    HexCell::Offset off = PlayerBoard::axialToOffset(neighHex);  // on convertit en Offset pour voir à quelle case dans le tableau 2D le voisin correspond
                     int off_x = off.getCol();
                     int off_y = off.getRow();
                     if (off_x < 0 || off_x >= size || off_y < 0 || off_y >= size)  // vérification que les coordonnées du voisin sont valides

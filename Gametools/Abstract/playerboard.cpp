@@ -5,7 +5,7 @@ PlayerBoard::PlayerBoard() : TileHolder(MAX_SIZE, MAX_SIZE){
     m_r_center = MAX_SIZE/2;
 }
 
-int PlayerBoard::floorDiv(int n) {
+/*int PlayerBoard::floorDiv(int n) {
     // fonction utilitaire pour la forumule de conversion entre hex et offset (la division normale ne marche pas avec les negatifs de notre cas)
     if (n >= 0) {
         return n / 2;
@@ -13,9 +13,9 @@ int PlayerBoard::floorDiv(int n) {
     else {
         return (n - 1) / 2;
     }
-}
+}*/
 
-PlayerBoard::Offset PlayerBoard::axialToOffset(const HexCell& hex){
+/*PlayerBoard::Offset PlayerBoard::axialToOffset(const HexCell& hex){
     int q = hex.getQ();
     int r = hex.getR();
     int col = q + MAX_SIZE/2;
@@ -29,7 +29,7 @@ HexCell PlayerBoard::offsetToAxial(const Offset& off){
     int q = col - MAX_SIZE;
     int r = row - floorDiv(q) - MAX_SIZE;
     return HexCell(q, r);
-}
+}*/
 
 
 std::string PlayerBoard::getSaveString() const { // genere un string qui permet de déchiffrer l'affichage
@@ -67,7 +67,7 @@ void PlayerBoard::addTile(GameTile& tile, int* q = nullptr, int* r = nullptr, bo
     int* y = new int;
 
 
-    Offset offset_value(0, 0);
+    GameTile::Offset offset_value(0, 0);
     if (q != nullptr && r != nullptr){
         tile.setQ(*q);
         tile.setR(*r);
@@ -81,3 +81,13 @@ void PlayerBoard::addTile(GameTile& tile, int* q = nullptr, int* r = nullptr, bo
     delete y;
 }
 
+bool PlayerBoard::hasNeighbour(unsigned short int x, unsigned short int y){
+    HexCell current_cell = HexCell::offsetToAxial(HexCell::Offset(x,  y), MAX_SIZE);
+    for (int i = 0; i < current_cell.getNeighbors().size(); i++){
+        HexCell::Offset neight = HexCell::axialToOffset(current_cell.getNeighbors()[i], MAX_SIZE);
+        if (this->getTile(neight.getCol(), neight.getRow()) != nullptr){
+            return true;
+        }
+    }
+    return false;
+}
