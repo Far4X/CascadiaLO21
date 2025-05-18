@@ -21,7 +21,7 @@ double TileScoringStrategy::computeScore(const PlayerBoard& board) const {
     return total_score;  // placeholder bien sûr
 
     Bugged code, comment to compile
-    */
+
 
 }
 
