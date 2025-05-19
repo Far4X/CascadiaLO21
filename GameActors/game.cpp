@@ -90,9 +90,7 @@ void Game::initPlayerboards(){
         int index = uni(rng);
         GameTile* tmp = nullptr;
         for (int j = 0; j < 3; j++){
-            std::cout << "j : " << j << " index : " << index << std::endl;
-            m_players[i]->getBoard()->addTile(*(m_starter_cards[index][j]), nullptr, nullptr, false);
-            std::cout << "2" << std::endl;
+            m_players[i]->getBoard()->addTile(*(m_starter_cards[index][j]));
             tmp = m_starter_cards[index][j];
             m_starter_cards[index][j] = m_starter_cards[4-i][j];
             m_starter_cards[4-i][j] = tmp;

@@ -18,7 +18,7 @@ public:
     TileHolder(int size_x, int size_y);
     ~TileHolder();
     GameTile* getTile(int posx, int posy) const;
-    void addTile(GameTile& tile, int* x = nullptr, int* y = nullptr, bool overwrite = false);
+    void addTile(GameTile& tile, int x, int y, bool overwrite = false);
     virtual void show() = 0;
 };
 

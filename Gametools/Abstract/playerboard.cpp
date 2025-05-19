@@ -63,32 +63,15 @@ void PlayerBoard::moveVt(short int step){
     }
 }
 
-void PlayerBoard::addTile(GameTile& tile, int* q, int* r, bool overwrite){
-    std::cout << "10" << std::endl;
-    int* x = new int ;
-    int* y = new int;
-
-    std::cout << "11" << std::endl;
-
+void PlayerBoard::addTile(GameTile& tile){
+    int x;
+    int y;
     GameTile::Offset offset_value(0, 0);
-    if (q != nullptr && r != nullptr){
-        tile.setQ(*q);
-        tile.setR(*r);
-    }
-    std::cout << "12" << std::endl;
-
     offset_value = this->axialToOffset(HexCell(tile.getQ(), tile.getR()));
-    *x = offset_value.getCol();
-    *y = offset_value.getRow();
-    std::cout << "13" << std::endl;
+    x = offset_value.getCol();
+    y = offset_value.getRow();
 
-
-    TileHolder::addTile(tile, x, y, overwrite);
-    std::cout << "14" << std::endl;
-
-    delete x;
-    delete y;
-    std::cout << "15" << std::endl;
+    TileHolder::addTile(tile, x, y, false);
 
 }
 
