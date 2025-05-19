@@ -2,6 +2,11 @@
 #include <algorithm>
 #include <random>
 
+DeckTile &DeckTile::getInstance(){
+    throw CustomError("Virtual class got called", 301);
+}
+
+
 DeckTile::DeckTile() : TileHolder(4, 1) {
 
 }

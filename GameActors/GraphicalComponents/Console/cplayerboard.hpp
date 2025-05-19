@@ -2,7 +2,6 @@
 #define CPLAYERBOARD_HPP
 
 
-#define MAX_SIZE 41
 #include "../../../Gametools/Abstract/playerboard.hpp"
 
 class CPlayerBoard : public PlayerBoard{

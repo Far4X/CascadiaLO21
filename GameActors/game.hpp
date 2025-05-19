@@ -22,6 +22,7 @@ class Game : public SalvableThing, public NotifiableInterface {
     const bool m_is_console;
     std::vector<Player*> m_players;
     GameTile** m_cards = nullptr;
+    GameTile* m_starter_cards[5][3];
     unsigned short int m_nb_cards = 0;
     GameStatus m_status = GameStatus::NotStarted;
 
@@ -33,6 +34,7 @@ public:
     void readCards(std::string path = "");
     void play();
     void init();
+    void initPlayerboards();
     void getInfoConsole();
     void getInfoGX();
     GameStatus getGameStatus() const;

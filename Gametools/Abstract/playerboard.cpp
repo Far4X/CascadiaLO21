@@ -1,4 +1,5 @@
 #include "playerboard.hpp"
+#include <iostream>
 
 PlayerBoard::PlayerBoard() : TileHolder(MAX_SIZE, MAX_SIZE){
     m_q_center = MAX_SIZE/2;
@@ -62,23 +63,33 @@ void PlayerBoard::moveVt(short int step){
     }
 }
 
-void PlayerBoard::addTile(GameTile& tile, int* q = nullptr, int* r = nullptr, bool overwrite = false){
+void PlayerBoard::addTile(GameTile& tile, int* q, int* r, bool overwrite){
+    std::cout << "10" << std::endl;
     int* x = new int ;
     int* y = new int;
 
+    std::cout << "11" << std::endl;
 
     GameTile::Offset offset_value(0, 0);
     if (q != nullptr && r != nullptr){
         tile.setQ(*q);
         tile.setR(*r);
     }
+    std::cout << "12" << std::endl;
+
     offset_value = this->axialToOffset(HexCell(tile.getQ(), tile.getR()));
     *x = offset_value.getCol();
     *y = offset_value.getRow();
+    std::cout << "13" << std::endl;
+
 
     TileHolder::addTile(tile, x, y, overwrite);
+    std::cout << "14" << std::endl;
+
     delete x;
     delete y;
+    std::cout << "15" << std::endl;
+
 }
 
 bool PlayerBoard::hasNeighbour(unsigned short int x, unsigned short int y){

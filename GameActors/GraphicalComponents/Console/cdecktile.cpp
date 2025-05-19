@@ -1,7 +1,16 @@
 #include "cdecktile.hpp"
 #include <iostream>
 
-CDeckTile::CDeckTile() : DeckTile() {}
+CDeckTile& CDeckTile::getInstance(){
+    static CDeckTile ins;
+    return ins;
+}
+
+CDeckTile::CDeckTile() : DeckTile(){}
+
+std::string CDeckTile::getSaveString() const {
+    return "";
+}
 
 void CDeckTile::show(){
     for (int i = 0; i < 30; i++){

@@ -6,9 +6,16 @@
 class CDeckTile : public DeckTile{
     unsigned short int const m_max_height = 42;
     unsigned short int const m_max_width = 80;
-public:
+    unsigned short int const m_size_tile = 5;
+
+    static CDeckTile& getInstance();
+    CDeckTile(const CDeckTile &tar) = delete;
+    CDeckTile &operator=(const CDeckTile &tar) = delete;
     CDeckTile();
+    ~CDeckTile() = default;
+public:
     void show() override;
+    std::string getSaveString() const override;
 };
 
 #endif // CDECKCARD_HPP

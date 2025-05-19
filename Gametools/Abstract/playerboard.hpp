@@ -9,6 +9,7 @@
 class PlayerBoard : public TileHolder {
     unsigned short int m_q_center;
     unsigned short int m_r_center;
+    HexCell pointed_cell;
 public:
     /*struct Offset {
         int getCol() const {return col;}
@@ -29,8 +30,9 @@ public:
     std::string getSaveString() const override;
     void moveHz(short int step = 1);
     void moveVt(short int step = 1);
-    void addTile(GameTile& tile,int* q,int* r, bool overwrite);
+    void addTile(GameTile& tile);
     bool hasNeighbour(unsigned short int x, unsigned short int y);
+    inline HexCell getPointedCell() const {return pointed_cell;};
 };
 
 #endif // PLAYERBOARD_HPP

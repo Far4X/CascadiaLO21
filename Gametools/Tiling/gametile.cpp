@@ -256,6 +256,11 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
     return rt;
 }
 
+void GameTile::setPos(int const &q, int const &r){
+    this->setQ(q);
+    this->setR(r);
+}
+
 bool GameTile::isKeystone(const std::string& description)const {
     if (description.size() < 6) {
         for (int i = 1; i < 6; i++){
