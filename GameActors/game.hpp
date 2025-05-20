@@ -18,6 +18,7 @@ class Game : public SalvableThing, public NotifiableInterface {
     unsigned short m_nb_players = 0;
     Menu<std::string>* m_player_menu = nullptr;
     Menu<std::tuple<std::string, std::string>>* m_game_menu = nullptr;
+    DeckTile* m_decktile = nullptr;
 
     const bool m_is_console;
     std::vector<Player*> m_players;
@@ -34,6 +35,7 @@ public:
     void readCards(std::string path = "");
     void play();
     void init();
+    void makePlayerTurn(unsigned short int id_player);
     void initPlayerboards();
     void getInfoConsole();
     void getInfoGX();

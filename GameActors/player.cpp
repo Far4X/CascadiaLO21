@@ -6,7 +6,6 @@ Player::Player(const std::string& name) : m_name(name), m_id(++nb_players){
 
 }
 
-
 Player::~Player() {
     Player::nb_players--;
     delete m_board;

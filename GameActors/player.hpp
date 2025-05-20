@@ -18,6 +18,7 @@ class Player : public SalvableThing {
     std::vector<GameTile*> m_tiles;
     std::vector<WildlifeToken*> m_tokens;
     PlayerBoard* m_board = nullptr;
+    unsigned short int m_nb_nature_token = 0;
 
 
 public:
@@ -29,6 +30,9 @@ public:
     unsigned int getId() const {return m_id;}
     unsigned int getScore() const {return m_score;}
     PlayerBoard* getBoard() const {return m_board;}
+    unsigned short int getNbNatureToken() const {return m_nb_nature_token;};
+    void addNatureToken() {m_nb_nature_token++;};
+    bool removeNatureToke() {if (m_nb_nature_token > 0){m_nb_nature_token--; return true;} return false;}
 
     void setName(const std::string& name);
     void addScore(unsigned int points);

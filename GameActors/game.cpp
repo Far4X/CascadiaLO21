@@ -61,15 +61,19 @@ void Game::initPlayerboards(){
     m_starter_cards[0][0] = new GameTile(1000, "2223333245");
     m_starter_cards[0][1] = new GameTile(1001, "55555515");
     m_starter_cards[0][2] = new GameTile(1002, "444111213");
+
     m_starter_cards[1][0] = new GameTile(1003, "3331113423");
     m_starter_cards[1][1] = new GameTile(1004, "22222214");
     m_starter_cards[1][2] = new GameTile(1005, "444555215");
+
     m_starter_cards[2][0] = new GameTile(1006, "1112223354");
     m_starter_cards[2][1] = new GameTile(1007, "44444411");
     m_starter_cards[2][2] = new GameTile(1008, "333555212");
+
     m_starter_cards[3][0] = new GameTile(1009, "5551113123");
     m_starter_cards[3][1] = new GameTile(1010, "33333312");
     m_starter_cards[3][2] = new GameTile(1011, "444222245");
+
     m_starter_cards[4][0] = new GameTile(1012, "4443333134");
     m_starter_cards[4][1] = new GameTile(1013, "11111113");
     m_starter_cards[4][2] = new GameTile(1014, "555222252");
@@ -100,6 +104,14 @@ void Game::initPlayerboards(){
     }
 }
 
+void Game::makePlayerTurn(unsigned short int id_player){
+
+    m_players[id_player]->getBoard()->show();
+
+
+}
+
+
 void Game::notify(unsigned int code){
     if (code == 1){
         Player *pl = nullptr;
@@ -118,47 +130,13 @@ void Game::notify(unsigned int code){
             std::cout << m_players.back()->getName() << std::endl;
         }
         m_nb_players = m_players.size();
-        /*int* qpos = new int;
-        int* rpos = new int;
-        *qpos = 0;
-        *rpos = 0;
-        m_players[0]->getBoard()->addTile(*m_cards[0], qpos, rpos, true);
-        *qpos = 0;
-        *rpos = 1;
-        m_players[0]->getBoard()->addTile(*m_cards[1], qpos, rpos, true);
-        *qpos = 0;
-        *rpos = 2;
-        m_players[0]->getBoard()->addTile(*m_cards[2], qpos, rpos, true);
-        *qpos = 1;
-        *rpos = 0;
-        m_players[0]->getBoard()->addTile(*m_cards[3], qpos, rpos, true);
-        *qpos = 1;
-        *rpos = 1;
-        m_players[0]->getBoard()->addTile(*m_cards[4], qpos, rpos, true);
-        *qpos = 1;
-        *rpos = 2;
-        m_players[0]->getBoard()->addTile(*m_cards[5], qpos, rpos, true);
-        *qpos = 2;
-        *rpos = 0;
-        m_players[0]->getBoard()->addTile(*m_cards[6], qpos, rpos, true);
-        *qpos = 2;
-        *rpos = 1;
-        m_players[0]->getBoard()->addTile(*m_cards[7], qpos, rpos, true);
-        *qpos = 2;
-        *rpos = -1;
-        m_players[0]->getBoard()->addTile(*m_cards[8], qpos, rpos, true);
-        delete qpos;
-        delete rpos;
-        std::cout << "Show board" << std::endl;
-
-        m_players[0]->getBoard()->show();*/
-
         initPlayerboards();
 
     }
     if (code == 2){
         if (m_is_console){
             m_player_menu = new CPlayerMenu(this);
+            m_decktile = &CDeckTile::getInstance();
         }
         else {
             m_player_menu = new GPlayerMenu(this);

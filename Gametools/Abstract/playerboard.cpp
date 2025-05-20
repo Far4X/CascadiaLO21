@@ -50,7 +50,7 @@ void PlayerBoard::show(){
 }
 
 
-void PlayerBoard::moveHz(short int step){
+/*void PlayerBoard::moveHz(short int step){
     if ((step >= 0 && m_r_center > step) || (step < 0 && m_q_center >= 2*step)){ //TODO: check if superior to MAXSIZE;
         m_q_center += 2*step;
         m_r_center -= 1;
@@ -61,7 +61,7 @@ void PlayerBoard::moveVt(short int step){
     if (step + m_q_center > 0 && step + m_q_center < MAX_SIZE){
         m_q_center += step;
     }
-}
+}*/
 
 void PlayerBoard::addTile(GameTile& tile){
     int x;
@@ -71,13 +71,13 @@ void PlayerBoard::addTile(GameTile& tile){
     x = offset_value.getCol();
     y = offset_value.getRow();
 
-    TileHolder::addTile(tile, x, y, false);
+    TileHolder::addTile(tile, x, y, true);
 
 }
 
 bool PlayerBoard::hasNeighbour(unsigned short int x, unsigned short int y){
     HexCell current_cell = HexCell::offsetToAxial(HexCell::Offset(x,  y), MAX_SIZE);
-    for (int i = 0; i < current_cell.getNeighbors().size(); i++){
+    for (size_t i = 0; i < current_cell.getNeighbors().size(); i++){
         HexCell::Offset neight = HexCell::axialToOffset(current_cell.getNeighbors()[i], MAX_SIZE);
         if (this->getTile(neight.getCol(), neight.getRow()) != nullptr){
             return true;
