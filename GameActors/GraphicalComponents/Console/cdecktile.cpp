@@ -40,7 +40,7 @@ void CDeckTile::show(){
     }
 
     for (int i = 0; i < 4; i++){
-        const GameTile* tile = getTile(i, 0);
+        const GameTile* tile = TileHolder::getTile(i, 0);
         tile_rpr = getRepresentation(tile, m_size_tile, 4);
 
         for (int j = 0; j < 2*m_size_tile +1; j++){

@@ -2,8 +2,8 @@
 #include <iostream>
 
 PlayerBoard::PlayerBoard() : TileHolder(MAX_SIZE, MAX_SIZE){
-    m_q_center = MAX_SIZE/2;
-    m_r_center = MAX_SIZE/2;
+    //m_q_center = MAX_SIZE/2;
+    //m_r_center = MAX_SIZE/2;
 }
 
 /*int PlayerBoard::floorDiv(int n) {
@@ -37,8 +37,8 @@ std::string PlayerBoard::getSaveString() const { // genere un string qui permet 
     std::string desc = "c:";
     for (int i = 0; i < MAX_SIZE; i++){
         for (int j = 0; j < MAX_SIZE; j++){
-            if (getTile(i, j) != nullptr){
-                desc += std::to_string(getTile(i, j)->getId()) + ";";
+            if (TileHolder::getTile(i, j) != nullptr){
+                desc += std::to_string(TileHolder::getTile(i, j)->getId()) + ";";
             }
         }
     }
@@ -75,13 +75,19 @@ void PlayerBoard::addTile(GameTile& tile){
 
 }
 
-bool PlayerBoard::hasNeighbour(unsigned short int x, unsigned short int y){
-    HexCell current_cell = HexCell::offsetToAxial(HexCell::Offset(x,  y), MAX_SIZE);
-    for (size_t i = 0; i < current_cell.getNeighbors().size(); i++){
-        HexCell::Offset neight = HexCell::axialToOffset(current_cell.getNeighbors()[i], MAX_SIZE);
-        if (this->getTile(neight.getCol(), neight.getRow()) != nullptr){
+bool PlayerBoard::hasNeighbour(const HexCell& pos){
+    for (size_t i = 0; i < pos.getNeighbors().size(); i++){
+        HexCell::Offset neight = axialToOffset(pos.getNeighbors()[i]);
+        std::cout << "Offset pos neigh : " << neight.getCol() << " " << neight.getRow() << std::endl;
+        if (neight.getCol() >= 0 && neight.getRow() >= 0 && this->TileHolder::getTile(neight.getCol(), neight.getRow()) != nullptr){
             return true;
         }
     }
     return false;
+}
+
+GameTile* PlayerBoard::getTile(int const &q, int const &r) const{
+    HexCell::Offset offset_pos = PlayerBoard::axialToOffset(HexCell(q, r));
+    //std::cout << "Offset pos : " << offset_pos.getCol() << " " << offset_pos.getRow() << std::endl;
+    return TileHolder::getTile(offset_pos.getCol(), offset_pos.getRow());
 }

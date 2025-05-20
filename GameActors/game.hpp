@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
-#include "Gametools/Abstract/salvablething.hpp"
-#include "Gametools/Abstract/notifiableinterface.hpp"
+#include "../Gametools/Abstract/salvablething.hpp"
+#include "../Gametools/Abstract/notifiableinterface.hpp"
 #include "gameactors.hpp"
 #include "GraphicalComponents/graphicalcomponents.hpp"
 #include "player.hpp"
@@ -18,6 +18,7 @@ class Game : public SalvableThing, public NotifiableInterface {
     unsigned short m_nb_players = 0;
     Menu<std::string>* m_player_menu = nullptr;
     Menu<std::tuple<std::string, std::string>>* m_game_menu = nullptr;
+    Menu<std::tuple<GameTile&, const WildlifeToken&>>* m_menu_token = nullptr;
     DeckTile* m_decktile = nullptr;
 
     const bool m_is_console;
@@ -35,7 +36,8 @@ public:
     void readCards(std::string path = "");
     void play();
     void init();
-    void makePlayerTurn(unsigned short int id_player);
+    void getTileAndToken();
+    void makePlayerTurn(unsigned short int id_player, GameTile& tile, const WildlifeToken& token);
     void initPlayerboards();
     void getInfoConsole();
     void getInfoGX();

@@ -26,7 +26,9 @@ Game::~Game(){
     delete m_player_menu;
 }
 
-GameStatus Game::getGameStatus() const { return m_status; }
+GameStatus Game::getGameStatus() const {
+    return m_status;
+}
 
 std::string Game::getSaveString() const {
     return "";
@@ -44,7 +46,11 @@ void Game::init(){
 }
 
 void Game::play(){
-
+    for (int i = 0; i < 20; i++){
+        for (int j = 0; j < m_nb_players; j++){
+            makePlayerTurn(j);
+        }
+    }
 }
 
 void Game::getInfoConsole(){
@@ -100,15 +106,30 @@ void Game::initPlayerboards(){
             m_starter_cards[4-i][j] = tmp;
 
         }
-        m_players[i]->getBoard()->show();
+        //m_players[i]->getBoard()->show();
     }
 }
 
-void Game::makePlayerTurn(unsigned short int id_player){
+void Game::getTileAndToken(){
 
-    m_players[id_player]->getBoard()->show();
+}
 
+void Game::makePlayerTurn(unsigned short int id_player, GameTile& tile, const WildlifeToken& token){
+    m_decktile->show();
+    if (m_players[id_player]->getNbNatureToken() > 0){
 
+    }
+
+    HexCell target;
+    bool cnt = true;
+    while (cnt){
+        m_players[id_player]->getBoard()->show();
+        target = HexCell(m_players[id_player]->getBoard()->getPointedCell());
+        //std::cout << "Hexcell pos : " << target.getQ() << ", " << target.getR() << std::endl;
+        if ((m_players[id_player]->getBoard()->hasNeighbour(target)) && m_players[id_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
+            cnt = false;
+        }
+    }
 }
 
 
@@ -143,6 +164,7 @@ void Game::notify(unsigned int code){
         }
         m_player_menu->show();
     }
+    play();
 }
 
 void Game::readCards(std::string path){

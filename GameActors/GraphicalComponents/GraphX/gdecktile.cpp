@@ -12,6 +12,6 @@ std::string GDeckTile::getSaveString() const {
     return "";
 }
 
-void show(){
+void GDeckTile::show(){
 
 }

@@ -9,7 +9,8 @@
 class PlayerBoard : public TileHolder {
     //unsigned short int m_q_center;
     //unsigned short int m_r_center;
-    HexCell pointed_cell;
+protected :
+    HexCell m_pointed_cell = HexCell(0, 0);
     bool m_want_use_naturetoken = false;
 
 public:
@@ -23,8 +24,10 @@ public:
     inline bool getIntentionToken() const {return m_want_use_naturetoken;};
     inline void setIntentionToken(bool val) {m_want_use_naturetoken = val;};
     void addTile(GameTile& tile);
-    bool hasNeighbour(unsigned short int x, unsigned short int y);
-    inline HexCell getPointedCell() const {return pointed_cell;};
+    bool hasNeighbour(const HexCell& pos);
+    inline HexCell getPointedCell() const {return m_pointed_cell;};
+    inline void resetPointedCell() {m_pointed_cell = HexCell(0,0);};
+    GameTile* getTile(int const &q, int const &r) const;
 };
 
 #endif // PLAYERBOARD_HPP
