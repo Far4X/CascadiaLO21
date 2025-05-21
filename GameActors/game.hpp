@@ -45,6 +45,8 @@ public:
     void notify(unsigned int code) override;
     void restart();
     void quit();
+    const DeckTile* getDeckTile() const {return m_decktile};
+
 
 
 };
