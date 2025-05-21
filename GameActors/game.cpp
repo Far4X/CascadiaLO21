@@ -163,8 +163,8 @@ void Game::notify(unsigned int code){
             m_player_menu = new GPlayerMenu(this);
         }
         m_player_menu->show();
+        play();
     }
-    play();
 }
 
 void Game::readCards(std::string path){
