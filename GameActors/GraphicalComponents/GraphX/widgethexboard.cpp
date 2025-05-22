@@ -1,6 +1,6 @@
 #include "widgethexboard.hpp"
 #include <iostream>
-
+/*
 WidgetHexBoard::WidgetHexBoard(QWidget *parent,int size)
     : QWidget{parent}, max_size(size)
 {
@@ -61,3 +61,5 @@ void WidgetHexBoard::addTile(int col,int row){
 
     tileLabel->move(x, y);  // Déplacement relatif au widget
 }
+
+*/

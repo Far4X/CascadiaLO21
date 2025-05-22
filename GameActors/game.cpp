@@ -4,18 +4,10 @@
 #include <iostream>
 #include <fstream>
 
-Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console) {
-    //readCards();
+Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console){
+    std::srand(std::time(0)); // debug
     m_cards = new GameTile*;
-    *m_cards = new GameTile(0, "112233213");
-    char** repr;
-    repr = getRepresentation(**m_cards);
-    for (int i = 0; i < 2*5 +1; i++){
-        for (int j = 0; j < 4*5; j++){
-            std::cout << repr[i][j];
-        }
-        std::cout << std::endl;
-    }
+    readCards();
 }
 
 Game::~Game(){
@@ -34,7 +26,7 @@ std::string Game::getSaveString() const {
 }
 void Game::play(){
     m_status = GameStatus::Running;
-    
+
     if (m_is_console){
         m_game_menu = new CGameMenu(this);
     }
@@ -43,6 +35,7 @@ void Game::play(){
     }
     m_game_menu->show();
 }
+
 void Game::init(){
 
 }
@@ -96,8 +89,41 @@ void Game::notify(unsigned int code){
             m_players.back()->setBoard(bd);
             std::cout << m_players.back()->getName() << std::endl;
         }
+        int* qpos = new int;
+        int* rpos = new int;
+        *qpos = 0;
+        *rpos = 0;
+        m_players[0]->getBoard()->addTile(*m_cards[0], qpos, rpos, true);
+        *qpos = 0;
+        *rpos = 1;
+        m_players[0]->getBoard()->addTile(*m_cards[1], qpos, rpos, true);
+        *qpos = 0;
+        *rpos = 2;
+        m_players[0]->getBoard()->addTile(*m_cards[2], qpos, rpos, true);
+        *qpos = 1;
+        *rpos = 0;
+        m_players[0]->getBoard()->addTile(*m_cards[3], qpos, rpos, true);
+        *qpos = 1;
+        *rpos = 1;
+        m_players[0]->getBoard()->addTile(*m_cards[4], qpos, rpos, true);
+        *qpos = 1;
+        *rpos = 2;
+        m_players[0]->getBoard()->addTile(*m_cards[5], qpos, rpos, true);
+        *qpos = 2;
+        *rpos = 0;
+        m_players[0]->getBoard()->addTile(*m_cards[6], qpos, rpos, true);
+        *qpos = 2;
+        *rpos = 1;
+        m_players[0]->getBoard()->addTile(*m_cards[7], qpos, rpos, true);
+        *qpos = 2;
+        *rpos = -1;
+        m_players[0]->getBoard()->addTile(*m_cards[8], qpos, rpos, true);
+        delete qpos;
+        delete rpos;
         std::cout << "Show board" << std::endl;
+
         m_players[0]->getBoard()->show();
+
     }
     if (code == 2){
         for (Menu<std::tuple<std::string,std::string>>::Iterator it = m_game_menu->getIterator(); !it.isDone(); it++) {
@@ -119,6 +145,21 @@ void Game::notify(unsigned int code){
 }
 
 void Game::readCards(std::string path){
+    if (path == ""){
+        // debug
+        m_cards = new GameTile*[9];
+        m_nb_cards = 9;
+        m_cards[0] = new GameTile(1, "1111110");
+        m_cards[1] = new GameTile(2, "2222220");
+        m_cards[2] = new GameTile(3, "3333330");
+        m_cards[3] = new GameTile(4, "4444440");
+        m_cards[4] = new GameTile(5, "5555550");
+        m_cards[5] = new GameTile(6, "1112220");
+        m_cards[6] = new GameTile(7, "3332220");
+        m_cards[7] = new GameTile(8, "4442220");
+        m_cards[8] = new GameTile(9, "5552220");
+
+    }
     std::ifstream istream(path);
     char chr;
     int tmp_nb = 0;

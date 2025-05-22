@@ -10,7 +10,6 @@ GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_typ
     for (int i = 0; i < num_types; i++){
         m_possible_wltoken[i] = type[i];
     }
-
 }
 
 GameTile::GameTile(int id, std::string description) : HexCell(), m_id(id){
@@ -89,7 +88,7 @@ std::string GameTile::getSaveString() const{
     return "";
 }
 
-char** getRepresentation(const GameTile& tile, unsigned short int size){
+char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size){ //Merge with hexcell function
     unsigned short int height = 2*size+1;
     unsigned short int width = 4*size;
     char **rt = new char*[height];
@@ -100,18 +99,27 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
         }
     }
 
+    if (tile == nullptr){
+        return rt;
+    }
+
     //Draw hex
     for (int i = 0; i < size; i++){
-
         rt[0][i+size] = '_';
         rt[height-1][i+size] = '_';
         rt[0][3*size -i -1] = '_';
         rt[height-1][3*size -i -1] = '_';
+
         rt[size][i] = '_';
         rt[size][2*size-i-1] = '_';
         rt[size][i+2*size] = '_';
         rt[size][4*size - i - 1] = '_';
 
+
+        rt[size + 1 + i][2*size - i - 1] = '/';
+        rt[size + 1 + i][i] = '\\';
+        rt[size + 1 + i][4*size - i - 1] = '/';
+        rt[height - i - 1][3*size - 1 - i] = '\\';
 
 
         rt[i+1][size + i] = '\\';
@@ -119,17 +127,12 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
         rt[size - i][i+2*size] = '/';
         rt[size - i][i] = '/';
 
-        rt[size + 1 + i][2*size - i - 1] = '/';
-        rt[size + 1 + i][i] = '\\';
-        rt[size + 1 + i][4*size - i - 1] = '/';
-        rt[height - i - 1][3*size - 1 - i] = '\\';
     }
 
     //Fill hex
-
     for (int i = 0; i < 6; i++){
         char filling;
-        switch (tile.getBiome(i)) {
+        switch (tile->getBiome(i)) {
         case Forest:
             filling = '@';
             break;
@@ -174,8 +177,6 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
         else {
             //Up triangle
             if (i == 1){
-
-
                 padding_x = 1;
                 padding_y = 2*size + 1;
             }
@@ -195,7 +196,82 @@ char** getRepresentation(const GameTile& tile, unsigned short int size){
             }
         }
     }
+    // Adding informations
 
+
+    HexCell::Offset pos = HexCell::axialToOffset(*tile, max_size);
+    rt[size][1] = char(pos.getCol() / 10) + '0';
+    rt[size][2] = char(pos.getCol() % 10) + '0';
+    rt[size][3] = ',';
+    rt[size][4] = char(pos.getRow() / 10) + '0';
+    rt[size][5] = char(pos.getRow() % 10) + '0';
+
+    if (tile->getToken() == nullptr){
+        for (int i = 0; i > tile->getNbWildlife(); i++){
+            char out = ' ';
+            switch (tile->getWildlife(i)){
+            case Bear :
+                out = 'b';
+                break;
+            case Salmon :
+                out = 's';
+                break;
+            case Hawk :
+                out = 'h';
+                break;
+            case Elk :
+                out = 'e';
+                break;
+            case Fox :
+                out = 'f';
+                break;
+            }
+            rt[size + 1][i+2] = out;
+        }
+    }
+    else {
+        char out = ' ';
+        switch(tile->getToken()->getWildlifeType()){
+        case Bear :
+            out = 'B';
+            break;
+        case Salmon :
+            out = 'S';
+            break;
+        case Hawk :
+            out = 'H';
+            break;
+        case Elk :
+            out = 'E';
+            break;
+        case Fox :
+            out = 'F';
+            break;
+        }
+        rt[size +1][3] = out;
+    }
+    if (tile->isKeystone()){
+        rt[size-1][3] = '#';
+    }
     return rt;
 }
 
+bool GameTile::isKeystone(const std::string& description)const {
+    if (description.size() < 6) {
+        for (int i = 1; i < 6; i++){
+            if (m_biomes[i] != m_biomes[0]){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    char first = description[0];
+    for (int i = 1; i < 6; ++i) {
+        if (description[i] != first) {
+            return false;
+        }
+    }
+    return true;
+}

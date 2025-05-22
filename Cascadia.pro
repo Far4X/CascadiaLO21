@@ -3,14 +3,15 @@ QT += widgets
 DISTFILES += \
     .gitignore \
     Assets/* \
-    Assets/ListTiles \
+    Assets/ListTiles.csv \
+    Assets/StarterTiles.csv \
     PlanTile
 
 CONFIG += console
 
-SOURCES += $$files($$PWD/*.cpp, true)
+SOURCES += $$files($$PWD/*.cpp, true)\
 
-HEADERS += $$files($$PWD/*.hpp, true)
+HEADERS += $$files($$PWD/*.hpp, true)\
 
 RESOURCES += \
     ressources.qrc
