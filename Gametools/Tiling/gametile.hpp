@@ -34,6 +34,14 @@ public:
     Biome getBiome(unsigned short int number) const {{return m_biomes[number%6];}}
     inline unsigned int getId() const {return m_id;}
     WildlifeToken* getToken() const { return m_wltoken; }
+    bool matchesType(Wildlife type) const {
+        if (m_wltoken != nullptr) {
+            return m_wltoken->getWildlifeType() == type;
+        }
+        else {
+            throw "No token on this tile";
+        }
+    }
     bool matchesType(Biome biome) const {
         for (int i = 0; i < 6; ++i) {
             if (m_biomes[i] == biome)

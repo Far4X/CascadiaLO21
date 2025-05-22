@@ -3,7 +3,6 @@
 
 #define MAX_SIZE 41
 
-#include "../Tiling/gametile.hpp"
 #include "tileholder.hpp"
 
 class PlayerBoard : public TileHolder {
@@ -21,6 +20,8 @@ public:
     static int floorDiv(int n);
     static Offset axialToOffset(const HexCell& hex);
     static HexCell offsetToAxial(const Offset& off);
+    GameTile* getNeighborTile(const GameTile& tile, Direction d) const;
+    std::vector<GameTile*> getNeighborTiles(const GameTile& tile) const;
     PlayerBoard();
     void show() override;
     std::string getSaveString() const override;
