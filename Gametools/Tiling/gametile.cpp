@@ -88,7 +88,7 @@ std::string GameTile::getSaveString() const{
     return "";
 }
 
-char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size){ //Merge with hexcell function
+char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size, bool add_pos){ //Merge with hexcell function
     unsigned short int height = 2*size+1;
     unsigned short int width = 4*size;
     char **rt = new char*[height];
@@ -130,6 +130,7 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
     }
 
     //Fill hex
+    std::cout << tile << std::endl;
     for (int i = 0; i < 6; i++){
         char filling;
         switch (tile->getBiome(i)) {
@@ -196,16 +197,17 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
             }
         }
     }
+
     // Adding informations
 
-
-    HexCell::Offset pos = HexCell::axialToOffset(*tile, max_size);
-    rt[size][1] = char(pos.getCol() / 10) + '0';
-    rt[size][2] = char(pos.getCol() % 10) + '0';
-    rt[size][3] = ',';
-    rt[size][4] = char(pos.getRow() / 10) + '0';
-    rt[size][5] = char(pos.getRow() % 10) + '0';
-
+    if (add_pos){
+        HexCell::Offset pos = HexCell::axialToOffset(*tile, max_size);
+        rt[size][1] = char(pos.getCol() / 10) + '0';
+        rt[size][2] = char(pos.getCol() % 10) + '0';
+        rt[size][3] = ',';
+        rt[size][4] = char(pos.getRow() / 10) + '0';
+        rt[size][5] = char(pos.getRow() % 10) + '0';
+    }
     if (tile->getToken() == nullptr){
         for (int i = 0; i > tile->getNbWildlife(); i++){
             char out = ' ';
@@ -228,7 +230,7 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
             }
             rt[size + 1][i+2] = out;
         }
-    }
+    }    
     else {
         char out = ' ';
         switch(tile->getToken()->getWildlifeType()){
@@ -248,11 +250,13 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
             out = 'F';
             break;
         }
-        rt[size +1][3] = out;
+        rt[size + 1][3] = out;
     }
+
     if (tile->isKeystone()){
         rt[size-1][3] = '#';
     }
+
     return rt;
 }
 

@@ -9,13 +9,9 @@ DISTFILES += \
 
 CONFIG += console
 
-SOURCES += $$files($$PWD/*.cpp, true)\
-    GameActors/Menus/COMenus/ctokenmenu.cpp \
-    GameActors/Menus/GXMenus/gtokenmenu.cpp
+SOURCES += $$files($$PWD/*.cpp, true)
 
-HEADERS += $$files($$PWD/*.hpp, true)\
-    GameActors/Menus/COMenus/ctokenmenu.hpp \
-    GameActors/Menus/GXMenus/gtokenmenu.hpp
+HEADERS += $$files($$PWD/*.hpp, true)
 
 RESOURCES += \
     ressources.qrc

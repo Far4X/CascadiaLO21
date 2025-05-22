@@ -5,7 +5,7 @@
 #include <ctime>
 #include "graphxvue.hpp"
 
-GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{parent}, max_size(size) {
+GPlayerBoard::GPlayerBoard(NotifiableInterface* tar, QWidget *parent,int size) : PlayerBoard(tar), QWidget{parent}, max_size(size) {
 
     // FOR DEBUG ONLY
     Biome deb_biomes[6] = {River,Mountain,Prairie,Forest,Wetland,Wetland};

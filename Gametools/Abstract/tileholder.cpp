@@ -1,4 +1,5 @@
 #include "tileholder.hpp"
+#include <iostream>
 
 TileHolder::TileHolder(int size_x, int size_y) : Printable(), SalvableThing(){
     m_size_x = size_x;
@@ -28,7 +29,7 @@ GameTile* TileHolder::getTile(int posx, int posy) const{
 
 
 void TileHolder::addTile(GameTile& tile, int x, int y, bool overwrite){
-    if (x < 0 ||y < 0){
+    if (x < 0 || y < 0){
         throw CustomError("X or Y non positive", 202);
     }
 
@@ -36,6 +37,9 @@ void TileHolder::addTile(GameTile& tile, int x, int y, bool overwrite){
     //tile.setR(*y);
     if (tile.getQ() >= m_size_x || tile.getR() >= m_size_y){
         throw CustomError("Holder not big enought", 201);
+    }
+    if (!overwrite && m_tiles[x][y] != nullptr){
+        return;
     }
 
     m_tiles[x][y] = &tile;

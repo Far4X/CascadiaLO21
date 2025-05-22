@@ -24,7 +24,7 @@ const int yOffset = tileHeight / 2;    // Décalage vertical pour les lignes imp
 
 class GPlayerBoard : public PlayerBoard, public QWidget{
 public:
-    GPlayerBoard(QWidget *parent = nullptr,int size = 41);
+    GPlayerBoard(NotifiableInterface* tar, QWidget *parent = nullptr,int size = 41);
     ~GPlayerBoard() = default;;
 
     void initHexTiles();

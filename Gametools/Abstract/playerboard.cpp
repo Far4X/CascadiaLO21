@@ -1,9 +1,11 @@
 #include "playerboard.hpp"
 #include <iostream>
 
-PlayerBoard::PlayerBoard() : TileHolder(MAX_SIZE, MAX_SIZE){
+PlayerBoard::PlayerBoard(NotifiableInterface *tar) : TileHolder(MAX_SIZE, MAX_SIZE){
     //m_q_center = MAX_SIZE/2;
     //m_r_center = MAX_SIZE/2;
+
+    m_target = tar;
 }
 
 /*int PlayerBoard::floorDiv(int n) {

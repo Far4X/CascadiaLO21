@@ -2,7 +2,6 @@
 #define CTOKENMENU_HPP
 
 #include "cmenu.hpp"
-//#include "../../../Gametools/Tiling/gametile.hpp"
 #include "../../../Gametools/Abstract/decktile.hpp"
 
 class CTokenMenu : public CMenu<unsigned short int>{

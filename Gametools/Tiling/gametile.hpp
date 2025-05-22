@@ -45,6 +45,6 @@ public:
     bool isKeystone(const std::string& description = "") const;
 };
 
-char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size);
+char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size, bool add_pos = true);
 
 #endif // GAMETILE_HPP

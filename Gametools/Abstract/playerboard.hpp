@@ -5,6 +5,7 @@
 
 #include "../Tiling/gametile.hpp"
 #include "tileholder.hpp"
+#include "notifiableinterface.hpp"
 
 class PlayerBoard : public TileHolder {
     //unsigned short int m_q_center;
@@ -12,11 +13,13 @@ class PlayerBoard : public TileHolder {
 protected :
     HexCell m_pointed_cell = HexCell(0, 0);
     bool m_want_use_naturetoken = false;
+    NotifiableInterface* m_target = nullptr;
 
 public:
+    virtual ~PlayerBoard() = default;
     static inline HexCell::Offset axialToOffset(const HexCell& hex){return HexCell::axialToOffset(hex, MAX_SIZE);};
     static inline HexCell offsetToAxial(const HexCell::Offset& off){return HexCell::offsetToAxial(off, MAX_SIZE);};
-    PlayerBoard();
+    PlayerBoard(NotifiableInterface* tar = nullptr);
     void show() override;
     std::string getSaveString() const override;
     //void moveHz(short int step = 1);

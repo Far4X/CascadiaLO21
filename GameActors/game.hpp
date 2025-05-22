@@ -18,16 +18,25 @@ class Game : public SalvableThing, public NotifiableInterface {
     unsigned short m_nb_players = 0;
     Menu<std::string>* m_player_menu = nullptr;
     Menu<std::tuple<std::string, std::string>>* m_game_menu = nullptr;
-    Menu<std::tuple<GameTile&, const WildlifeToken&>>* m_menu_token = nullptr;
+    Menu<unsigned short int>* m_menu_token = nullptr;
     DeckTile* m_decktile = nullptr;
 
     const bool m_is_console;
+
+    bool m_is_waiting_for_position = false;
+    bool m_is_waiting_to_place_tile = false;
+    GameTile* m_tile_to_add = nullptr;
+    const WildlifeToken* m_token_to_add = nullptr;
+
     std::vector<Player*> m_players;
+    std::vector<const WildlifeToken*> m_tokens;
     GameTile** m_cards = nullptr;
     GameTile* m_starter_cards[5][3];
     unsigned short int m_nb_cards = 0;
     GameStatus m_status = GameStatus::NotStarted;
-
+    unsigned short int current_tour = 0;
+    unsigned short int current_player = 0;
+    std::vector <void *> throwaway;
 
 public:
     Game(const bool is_console = false);
@@ -36,8 +45,9 @@ public:
     void readCards(std::string path = "");
     void play();
     void init();
-    void getTileAndToken();
-    void makePlayerTurn(unsigned short int id_player, GameTile& tile, const WildlifeToken& token);
+    void getTileAndToken(unsigned short int pos_tile, unsigned short int pos_token = -1);
+    //void makePlayerTurn(unsigned short int id_player, GameTile& tile, const WildlifeToken& token);
+    void makePlayerTurn();
     void initPlayerboards();
     void getInfoConsole();
     void getInfoGX();
@@ -45,10 +55,7 @@ public:
     void notify(unsigned int code) override;
     void restart();
     void quit();
-    const DeckTile* getDeckTile() const {return m_decktile};
-
-
-
+    const DeckTile* getDeckTile() const {return m_decktile;};
 };
 
 #endif // GAME_H

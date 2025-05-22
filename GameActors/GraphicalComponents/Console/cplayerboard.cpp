@@ -1,7 +1,7 @@
 #include "cplayerboard.hpp"
 #include <iostream>
 
-CPlayerBoard::CPlayerBoard() : PlayerBoard(){}
+CPlayerBoard::CPlayerBoard(NotifiableInterface *tar) : PlayerBoard(tar){}
 
 void CPlayerBoard::show(){
     reprBoard();
@@ -81,6 +81,7 @@ void CPlayerBoard::show(){
         }
     }
 
+    m_target->notify(4);
 }
 
 void CPlayerBoard::reprBoard(){

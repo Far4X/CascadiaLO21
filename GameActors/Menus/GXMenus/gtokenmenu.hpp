@@ -18,10 +18,10 @@ class GTokenMenu : public GMenu<unsigned short int>{
 
 public:
     GTokenMenu(NotifiableInterface* tar, DeckTile* decktile, unsigned short int nb_token);
-    ~GTokenMenu();
-    void validateNumber();
-    void validateNames();
-    void show();
+    ~GTokenMenu(){}
+    void validateNumber(){}
+    void validateNames(){}
+    void show(){}
 };
 
 #endif // GTOKENMENU_HPP

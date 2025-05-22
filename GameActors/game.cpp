@@ -24,6 +24,13 @@ Game::~Game(){
     }
     delete[] m_cards;
     delete m_player_menu;
+
+    for (size_t i = 0; i < throwaway.size(); i++){
+        delete throwaway[i];
+    }
+    for (size_t i = 0; i < m_tokens.size(); i++){
+        delete m_tokens[i];
+    }
 }
 
 GameStatus Game::getGameStatus() const {
@@ -48,7 +55,7 @@ void Game::init(){
 void Game::play(){
     for (int i = 0; i < 20; i++){
         for (int j = 0; j < m_nb_players; j++){
-            makePlayerTurn(j);
+            makePlayerTurn();
         }
     }
 }
@@ -92,7 +99,6 @@ void Game::initPlayerboards(){
 
     }
 
-
     std::random_device rd;
     std::mt19937 rng(rd());
     for (int i = 0; i < m_nb_players; i++){
@@ -104,23 +110,34 @@ void Game::initPlayerboards(){
             tmp = m_starter_cards[index][j];
             m_starter_cards[index][j] = m_starter_cards[4-i][j];
             m_starter_cards[4-i][j] = tmp;
-
         }
-        //m_players[i]->getBoard()->show();
     }
 }
 
-void Game::getTileAndToken(){
+void Game::getTileAndToken(unsigned short int pos_tile, unsigned short int pos_token){
+    m_is_waiting_for_position = true;
+    m_is_waiting_to_place_tile = true;
 
+    std::tuple<GameTile*, const WildlifeToken*> tmp = m_decktile->getCouple(pos_tile, pos_token);
+    m_tile_to_add = std::get<0>(tmp);
+    m_token_to_add = std::get<1>(tmp);
 }
 
-void Game::makePlayerTurn(unsigned short int id_player, GameTile& tile, const WildlifeToken& token){
+void Game::makePlayerTurn(){
+    if (m_is_console){
+        std::cout << '------' << '\n' << "Tour de " << m_players[current_player]->getName() << std::endl;
+        m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]->getNbNatureToken());
+    }
+    else {
+        m_menu_token = new GTokenMenu(this, m_decktile, m_players[current_player]->getNbNatureToken());
+    }
+
+    m_players[current_player]->getBoard()->show();
+
     m_decktile->show();
-    if (m_players[id_player]->getNbNatureToken() > 0){
+    return m_menu_token->show();
 
-    }
-
-    HexCell target;
+    /*HexCell target;
     bool cnt = true;
     while (cnt){
         m_players[id_player]->getBoard()->show();
@@ -129,7 +146,7 @@ void Game::makePlayerTurn(unsigned short int id_player, GameTile& tile, const Wi
         if ((m_players[id_player]->getBoard()->hasNeighbour(target)) && m_players[id_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
             cnt = false;
         }
-    }
+    }*/
 }
 
 
@@ -142,18 +159,19 @@ void Game::notify(unsigned int code){
             m_players.push_back(pl);
             PlayerBoard* bd;
             if (m_is_console){
-                bd = new CPlayerBoard();
+                bd = new CPlayerBoard(this);
             }
             else {
-                bd = new GPlayerBoard();
+                bd = new GPlayerBoard(this);
             }
             m_players.back()->setBoard(bd);
             std::cout << m_players.back()->getName() << std::endl;
         }
         m_nb_players = m_players.size();
         initPlayerboards();
-
+        return makePlayerTurn();
     }
+
     if (code == 2){
         if (m_is_console){
             m_player_menu = new CPlayerMenu(this);
@@ -161,28 +179,106 @@ void Game::notify(unsigned int code){
         }
         else {
             m_player_menu = new GPlayerMenu(this);
+            m_decktile = &GDeckTile::getInstance();
         }
+
+        for (size_t i = 0; i < m_tokens.size(); i++){
+            m_decktile->addToken(m_tokens[i]);
+        }
+        for (int i = 0; i < m_nb_cards; i++){
+            m_decktile->addTile(m_cards[i]);
+        }
+        m_decktile->fillPlate();
         m_player_menu->show();
-        play();
+        return play();
+    }
+
+    if (code == 3){
+        if (m_menu_token == nullptr){
+            throw CustomError("Menu token not initialized", 1);
+        }
+        std::cout << "Game notified with code 3" << std::endl;
+        std::vector<unsigned short int> params;
+        for (Menu<unsigned short int>::Iterator it = m_menu_token->getIterator(); !it.isDone(); it++){
+            params.push_back(it.getValue());
+        }
+        m_menu_token->getIterator();
+        //delete m_menu_token;
+        throwaway.push_back(m_menu_token);
+        m_menu_token = nullptr;
+        if (params.size() == 2){
+            getTileAndToken(params[0], params[1]);
+            
+        }
+        else {
+            getTileAndToken(params[0]);
+        }
+
+        m_players[current_player]->getBoard()->resetPointedCell();
+        return m_players[current_player]->getBoard()->show();
+    }
+
+    if (code == 4){
+        if (m_is_waiting_for_position == false){
+            return;
+        }
+        if (m_is_waiting_to_place_tile){
+            HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
+            //std::cout << "Hexcell pos : " << target.getQ() << ", " << target.getR() << std::endl;
+            if ((m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
+                m_players[current_player]->getBoard()->show();
+            }
+            else {
+                return m_players[current_player]->getBoard()->show();
+            }
+        }
+        else {
+            std::cout << "Here cap" << std::endl;
+        }
     }
 }
 
 void Game::readCards(std::string path){
+    for (int i = 0; i < 30; i++){
+        m_tokens.push_back(new WildlifeToken(Fox));
+        m_tokens.push_back(new WildlifeToken(Bear));
+        m_tokens.push_back(new WildlifeToken(Elk));
+        m_tokens.push_back(new WildlifeToken(Hawk));
+        m_tokens.push_back(new WildlifeToken(Salmon));
+    }
+
     if (path == ""){
         // debug
         m_cards = new GameTile*[9];
         m_nb_cards = 9;
         m_cards[0] = new GameTile(1, "1111110");
+        std::cout << m_cards[0] << std::endl;
         m_cards[1] = new GameTile(2, "2222220");
-        m_cards[2] = new GameTile(3, "3333330");
-        m_cards[3] = new GameTile(4, "4444440");
-        m_cards[4] = new GameTile(5, "5555550");
-        m_cards[5] = new GameTile(6, "1112220");
-        m_cards[6] = new GameTile(7, "3332220");
-        m_cards[7] = new GameTile(8, "4442220");
-        m_cards[8] = new GameTile(9, "5552220");
+        std::cout << m_cards[1] << std::endl;
 
+        m_cards[2] = new GameTile(3, "3333330");
+        std::cout << m_cards[2] << std::endl;
+
+        m_cards[3] = new GameTile(4, "4444440");
+        std::cout << m_cards[3] << std::endl;
+
+        m_cards[4] = new GameTile(5, "5555550");
+        std::cout << m_cards[4] << std::endl;
+
+        m_cards[5] = new GameTile(6, "1112220");
+        std::cout << m_cards[5] << std::endl;
+
+        m_cards[6] = new GameTile(7, "3332220");
+        std::cout << m_cards[6] << std::endl;
+
+        m_cards[7] = new GameTile(8, "4442220");
+        std::cout << m_cards[7] << std::endl;
+        m_cards[8] = new GameTile(9, "5552220");
+        std::cout << m_cards[8] << std::endl;
+
+        return;
     }
+
     std::ifstream istream(path);
     char chr;
     int tmp_nb = 0;
@@ -209,7 +305,6 @@ void Game::readCards(std::string path){
             }
         }
     }
-
 }
 
 void Game::quit(){
