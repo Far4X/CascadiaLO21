@@ -40,19 +40,19 @@ GameTile::GameTile(int id, std::string description) : HexCell(), m_id(id){
     for (int i = 7; i < m_numtypes + 7; i++){
         switch (description[i]) {
         case '1' :
-            m_possible_wltoken[i] = Bear;
+            m_possible_wltoken[i-7] = Bear;
             break;
         case '2' :
-            m_possible_wltoken[i] = Salmon;
+            m_possible_wltoken[i-7] = Salmon;
             break;
         case '3' :
-            m_possible_wltoken[i] = Elk;
+            m_possible_wltoken[i-7] = Elk;
             break;
         case '4':
-            m_possible_wltoken[i] = Hawk;
+            m_possible_wltoken[i-7] = Hawk;
             break;
         case '5':
-            m_possible_wltoken[i] = Fox;
+            m_possible_wltoken[i-7] = Fox;
             break;
         default:
             break;
@@ -254,7 +254,7 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
             out = 'F';
             break;
         }
-        rt[size + 1][3] = out;
+        rt[size][2*size + 1] = out;
     }
 
     if (tile->isKeystone()){

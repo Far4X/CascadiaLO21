@@ -264,7 +264,6 @@ void Game::notify(unsigned int code){
         if (m_is_waiting_to_place_tile){
             HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
             if ((m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
-
                 m_is_waiting_to_place_tile = true;
                 m_tile_to_add->setPos(target.getQ(), target.getR());
                 unsigned short int rotation = 0;
@@ -282,15 +281,36 @@ void Game::notify(unsigned int code){
                 }
 
                 for (int i = 0; i < rotation; i++){
-                    m_tile_to_add->Rotate();
+                    m_tile_to_add->Rotate(Trigonometric);
                 }
 
                 m_players[current_player]->getBoard()->addTile(*m_tile_to_add);
                 m_tile_to_add = nullptr;
-                m_players[current_player]->getBoard()->show();
+                return m_players[current_player]->getBoard()->show();
             }
             else {
-                return m_players[current_player]->getBoard()->show();
+                HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
+                if ((m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) != nullptr) && (m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->getToken() == nullptr)){
+                    // Check if token well in list !!!!!!!!
+
+                    m_is_waiting_for_position = false;
+                    m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
+                    if (m_is_console){
+                        std::cout << "Le token a bien été placé." << std::endl;
+                    }
+                    current_player++;
+                    if (current_player == m_nb_players){
+                        current_player = 0;
+                        current_tour++;
+                        if (current_tour == 20){
+                            return scoreGame();
+                        }
+                        return makePlayerTurn();
+                    }
+                }
+                else {
+
+                }
             }
         }
         else {

@@ -15,7 +15,7 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     //Hexcell m_position;
     Biome m_biomes[6]; //0 : top, 1 : topright...
     unsigned char m_rotation = 0;
-    WildlifeToken *m_wltoken = nullptr;
+    const WildlifeToken *m_wltoken = nullptr;
     Wildlife *m_possible_wltoken = nullptr;
     int m_numtypes;
     const unsigned int m_id;
@@ -36,7 +36,8 @@ public:
     int draw();
     Biome getBiome(unsigned short int number) const {{return m_biomes[number%6];}}
     inline unsigned int getId() const {return m_id;}
-    WildlifeToken* getToken() const { return m_wltoken; }
+    const WildlifeToken* getToken() const { return m_wltoken; }
+    inline void setWildLifeToken(const WildlifeToken* wlt){m_wltoken = wlt;};
     bool matchesType(Wildlife type) const {
         if (m_wltoken != nullptr) {
             return m_wltoken->getWildlifeType() == type;
