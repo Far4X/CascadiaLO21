@@ -31,7 +31,7 @@ void CTokenMenu::show(){
             //Clear tokens
         }
         else {
-            std::cout << "Résultat non valide. Merci d'écrire y ou n." << std::endl;
+            std::cout << "Résultat non valide. Merci d'écrire n, c ou b." << std::endl;
         }
     }
 
