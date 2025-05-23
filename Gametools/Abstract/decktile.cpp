@@ -59,7 +59,7 @@ void DeckTile::clearTokens(){
 int DeckTile::fillPlate(){
     for (int i = 0; i < 4; i++){
         if (m_tiles[i] == nullptr){
-            std::cout << "Adding " << m_deck_tiles[m_deck_tiles.size()-1] << std::endl;
+            //std::cout << "Adding " << m_deck_tiles[m_deck_tiles.size()-1] << std::endl;
             if (m_deck_tiles.empty() == false){
                 m_tiles[i] = m_deck_tiles[m_deck_tiles.size()-1];
                 m_deck_tiles.pop_back();
@@ -82,7 +82,7 @@ int DeckTile::fillPlate(){
 }
 
 std::tuple<GameTile*, const WildlifeToken*> DeckTile::getCouple(int id_card, int id_token){
-    if (id_token == -1){
+    if (id_token == 65535){
         id_token = id_card;
     }
     if (id_card > 4 || id_card < 0 || id_token > 4 || id_token < 0 ){

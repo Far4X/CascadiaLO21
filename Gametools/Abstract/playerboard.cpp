@@ -80,7 +80,7 @@ void PlayerBoard::addTile(GameTile& tile){
 bool PlayerBoard::hasNeighbour(const HexCell& pos){
     for (size_t i = 0; i < pos.getNeighbors().size(); i++){
         HexCell::Offset neight = axialToOffset(pos.getNeighbors()[i]);
-        std::cout << "Offset pos neigh : " << neight.getCol() << " " << neight.getRow() << std::endl;
+        //std::cout << "Offset pos neigh : " << neight.getCol() << " " << neight.getRow() << std::endl;
         if (neight.getCol() >= 0 && neight.getRow() >= 0 && this->TileHolder::getTile(neight.getCol(), neight.getRow()) != nullptr){
             return true;
         }

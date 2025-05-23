@@ -209,7 +209,8 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
         rt[size][5] = char(pos.getRow() % 10) + '0';
     }
     if (tile->getToken() == nullptr){
-        for (int i = 0; i > tile->getNbWildlife(); i++){
+        std::cout << "Has " << tile->getNbWildlife() << " wildlife" << std::endl;
+        for (int i = 0; i < tile->getNbWildlife(); i++){
             char out = ' ';
             switch (tile->getWildlife(i)){
             case Bear :
@@ -227,8 +228,11 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
             case Fox :
                 out = 'f';
                 break;
+            default :
+                std::cout << "Not here" << std::endl;
+                break;
             }
-            rt[size + 1][i+2] = out;
+            rt[size][2*size + i+1] = out;
         }
     }    
     else {
