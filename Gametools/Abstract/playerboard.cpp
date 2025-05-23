@@ -1,4 +1,5 @@
 #include "playerboard.hpp"
+#include "../Tiling/gametile.hpp"
 
 PlayerBoard::PlayerBoard() : TileHolder(MAX_SIZE, MAX_SIZE){
     m_q_center = MAX_SIZE/2;
@@ -26,11 +27,27 @@ PlayerBoard::PlayerBoard() : TileHolder(MAX_SIZE, MAX_SIZE){
 HexCell PlayerBoard::offsetToAxial(const Offset& off){
     int col = off.getCol();
     int row = off.getRow();
-    int q = col - MAX_SIZE;
-    int r = row - floorDiv(q) - MAX_SIZE;
+    int q = col - MAX_SIZE/2;
+    int r = row - floorDiv(q) - MAX_SIZE/2;
     return HexCell(q, r);
 }*/
 
+
+GameTile* PlayerBoard::getNeighborTile(const GameTile& tile, Direction d) const {
+    HexCell hex = tile.getNeighbor(d);
+    PlayerBoard::Offset off = PlayerBoard::axialToOffset(hex);
+    return this->getTile(off.getCol(), off.getRow());
+}
+
+std::vector<GameTile*> PlayerBoard::getNeighborTiles(const GameTile& tile) const {
+    std::vector<HexCell> hexes = tile.getNeighbors();
+    std::vector<GameTile*> neighbors;
+    for (const HexCell& hex : hexes) {
+        PlayerBoard::Offset off = PlayerBoard::axialToOffset(hex);
+        neighbors.push_back(getTile(off.getCol(), off.getRow()));
+    }
+    return neighbors;
+}
 
 std::string PlayerBoard::getSaveString() const { // genere un string qui permet de déchiffrer l'affichage
     std::string desc = "c:";

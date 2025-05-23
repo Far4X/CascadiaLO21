@@ -8,7 +8,6 @@ enum Direction {N, NE, SE, S, SW, NW};
 class HexCell : public BaseClass {
     int m_q;
     int m_r;
-    static const std::vector<HexCell> directions;
     //HexTile* m_tile;
 
 public:
@@ -29,6 +28,7 @@ public:
 	int getQ() const { return m_q; };
 	int getR() const { return m_r; };
     int getS() const { return -m_q - m_r; };  // useless
+    static const std::vector<HexCell> directions;
 
     inline void setQ(const int& q){m_q = q;}
     inline void setR(const int& r){m_r = r;}
@@ -39,7 +39,7 @@ public:
 	// HexCell operator-=(const HexCell& other);
 
     HexCell getDirection(Direction d) const;
-    HexCell getNeighbors(Direction d) const;  // retourne le voisin de direction d
+    HexCell getNeighbor(Direction d) const;  // retourne le voisin de direction d
     std::vector<HexCell> getNeighbors() const;  // overloaded : retourne tous les voisins (les 6)
 };
 char** getRepresentationCell(const HexCell* cell, unsigned short int size, unsigned int max_size);

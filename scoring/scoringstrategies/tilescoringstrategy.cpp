@@ -1,29 +1,26 @@
 #include "tilescoringstrategy.hpp"
 #include "scoring/scoreutils.hpp"
-
-/*
+#include <vector>
+#include <algorithm>
 
 TileScoringStrategy::TileScoringStrategy() {}
 
-double TileScoringStrategy::computeScore(const PlayerBoard& board) const {
-    /*ScoreUtils::TileGrid tiles = ScoreUtils::gatherAllTiles(board);
-    double total_score = 0;
-    for (auto biome : Animals) {
-        auto groups = ScoreUtils::getAdjacentComponents(tiles, biome, MAX_SIZE);
-        size_t max_size = 0;
-        for (size_t i = 0; i < groups.size(); i++) {
-            if (groups[i].size() > max_size) {
-                max_size = groups[i].size();
-            }
+std::vector<double> TileScoringStrategy::computeScore(const PlayerBoard& board) const {
+
+    std::vector<double> largestPerBiome(Biomes.size(), 0.0);
+
+    for (int biome = 0; biome < (int)Biomes.size(); biome++) {
+        Biome filter = static_cast<Biome>(biome);
+
+        auto groups = ScoreUtils::getAdjacentComponents(board, 1, filter, MAX_SIZE);
+
+        int best = 1;
+        for (auto& cluster : groups) {
+            best = std::max(best, (int)cluster.size());
         }
-        total_score += max_size;
+
+        largestPerBiome[biome] = static_cast<double>(best);
     }
-    return total_score;  // placeholder bien sûr
 
-    Bugged code, comment to compile
-
-
+    return largestPerBiome;
 }
-
-*/
-

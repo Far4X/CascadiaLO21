@@ -50,7 +50,7 @@ HexCell HexCell::getDirection(Direction d) const {
     return directions[d];
 }
 
-HexCell HexCell::getNeighbors(Direction d) const {
+HexCell HexCell::getNeighbor(Direction d) const {
     return (*this + getDirection(d));
 }
 

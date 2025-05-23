@@ -3,7 +3,6 @@
 
 #define MAX_SIZE 41
 
-#include "../Tiling/gametile.hpp"
 #include "tileholder.hpp"
 
 class PlayerBoard : public TileHolder {
@@ -22,8 +21,10 @@ public:
     static Offset axialToOffset(const HexCell& hex);
     static HexCell offsetToAxial(const Offset& off);*/
 
-    static inline HexCell::Offset axialToOffset(const HexCell& hex){return HexCell::axialToOffset(hex, MAX_SIZE);};
-    static inline HexCell offsetToAxial(const HexCell::Offset& off){return HexCell::offsetToAxial(off, MAX_SIZE);};
+    static inline HexCell::Offset axialToOffset(const HexCell& hex) { return HexCell::axialToOffset(hex, MAX_SIZE); }
+    static inline HexCell offsetToAxial(const HexCell::Offset& off) { return HexCell::offsetToAxial(off, MAX_SIZE); }
+    GameTile* getNeighborTile(const GameTile& tile, Direction d) const;
+    std::vector<GameTile*> getNeighborTiles(const GameTile& tile) const;
     PlayerBoard();
     void show() override;
     std::string getSaveString() const override;
