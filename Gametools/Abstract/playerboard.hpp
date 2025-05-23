@@ -3,7 +3,6 @@
 
 #define MAX_SIZE 41
 
-#include "../Tiling/gametile.hpp"
 #include "tileholder.hpp"
 #include "notifiableinterface.hpp"
 
@@ -20,6 +19,8 @@ public:
     static inline HexCell::Offset axialToOffset(const HexCell& hex){return HexCell::axialToOffset(hex, MAX_SIZE);};
     static inline HexCell offsetToAxial(const HexCell::Offset& off){return HexCell::offsetToAxial(off, MAX_SIZE);};
     PlayerBoard(NotifiableInterface* tar = nullptr);
+    GameTile* getNeighborTile(const GameTile& tile, Direction d) const;
+    std::vector<GameTile*> getNeighborTiles(const GameTile& tile) const;
     void show() override;
     std::string getSaveString() const override;
     //void moveHz(short int step = 1);

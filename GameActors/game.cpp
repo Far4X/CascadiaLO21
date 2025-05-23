@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "../Gametools/customerror.hpp"
+#include "scoring/scoreutils.hpp"
 #include <iostream>
 #include <fstream>
 #include <random>
@@ -153,6 +154,32 @@ void Game::makePlayerTurn(){
 }
 
 
+void Game::scoreGame() {
+    // à rajouter
+    /* if (m_status != Finished) {
+     * throw "Cannot score an unfinished game";
+    */
+    for (size_t i = 0; i < m_nb_players; i++) {  // boucle joueurs
+        auto board = m_players[i]->getBoard();
+
+        // PARTIE TUILES
+        TileScoringStrategy tile_strategy;
+        auto tile_scores = m_scorer.obtainScore(*board, tile_strategy);
+        m_players[i]->setTilesScores(tile_scores);
+
+        // PARTIE JETONS
+        /* Pour chaque carte de marquage, on va calculer le score et append ce score au vecteur wildlife_scores */
+        const auto& cards = m_scorer.getScoringCards();
+        std::vector<double> wildlife_scores(cards.size());
+        for (size_t j = 0; j < cards.size(); j++) {
+            m_scorer.setStrategy(j);
+            wildlife_scores[j] = m_scorer.obtainScore(*board)[0];  // on copie la premiere valeur dans le vecteur de scores retourné par computeScore (le seul score)
+            // c'est un vecteur de double et pas un double normal parce que ça permet d'unifier la logique avec celle des tuiles
+        }
+        m_players[i]->setTokensScores(wildlife_scores);
+    }
+}
+
 void Game::notify(unsigned int code){
     if (code == 1){
         Player *pl = nullptr;
@@ -176,6 +203,14 @@ void Game::notify(unsigned int code){
     }
 
     if (code == 2){
+        for (Menu<std::tuple<std::string,std::string>>::Iterator it = m_game_menu->getIterator(); !it.isDone(); it++) {
+            auto tup = it.getValue();
+            const std::string& key = std::get<0>(tup);
+            const std::string& value = std::get<1>(tup);
+            if (key == "Use cards") {
+                m_scorer.configureCards(value);
+            }
+        }
         if (m_is_console){
             m_player_menu = new CPlayerMenu(this);
             m_decktile = &CDeckTile::getInstance();
