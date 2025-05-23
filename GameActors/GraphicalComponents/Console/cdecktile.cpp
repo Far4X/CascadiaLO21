@@ -1,6 +1,6 @@
 #include "cdecktile.hpp"
 #include <iostream>
-
+/*
 CDeckTile::CDeckTile() : DeckTile() {}
 
 void CDeckTile::show(){
@@ -72,3 +72,4 @@ void CDeckTile::show(){
         std::cout << std::endl;
     }
 }
+*/
