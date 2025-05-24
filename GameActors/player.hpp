@@ -35,7 +35,7 @@ public:
     PlayerBoard* getBoard() const {return m_board;}
     unsigned short int getNbNatureToken() const {return m_nb_nature_token;};
     void addNatureToken() {m_nb_nature_token++;};
-    bool removeNatureToke() {if (m_nb_nature_token > 0){m_nb_nature_token--; return true;} return false;}
+    bool removeNatureToken() {if (m_nb_nature_token > 0){m_nb_nature_token--; return true;} return false;}
     std::vector<double> getTilesScores() const { return m_tiles_scores; }
     std::vector<double> getTokensScores() const { return m_tokens_scores; }
 

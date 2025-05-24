@@ -1,16 +1,15 @@
 #include "ctokenmenu.hpp"
 #include <iostream>
 
-CTokenMenu::CTokenMenu(NotifiableInterface* tar, DeckTile* decktile, unsigned short int nb_token) : CMenu(tar){
+CTokenMenu::CTokenMenu(NotifiableInterface* tar, DeckTile* decktile, Player* caller) : CMenu(tar), m_caller(caller){
     m_deck_tile = decktile;
-    m_nb_tokens = nb_token;
 }
 
 void CTokenMenu::show(){
     m_deck_tile->show();
 
-    std::cout << "Voulez-vous utiliser un pion nature; vous en avez : " << m_nb_tokens << ". n : Non, c : Enlever tous les jeton faune actuel, b : Prendre séparément pion faune et tuile" << std::endl;
-
+    std::cout << "Voulez-vous utiliser un pion nature; vous en avez : " << m_caller->getNbNatureToken() << ". n : Non, c : Enlever tous les jeton faune actuel, b : Prendre séparément pion faune et tuile" << std::endl;
+    //TODO : Removetoken;
     bool cnt = true;
     bool choose_distinc;
     std::string out;

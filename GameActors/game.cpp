@@ -131,10 +131,10 @@ void Game::getTileAndToken(unsigned short int pos_tile, unsigned short int pos_t
 void Game::makePlayerTurn(){
     if (m_is_console){
         std::cout << "----- \nTour de " << m_players[current_player]->getName() << std::endl;
-        m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]->getNbNatureToken());
+        m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
     }
     else {
-        m_menu_token = new GTokenMenu(this, m_decktile, m_players[current_player]->getNbNatureToken());
+        m_menu_token = new GTokenMenu(this, m_decktile, m_players[current_player]);
     }
 
     m_players[current_player]->getBoard()->show();
@@ -308,6 +308,9 @@ void Game::readNotification(unsigned int code){
                 for (int i = 0; i < tile->getNbWildlife(); i++){
                     if (m_token_to_add->getWildlifeType() == tile->getWildlife(i)){
                         m_is_waiting_for_position = false;
+                        if (tile->isKeystone()){
+                            m_players[current_player]->addNatureToken();
+                        }
                         m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
                         if (m_is_console){
                             std::cout << "Le token a bien été placé." << std::endl;
