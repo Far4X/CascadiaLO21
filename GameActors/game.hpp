@@ -7,7 +7,7 @@
 #include "player.hpp"
 #include "../../scoring/scoringstrategies/tilescoringstrategy.hpp"
 #include "../../scoring/scoringstrategies/wildlifescoringstrategy.hpp"
-
+#include <QObject>
 
 #include <vector>
 
@@ -18,7 +18,7 @@ enum class GameStatus {
     Restart
 };
 
-class Game : public SalvableThing, public NotifiableInterface {
+class Game : public SalvableThing, public NotifiableInterface, public QObject {
     unsigned short m_nb_players = 0;
     Menu<std::string>* m_player_menu = nullptr;
     Menu<std::tuple<std::string, std::string>>* m_game_menu = nullptr;
@@ -43,10 +43,11 @@ class Game : public SalvableThing, public NotifiableInterface {
     unsigned short int current_player = 0;
     std::vector <void *> throwaway;
     Score m_scorer;
+    NotifiableInterface* const m_target;
 
 
 public:
-    Game(const bool is_console = false);
+    Game(NotifiableInterface* interface, const bool is_console = false);
     ~Game();
     std::string getSaveString() const override;
     void readCards(std::string path = ":/Assets/Assets/ListTiles.lst");
@@ -60,7 +61,8 @@ public:
     void getInfoGX();
     void scoreGame();
     GameStatus getGameStatus() const;
-    void notify(unsigned int code) override;
+    void readNotification(unsigned int code);
+    void notifyInterface(unsigned int code) override;
     void restart();
     void quit();
     const DeckTile* getDeckTile() const {return m_decktile;};

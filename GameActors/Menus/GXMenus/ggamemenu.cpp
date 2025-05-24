@@ -48,14 +48,14 @@ void GGameMenu::validate(){
     this->addResult(std::tuple<std::string, std::string>("Use cards", m_line_edit_cards->text().toStdString()));
     this->hide();
     if (m_target != nullptr){
-        m_target->notify(2);
+        m_target->notifyInterface(2);
     }
 }
 void GGameMenu::usePreviousGame(){
     this->addResult(std::tuple<std::string, std::string>("Recover", "true"));
     this->hide();
     if (m_target != nullptr){
-        m_target->notify(2);
+        m_target->notifyInterface(2);
     }
 }
 void GGameMenu::loadExtension(){

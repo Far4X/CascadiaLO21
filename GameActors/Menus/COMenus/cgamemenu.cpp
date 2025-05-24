@@ -52,5 +52,5 @@ void CGameMenu::show(){
         }
     }
 
-    m_target->notify(2);
+    m_target->notifyInterface(2);
 }

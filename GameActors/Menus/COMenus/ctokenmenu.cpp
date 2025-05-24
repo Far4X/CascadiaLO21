@@ -64,6 +64,6 @@ void CTokenMenu::show(){
         }
         this->addResult(id_token);
     }
-    m_target->notify(3);
+    m_target->notifyInterface(3);
 }
 
