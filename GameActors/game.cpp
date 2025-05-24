@@ -239,8 +239,8 @@ void Game::notify(unsigned int code){
         for (Menu<unsigned short int>::Iterator it = m_menu_token->getIterator(); !it.isDone(); it++){
             params.push_back(it.getValue());
         }
-        //delete m_menu_token;
-        throwaway.push_back(m_menu_token);
+        delete m_menu_token;
+        //throwaway.push_back(m_menu_token);
         m_menu_token = nullptr;
         if (params.size() == 2){
             getTileAndToken(params[0], params[1]);
@@ -250,8 +250,8 @@ void Game::notify(unsigned int code){
         }
 
         m_players[current_player]->getBoard()->resetPointedCell();
-        //m_is_waiting_for_position = true;
-        //m_is_waiting_to_place_tile = true;
+        m_is_waiting_for_position = true;
+        m_is_waiting_to_place_tile = true;
         return m_players[current_player]->getBoard()->show();
     }
 
@@ -262,7 +262,7 @@ void Game::notify(unsigned int code){
         if (m_is_waiting_to_place_tile){
             HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
             if ((m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
-                m_is_waiting_to_place_tile = true;
+                m_is_waiting_to_place_tile = false;
                 m_tile_to_add->setPos(target.getQ(), target.getR());
                 unsigned short int rotation = 0;
 
@@ -272,7 +272,7 @@ void Game::notify(unsigned int code){
                     std::cin >> result;
                     if (result.size() == 1){
                         if (result[0] < '6' && result[0] >= '0'){
-                            rotation = result[0] - '6';
+                            rotation = result[0] - '0';
                         }
                     }
                     std::cout << "Merci de choisir l'emplacement pour le pion faune : ";
