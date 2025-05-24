@@ -1,8 +1,10 @@
 #include "graphxvue.hpp"
 #include "gplayerboard.hpp"
+#include <iostream>
 
 
 GraphXVue* GraphXVue::s_instance = nullptr;
+
 
 GraphXVue::GraphXVue(QObject *parent)
     : QObject{parent}
@@ -29,13 +31,17 @@ GraphXVue::GraphXVue(QObject *parent)
 
     //Scene et vue plateaux
     m_scene = new QGraphicsScene();
-    m_view = new QGraphicsView(m_scene);
-    m_view->setDragMode(QGraphicsView::ScrollHandDrag);  // clic-gauche pour dragger
+    m_view = new GraphXView(m_scene);
+    m_view->setDragMode(GraphXView::ScrollHandDrag);  // clic-gauche pour dragger
     m_view->setRenderHint(QPainter::Antialiasing);
-    m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    m_view->setTransformationAnchor(GraphXView::AnchorUnderMouse);
     m_right_panel_layout->addWidget(m_view);
     QRectF sceneRect(0, 0, 2600, 2600);  //plus tard remplacer par de vrai fonction qui permettent de gérer le zoom dezoom
     m_scene->setSceneRect(sceneRect);
+    connect(m_view, &GraphXView::rightClickAt, this, &GraphXVue::onRightClickAt);
+
+    currentboard = 0;
+
 }
 
 
@@ -44,6 +50,7 @@ GraphXVue* GraphXVue::instance(){
         s_instance = new GraphXVue;
     }
     return s_instance;
+
 }
 
 void GraphXVue::addPlayerBoard(GPlayerBoard* board){
@@ -78,8 +85,34 @@ void GraphXVue::onTabChanged(int index)
         proxies[i]->setVisible(i == static_cast<size_t>(index));
     }
     m_view->centerOn(proxies[index]);
+    currentboard = index;
 }
 
+void GraphXVue::onRightClickAt(const QPointF& scenePos)
+{
+    int col = static_cast<int>(scenePos.x() / xOffset);
+    float yAdjusted = scenePos.y();
+
+    if (col % 2 == 1) {
+        yAdjusted -= yOffset;  // décale vers le haut pour les colonnes impaires
+    }
+
+    int row = static_cast<int>(yAdjusted / tileHeight);
+
+    // Debug
+    qDebug() << "Clique droit sur col:" << col << "row:" << row;
+    HexCell::Offset off(row,col);
+    HexCell hex (PlayerBoard::offsetToAxial(off));
+    if(boards[currentboard]->getTile(hex.getQ(),hex.getR()) != nullptr)
+    {
+        boards[currentboard]->setPointedCell(hex);
+
+
+    }
+
+
+    return;
+}
 
 
 

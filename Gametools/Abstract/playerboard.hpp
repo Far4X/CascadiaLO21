@@ -30,6 +30,7 @@ public:
     void addTile(GameTile& tile);
     bool hasNeighbour(const HexCell& pos);
     inline HexCell getPointedCell() const {return m_pointed_cell;};
+    inline void setPointedCell(HexCell pointed){m_pointed_cell = pointed;}
     inline void resetPointedCell() {m_pointed_cell = HexCell(0,0);};
     GameTile* getTile(int const &q, int const &r) const;
 };

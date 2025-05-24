@@ -31,6 +31,14 @@ GPlayerBoard::GPlayerBoard(NotifiableInterface* tar, QWidget *parent,int size) :
 
     m_manager = GraphXVue::instance();
     m_manager->addPlayerBoard(this);
+
+    connect(m_manager, &GraphXVue::rightClickOnBoard, this, [this](GPlayerBoard* board, const QPointF& pos){
+        if (board == this) {
+            // Traiter clic droit ici avec pos
+            qDebug() << "Clic droit sur ce GPlayerBoard à " << pos;
+            // Ton code ici
+        }
+    });
     }
 
 
@@ -39,13 +47,11 @@ void GPlayerBoard::initHexTiles(){
         for (int row = 0; row < max_size; ++row) {
             QLabel* tileLabel = new QLabel(this);  // Création d'un QLabel pour chaque tuile
             QPixmap pixmap;  // Charge une image de tuile
-            if (std::rand() % 2 == 0 && col!=20 && row!=20)
+            HexCell::Offset off(row,col);
+            HexCell hex (PlayerBoard::offsetToAxial(off));
+            if (getTile(hex.getQ(),hex.getR()) == nullptr)
                 {
                 QPixmap pixmapL(":/Assets/Assets/Tiles/desert.png");
-                pixmap = pixmapL;
-                }
-            else if (col==20 && row==20){
-                QPixmap pixmapL(":/Assets/Assets/tileOutline.png");
                 pixmap = pixmapL;
                 }
             else {
@@ -67,6 +73,7 @@ void GPlayerBoard::initHexTiles(){
             }
 
             tileLabel->move(x, y);  // Déplacement relatif au widget
+            tileLabel->setAttribute(Qt::WA_TransparentForMouseEvents); // permet de skip les cliques souris
 
         }
     }
@@ -95,16 +102,13 @@ void GPlayerBoard::addGxTile(int col,int row){
 }
 
 void GPlayerBoard::show(){
+    initHexTiles();
     m_manager->show();
 }
 
 QSize GPlayerBoard::sizeHint() const {
     return QSize(41*tileWidth,42*tileHeight);
 }
-
-
-
-
 
 
 

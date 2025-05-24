@@ -39,6 +39,8 @@ private:
     int max_size;
     QWidget* m_widget = nullptr; // widget principal
     QVBoxLayout* m_layout = nullptr;  // Grid pour organiser les widgets
+    QPoint m_last_mouse_pos;
+    bool m_dragging = false;
 
 };
 
