@@ -3,11 +3,11 @@
 
 std::vector<double> HawkScoringCardA::computeScore(const PlayerBoard& board) const {
 
-    auto bears = ScoreUtils::getAdjacentComponents(board, 2, Bear, MAX_SIZE);
+    auto hawks = ScoreUtils::getAdjacentComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Hawk));
 
     int cpt = 0;
-    for (size_t i = 0; i < bears.size(); i++) {
-		if (bears[i].size() == 2) {
+    for (size_t i = 0; i < hawks.size(); i++) {
+        if (hawks[i].size() == 2) {
 			cpt += 1;
 		}
 	}

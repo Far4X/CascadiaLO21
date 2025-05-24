@@ -3,11 +3,11 @@
 
 std::vector<double> FoxScoringCardA::computeScore(const PlayerBoard& board) const {
 
-    auto bears = ScoreUtils::getAdjacentComponents(board, 2, Bear, MAX_SIZE);
+    auto foxes = ScoreUtils::getAdjacentComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Fox));
 
     int cpt = 0;
-    for (size_t i = 0; i < bears.size(); i++) {
-		if (bears[i].size() == 2) {
+    for (size_t i = 0; i < foxes.size(); i++) {
+        if (foxes[i].size() == 2) {
 			cpt += 1;
 		}
 	}
