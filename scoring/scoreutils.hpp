@@ -5,13 +5,14 @@
 #include "scoring/scoringstrategy.hpp"
 #include <vector>
 #include <memory>
+#include <functional>
 
 
 namespace ScoreUtils {
     using TileGrid  = std::vector<std::vector<GameTile*>>;
-    using TokenGrid = std::vector<std::vector<WildlifeToken*>>;
     std::unique_ptr<WildlifeScoringStrategy> makeWildlifeStrategy(const std::string& wildlife, char card);
-    std::vector<std::vector<GameTile*>> gatherAllTiles(const PlayerBoard& board, int size = MAX_SIZE);
+    TileGrid gatherAllTiles(const PlayerBoard& board, int size = MAX_SIZE);
+    TileGrid pruneTiles(const PlayerBoard& board, std::vector<GameTile*> tiles, std::function<bool(int,int)> cmp, int threshold);
 
 
     class UnionFind {  // c'est une structure de données super utile que j'ai trouvée, elle permet de réunir des set de manière efficace ce dont j'ai besoin pour la recherche de groupes adjacents
@@ -55,7 +56,7 @@ namespace ScoreUtils {
     };
 
     template <typename Type>
-    std::vector<std::vector<GameTile*>> getAdjacentComponents(const PlayerBoard& board, int mode, Type filter, int size) {
+    TileGrid getAdjacentComponents(const PlayerBoard& board, int mode, Type filter, int size) {
         /* idée : pour chaque tuile, on récupère les voisins, ensuite pour chaque voisin, on va comparer selon le critère d'adjacence
         * qui nous intéresse. Enfin, on applique l'algo UnionFind.
         */
@@ -115,7 +116,7 @@ namespace ScoreUtils {
             }
         }
         // maintenant, on va regrouper les Component par parent (représentatif c.f. vidéo que j'ai envoyé sur Union Find)
-        std::vector<std::vector<GameTile*>> buckets(n);
+        TileGrid buckets(n);
         for (int y = 0; y < size; ++y) {
             for (int x = 0; x < size; ++x) {
                 GameTile* tile = tiles[y][x];
@@ -126,12 +127,26 @@ namespace ScoreUtils {
             }
         }
         // enfin, on va créer les vrais groupes, cette fois ci en supprimant aussi les indices ou c'est vide
-        std::vector<std::vector<GameTile*>> groups;
+        TileGrid groups;
         for (size_t id = 0; id < n; id++) {
             if (!buckets[id].empty())
                 groups.push_back(std::move(buckets[id]));
         }
         return groups;
     }
+
+    template<typename T>
+    std::vector<T> flatten(const std::vector<std::vector<T>>& v) {
+        std::vector<T> flat;
+        for (const auto& inner : v) {
+            for (const auto& elem : inner) {
+                flat.push_back(elem);
+            }
+        }
+        return flat;
+    }
+
+
+    TileGrid getLongestRun(const PlayerBoard& board, std::vector<std::vector<GameTile*>> tiles);
 }
 

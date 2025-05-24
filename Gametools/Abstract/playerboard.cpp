@@ -35,7 +35,7 @@ HexCell PlayerBoard::offsetToAxial(const Offset& off){
 
 GameTile* PlayerBoard::getNeighborTile(const GameTile& tile, Direction d) const {
     HexCell hex = tile.getNeighbor(d);
-    PlayerBoard::Offset off = PlayerBoard::axialToOffset(hex);
+    GameTile::Offset off = PlayerBoard::axialToOffset(hex);
     return this->getTile(off.getCol(), off.getRow());
 }
 
@@ -43,10 +43,21 @@ std::vector<GameTile*> PlayerBoard::getNeighborTiles(const GameTile& tile) const
     std::vector<HexCell> hexes = tile.getNeighbors();
     std::vector<GameTile*> neighbors;
     for (const HexCell& hex : hexes) {
-        PlayerBoard::Offset off = PlayerBoard::axialToOffset(hex);
+        GameTile::Offset off = PlayerBoard::axialToOffset(hex);
         neighbors.push_back(getTile(off.getCol(), off.getRow()));
     }
     return neighbors;
+}
+
+int PlayerBoard::getNbNeighbors(const GameTile& tile) const {
+    std::vector<GameTile*> neighbors = getNeighborTiles(tile);
+    int count = 0;
+    for (size_t i = 0; i < neighbors.size(); i++) {
+        if (neighbors[i] != nullptr) {
+            count++;
+        }
+    }
+    return count;
 }
 
 std::string PlayerBoard::getSaveString() const { // genere un string qui permet de déchiffrer l'affichage

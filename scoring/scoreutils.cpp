@@ -3,6 +3,7 @@
 #include "bearscoringcards/bearscoringcardb.hpp"
 #include "bearscoringcards/bearscoringcardc.hpp"
 #include "bearscoringcards/bearscoringcardd.hpp"
+#include <cassert>
 
 namespace ScoreUtils {
     std::unique_ptr<WildlifeScoringStrategy> makeWildlifeStrategy(const std::string& animal, char code) {
@@ -79,5 +80,29 @@ namespace ScoreUtils {
         else {
             throw "invalid animal";
         }
+    }
+
+    TileGrid gatherAllTiles(const PlayerBoard& board, int size) {
+        TileGrid tiles(size, std::vector<GameTile*>(size, nullptr));
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                tiles[y][x] = board.getTile(x, y);
+            }
+        }
+        return tiles;
+    }
+
+    TileGrid pruneTiles(const PlayerBoard& board, std::vector<GameTile*> tiles, std::function<bool(int,int)> cmp, int threshold) {
+        for (auto it = tiles.begin(); it != tiles.end();) {
+            GameTile* tile = *it;
+            assert(tile != nullptr);
+            if (cmp(board.getNbNeighbors(*tile), threshold)) {
+                it = tiles.erase(it);
+            }
+            else {
+                ++it;
+            }
+        }
+
     }
 }

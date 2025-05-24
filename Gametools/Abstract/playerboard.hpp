@@ -25,6 +25,7 @@ public:
     static inline HexCell offsetToAxial(const HexCell::Offset& off) { return HexCell::offsetToAxial(off, MAX_SIZE); }
     GameTile* getNeighborTile(const GameTile& tile, Direction d) const;
     std::vector<GameTile*> getNeighborTiles(const GameTile& tile) const;
+    int getNbNeighbors(const GameTile& tile) const;
     PlayerBoard();
     void show() override;
     std::string getSaveString() const override;
