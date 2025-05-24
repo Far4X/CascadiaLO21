@@ -2,14 +2,17 @@
 
 #include "Gametools/Tiling/gametile.hpp"
 #include "Gametools/Abstract/playerboard.hpp"
+#include "scoring/scoringstrategy.hpp"
 #include <vector>
+#include <memory>
+
 
 namespace ScoreUtils {
     using TileGrid  = std::vector<std::vector<GameTile*>>;
     using TokenGrid = std::vector<std::vector<WildlifeToken*>>;
-
+    std::unique_ptr<WildlifeScoringStrategy> makeWildlifeStrategy(const std::string& wildlife, char card);
     std::vector<std::vector<GameTile*>> gatherAllTiles(const PlayerBoard& board, int size = MAX_SIZE);
-    std::vector<std::vector<WildlifeToken*>> gatherAllTokens(const PlayerBoard& board, int size = MAX_SIZE);
+
 
     class UnionFind {  // c'est une structure de données super utile que j'ai trouvée, elle permet de réunir des set de manière efficace ce dont j'ai besoin pour la recherche de groupes adjacents
         std::vector<int> parent;
@@ -51,53 +54,79 @@ namespace ScoreUtils {
         }
     };
 
-    template <typename Component, typename Type>
-    std::vector<std::vector<Component*>> getAdjacentComponents(const std::vector<std::vector<Component*>>& components, Type filter, int size) {
-        /* idée : on retrouve la HexCell associée à la GameTile ou (de manière plus importante) du WildlifeToken, puis on récupère les voisins de cette cellule, ensuite pour chaque voisin,
-    * on regarde ses coordonnées Offset (s'ils existent) dans le tableau 2D et finalement on récupère la GameTile ou WildlifeToken à cet endroit pour effectuer le Union Find
-    */
-        size_t n = size * size;
-        UnionFind uf(n);
+    template <typename Type>
+    std::vector<std::vector<GameTile*>> getAdjacentComponents(const PlayerBoard& board, int mode, Type filter, int size) {
+        /* idée : pour chaque tuile, on récupère les voisins, ensuite pour chaque voisin, on va comparer selon le critère d'adjacence
+        * qui nous intéresse. Enfin, on applique l'algo UnionFind.
+        */
+        TileGrid tiles(size, std::vector<GameTile*>(size, nullptr));
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
-                Component* component = components[y][x];
-                if (component == nullptr || !component->matchesType(filter)) {
+                tiles[y][x] = board.getTile(x, y);
+            }
+        }
+        size_t n = size * size;
+        UnionFind uf(n);
+        // boucle principale sur tuiles
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                GameTile* curr_tile = tiles[y][x];
+                if (curr_tile == nullptr || !curr_tile->matchesType(filter)) {
                     continue;
                 }
-                PlayerBoard::Offset component_off(x, y);
-                HexCell component_hex = PlayerBoard::offsetToAxial(component_off);  // on retouve la gametile associée au Component
-                int id = y * size + x;
+                int curr_id = curr_tile->getId();
                 // traitement voisins
-                auto neighs = component_hex.getNeighbors();
-                for (size_t i = 0; i < neighs.size(); i++) {
-                    HexCell neighHex = neighs[i];
-                    PlayerBoard::Offset off = PlayerBoard::axialToOffset(neighHex);  // on convertit en Offset pour voir à quelle case dans le tableau 2D le voisin correspond
-                    int off_x = off.getCol();
-                    int off_y = off.getRow();
-                    if (off_x < 0 || off_x >= size || off_y < 0 || off_y >= size)  // vérification que les coordonnées du voisin sont valides
-                        continue;
-                    int nid = off_y * size + off_x;
-                    Component* n = components[off_y][off_x];  // le voisin du Component courant c
-                    if (n == nullptr || !n->matchesType(filter)) {
-                        continue;
+                if (mode == 1) {
+                    // mode biome
+                    for (int side = 0; side < 6; side++) {
+                        if (curr_tile->getBiome(side) != filter) {
+                            continue;
+                        }
+                        Direction d = static_cast<Direction>(side);
+                        GameTile* neigh_tile = board.getNeighborTile(*curr_tile, d);
+                        if (neigh_tile == nullptr) {
+                            continue;
+                        }
+                        int opp_side = (side + 3) % 6;
+                        if (neigh_tile->getBiome(opp_side) != filter) {
+                            continue;
+                        }
+                        int neigh_id = neigh_tile->getId();
+                        if (neigh_id > curr_id) {
+                            uf.unite(neigh_id, curr_id);
+                        }
                     }
-                    uf.unite(id, nid);
+                }
+                else if (mode == 2){
+                    // mode wildlife
+                    auto neighs = board.getNeighborTiles(*curr_tile);
+                    for (size_t i = 0; i < neighs.size(); i++) {
+                        GameTile* neigh_tile = neighs[i];
+                        if (neigh_tile == nullptr || !neigh_tile->matchesType(filter)) {
+                            continue;
+                        }
+                        int neigh_id = neigh_tile->getId();
+                        uf.unite(curr_id, neigh_id);
+                    }
+                }
+                else {
+                    throw "Mode invalide";
                 }
             }
         }
         // maintenant, on va regrouper les Component par parent (représentatif c.f. vidéo que j'ai envoyé sur Union Find)
-        std::vector<std::vector<Component*>> buckets(n);
+        std::vector<std::vector<GameTile*>> buckets(n);
         for (int y = 0; y < size; ++y) {
             for (int x = 0; x < size; ++x) {
-                Component* c = components[y][x];
-                if (!c || !c->matchesType(filter))  // redondant mais au cas où
+                GameTile* tile = tiles[y][x];
+                if (!tile || !tile->matchesType(filter))  // redondant mais au cas où
                     continue;
-                int root = uf.find(y * size + x);
-                buckets[root].push_back(c);
+                int root = uf.find(tile->getId());
+                buckets[root].push_back(tile);
             }
         }
         // enfin, on va créer les vrais groupes, cette fois ci en supprimant aussi les indices ou c'est vide
-        std::vector<std::vector<Component*>> groups;
+        std::vector<std::vector<GameTile*>> groups;
         for (size_t id = 0; id < n; id++) {
             if (!buckets[id].empty())
                 groups.push_back(std::move(buckets[id]));

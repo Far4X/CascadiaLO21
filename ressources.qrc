@@ -4,5 +4,22 @@
         <file>Assets/tileOutline.png</file>
         <file>Assets/Tiles/desert.png</file>
         <file>Assets/Tiles/lake.png</file>
+        <file>Assets/ListTiles.lst</file>
+        <file>Assets/StarterTiles.csv</file>
+        <file>Assets/set1/set1_1.png</file>
+        <file>Assets/set1/set1_2.png</file>
+        <file>Assets/set1/set1_3.png</file>
+        <file>Assets/set2/set2_1.png</file>
+        <file>Assets/set2/set2_2.png</file>
+        <file>Assets/set2/set2_3.png</file>
+        <file>Assets/set3/set3_3.png</file>
+        <file>Assets/set3/set3_1.png</file>
+        <file>Assets/set3/set3_2.png</file>
+        <file>Assets/set4/set4_1.png</file>
+        <file>Assets/set4/set4_2.png</file>
+        <file>Assets/set4/set4_3.png</file>
+        <file>Assets/set5/set5_1.png</file>
+        <file>Assets/set5/set5_2.png</file>
+        <file>Assets/set5/set5_3.png</file>
     </qresource>
 </RCC>

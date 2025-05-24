@@ -5,22 +5,21 @@
 #include <ctime>
 #include "graphxvue.hpp"
 
-GPlayerBoard::GPlayerBoard(QWidget *parent,int size) : PlayerBoard(), QWidget{parent}, max_size(size) {
+GPlayerBoard::GPlayerBoard(NotifiableInterface* tar, QWidget *parent,int size) : PlayerBoard(tar), QWidget{parent}, max_size(size) {
 
     // FOR DEBUG ONLY
 /*
     Biome deb_biomes[6] = {River,Mountain,Prairie,Forest,Wetland,Wetland};
-    GameTile* debugT = new GameTile(1,deb_biomes);
+    //GameTile* debugT = new GameTile(1,deb_biomes);
     HexCell deb_cell(0,0);
-    Offset* deb_off = new Offset(axialToOffset(deb_cell));
+    HexCell::Offset* deb_off = new HexCell::Offset(axialToOffset(deb_cell));
 
     unsigned int deb_xs = (deb_off->getCol());
     unsigned int* deb_x = & deb_xs;
 
     unsigned int deb_ys = (deb_off->getRow());
     unsigned int* deb_y = & deb_ys;
-    addTile(*debugT,deb_x,deb_y);
-*/
+    //addTile(*debugT,deb_x,deb_y);
     // FOR DEBUG ONLY
 
     setAutoFillBackground(true); // Permet de remplir l'arrière-plan
