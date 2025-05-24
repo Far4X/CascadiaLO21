@@ -15,7 +15,7 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     //Hexcell m_position;
     Biome m_biomes[6]; //0 : top, 1 : topright...
     unsigned char m_rotation = 0;
-    WildlifeToken *m_wltoken = nullptr;
+    const WildlifeToken *m_wltoken = nullptr;
     Wildlife *m_possible_wltoken = nullptr;
     int m_numtypes;
     const unsigned int m_id;
@@ -28,6 +28,7 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     std::string getSaveString() const override;
 
 public:
+    void setPos(int const &q, int const &r);
     inline int getNbWildlife() const {return m_numtypes;};
     inline Wildlife getWildlife(unsigned short int nb) const {if (nb < m_numtypes) return m_possible_wltoken[nb]; else throw CustomError("Not in range", 104);};
     GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy);
@@ -35,7 +36,8 @@ public:
     int draw();
     Biome getBiome(unsigned short int number) const {{return m_biomes[number%6];}}
     inline unsigned int getId() const {return m_id;}
-    WildlifeToken* getToken() const { return m_wltoken; }
+    const WildlifeToken* getToken() const { return m_wltoken; }
+    inline void setWildLifeToken(const WildlifeToken* wlt){m_wltoken = wlt;};
     bool matchesType(Wildlife type) const {
         if (m_wltoken != nullptr) {
             return m_wltoken->getWildlifeType() == type;
@@ -54,6 +56,6 @@ public:
     bool isKeystone(const std::string& description = "") const;
 };
 
-char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size);
+char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size, bool add_pos = true);
 
 #endif // GAMETILE_HPP

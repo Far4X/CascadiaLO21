@@ -2,7 +2,6 @@
 #define CPLAYERBOARD_HPP
 
 
-#define MAX_SIZE 41
 #include "../../../Gametools/Abstract/playerboard.hpp"
 
 class CPlayerBoard : public PlayerBoard{
@@ -13,7 +12,7 @@ class CPlayerBoard : public PlayerBoard{
     int m_y_swift = (MAX_SIZE-2)*m_size_tile ;
     unsigned int step = 10;
 public:
-    CPlayerBoard();
+    CPlayerBoard(NotifiableInterface *tar);
     void show() override;
     void reprBoard();
 };
