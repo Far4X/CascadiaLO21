@@ -130,7 +130,6 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
     }
 
     //Fill hex
-    std::cout << tile << std::endl;
     for (int i = 0; i < 6; i++){
         char filling;
         switch (tile->getBiome(i)) {
@@ -209,7 +208,6 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
         rt[size][5] = char(pos.getRow() % 10) + '0';
     }
     if (tile->getToken() == nullptr){
-        std::cout << "Has " << tile->getNbWildlife() << " wildlife" << std::endl;
         for (int i = 0; i < tile->getNbWildlife(); i++){
             char out = ' ';
             switch (tile->getWildlife(i)){
@@ -278,8 +276,6 @@ bool GameTile::isKeystone(const std::string& description)const {
         }
         return true;
     }
-
-
     char first = description[0];
     for (int i = 1; i < 6; ++i) {
         if (description[i] != first) {

@@ -25,23 +25,25 @@ GameTile* DeckTile::getTile(unsigned short int i){
     if (i < 4){
         return m_tiles[i];
     }
+    throw CustomError("Tile not in range", 202);
 }
 
 
 void DeckTile::addTile(GameTile* tile){
     //std::cout << "Added tile : " << tile << std::endl;
     m_deck_tiles.push_back(tile);
-    //shuffle();
+    shuffle();
 }
 
 void DeckTile::addToken(const WildlifeToken* token){
     m_deck_token.push_back(token);
-    //shuffle();
+    shuffle();
 }
 
 void DeckTile::shuffle(){
-    std::cout << "Shuffling" << std::endl;
-    std::default_random_engine rng = std::default_random_engine {};
+    //std::cout << "Shuffling" << std::endl;
+    std::random_device rd;
+    std::default_random_engine rng(rd());
     std::shuffle(std::begin(m_deck_tiles), std::end(m_deck_tiles), rng);
     std::shuffle(std::begin(m_deck_token), std::end(m_deck_token), rng);
 }

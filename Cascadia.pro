@@ -3,7 +3,7 @@ QT += widgets
 DISTFILES += \
     .gitignore \
     Assets/* \
-    Assets/ListTiles.csv \
+    Assets/ListTiles.lst \
     Assets/StarterTiles.csv \
     PlanTile
 

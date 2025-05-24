@@ -2,8 +2,9 @@
 #include "../Gametools/customerror.hpp"
 #include "scoring/scoreutils.hpp"
 #include <iostream>
-#include <fstream>
 #include <random>
+#include <QFile>
+#include <QTextStream>
 
 
 Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console){
@@ -137,8 +138,6 @@ void Game::makePlayerTurn(){
     }
 
     m_players[current_player]->getBoard()->show();
-
-    m_decktile->show();
     return m_menu_token->show();
 
     /*HexCell target;
@@ -240,20 +239,19 @@ void Game::notify(unsigned int code){
         for (Menu<unsigned short int>::Iterator it = m_menu_token->getIterator(); !it.isDone(); it++){
             params.push_back(it.getValue());
         }
-        //delete m_menu_token;
-        throwaway.push_back(m_menu_token);
+        delete m_menu_token;
+        //throwaway.push_back(m_menu_token);
         m_menu_token = nullptr;
         if (params.size() == 2){
             getTileAndToken(params[0], params[1]);
-            
         }
         else {
             getTileAndToken(params[0]);
         }
 
         m_players[current_player]->getBoard()->resetPointedCell();
-        //m_is_waiting_for_position = true;
-        //m_is_waiting_to_place_tile = true;
+        m_is_waiting_for_position = true;
+        m_is_waiting_to_place_tile = true;
         return m_players[current_player]->getBoard()->show();
     }
 
@@ -264,7 +262,7 @@ void Game::notify(unsigned int code){
         if (m_is_waiting_to_place_tile){
             HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
             if ((m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
-                m_is_waiting_to_place_tile = true;
+                m_is_waiting_to_place_tile = false;
                 m_tile_to_add->setPos(target.getQ(), target.getR());
                 unsigned short int rotation = 0;
 
@@ -274,7 +272,7 @@ void Game::notify(unsigned int code){
                     std::cin >> result;
                     if (result.size() == 1){
                         if (result[0] < '6' && result[0] >= '0'){
-                            rotation = result[0] - '6';
+                            rotation = result[0] - '0';
                         }
                     }
                     std::cout << "Merci de choisir l'emplacement pour le pion faune : ";
@@ -333,45 +331,54 @@ void Game::readCards(std::string path){
         m_cards = new GameTile*[9];
         m_nb_cards = 9;
         m_cards[0] = new GameTile(1, "11111111");
-        std::cout << m_cards[0] << std::endl;
         m_cards[1] = new GameTile(2, "222222212");
-        std::cout << m_cards[1] << std::endl;
-
         m_cards[2] = new GameTile(3, "33333313");
-        std::cout << m_cards[2] << std::endl;
-
         m_cards[3] = new GameTile(4, "44444414");
-        std::cout << m_cards[3] << std::endl;
-
         m_cards[4] = new GameTile(5, "55555515");
-        std::cout << m_cards[4] << std::endl;
-
         m_cards[5] = new GameTile(6, "111222234");
-        std::cout << m_cards[5] << std::endl;
-
         m_cards[6] = new GameTile(7, "3332223213");
-        std::cout << m_cards[6] << std::endl;
-
         m_cards[7] = new GameTile(8, "444222215");
-        std::cout << m_cards[7] << std::endl;
         m_cards[8] = new GameTile(9, "5552223214");
-        std::cout << m_cards[8] << std::endl;
 
         return;
     }
 
-    std::ifstream istream(path);
-    char chr;
+    QFile file(QString::fromStdString(path));
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        throw CustomError("Fnf", 800);
+        return;
+    }
+
+    QTextStream in(&file);
+    QString content = in.readAll();
+    file.close();
+
+    QStringList parts = content.split(';', Qt::SkipEmptyParts);
+    if (parts.isEmpty())
+        return;
+
+    m_nb_cards = parts[0].toInt();
+    m_cards = new GameTile*[m_nb_cards];
+
+    for (int i = 1; i <= m_nb_cards && i < parts.size(); ++i) {
+        m_cards[i - 1] = new GameTile(i, parts[i].toStdString());
+    }
+
+
+    /*char chr;
     int tmp_nb = 0;
     unsigned short int current_m_tiles = 0;
     std::string desc_tile;
     while (istream.get(chr)){
+        std::cout << "Here" << std::endl;
+
         if (m_nb_cards == 0){
             if (chr >= '0' && chr <= '9'){
                 tmp_nb *= 10;
                 tmp_nb += chr - '0';
             }
             else if (chr == ';'){
+                std::cout << "Nb chr : " << tmp_nb << std::endl;
                 m_nb_cards = tmp_nb;
                 m_cards = new GameTile*[m_nb_cards];
             }
@@ -385,7 +392,7 @@ void Game::readCards(std::string path){
                 desc_tile += std::to_string(chr);
             }
         }
-    }
+    }*/
 }
 
 void Game::quit(){

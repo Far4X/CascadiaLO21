@@ -7,6 +7,8 @@
 #include "player.hpp"
 #include "../../scoring/scoringstrategies/tilescoringstrategy.hpp"
 #include "../../scoring/scoringstrategies/wildlifescoringstrategy.hpp"
+
+
 #include <vector>
 
 enum class GameStatus {
@@ -47,7 +49,7 @@ public:
     Game(const bool is_console = false);
     ~Game();
     std::string getSaveString() const override;
-    void readCards(std::string path = "");
+    void readCards(std::string path = ":/Assets/Assets/ListTiles.lst");
     void play();
     void init();
     void getTileAndToken(unsigned short int pos_tile, unsigned short int pos_token = -1);
