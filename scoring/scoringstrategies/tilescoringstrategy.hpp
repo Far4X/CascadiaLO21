@@ -1,10 +1,12 @@
-#pragma once
+#ifndef TILESCORINGSTRATEGY_H
+#define TILESCORINGSTRATEGY_H
 
 #include "scoring/scoringstrategy.hpp"
 
 class TileScoringStrategy : ScoringStrategy {
 public:
     TileScoringStrategy();
-    std::vector<double> computeScore(const PlayerBoard& board) const override;
+    double computeScore(const PlayerBoard& board) const override;
 };
 
+#endif // TILESCORINGSTRATEGY_H

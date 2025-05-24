@@ -6,7 +6,7 @@ class BaseClass{
 
 public :
     BaseClass();
-    virtual ~BaseClass();
+    ~BaseClass();
 };
 
 #endif // BASECLASS_HPP

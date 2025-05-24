@@ -3,5 +3,5 @@
 
 class BearScoringCardA : public WildlifeScoringStrategy {
 public:
-    std::vector<double> computeScore(const PlayerBoard& board) const override;
+    double computeScore(const PlayerBoard& board) const override;
 };

@@ -1,9 +1,10 @@
 #include "bearscoringcarda.hpp"
 #include "scoring/scoreutils.hpp"
 
-std::vector<double> BearScoringCardA::computeScore(const PlayerBoard& board) const {
+double BearScoringCardA::computeScore(const PlayerBoard& board) const {
 
-    auto bears = ScoreUtils::getAdjacentComponents(board, 2, Bear, MAX_SIZE);
+    auto tokens = ScoreUtils::gatherAllTokens(board);
+    auto bears = ScoreUtils::getAdjacentComponents<WildlifeToken>(tokens, Bear, MAX_SIZE);
 
     int cpt = 0;
     for (size_t i = 0; i < bears.size(); i++) {
@@ -11,7 +12,7 @@ std::vector<double> BearScoringCardA::computeScore(const PlayerBoard& board) con
 			cpt += 1;
 		}
 	}
-    double final_score = 0;
+	int final_score = 0;
 	switch (cpt) {
 		case 0:
 			break;
@@ -27,5 +28,5 @@ std::vector<double> BearScoringCardA::computeScore(const PlayerBoard& board) con
 		default:
 			final_score += 27;
     }
-    return {final_score};
+    return final_score;
 }

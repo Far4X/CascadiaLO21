@@ -11,7 +11,7 @@
 
 
 //#include "widgethexboard.hpp"
-#include "../../../Gametools/Abstract/playerboard.hpp"
+#include "Gametools/Abstract/playerboard.hpp"
 
 
 class GraphXVue;
@@ -22,9 +22,9 @@ const int xOffset = tileWidth * 3 / 4; // Décalage horizontal entre les tuiles
 const int yOffset = tileHeight / 2;    // Décalage vertical pour les lignes impaires
 
 
-class GPlayerBoard : public PlayerBoard, public QWidget{
+class GPlayerBoard : public PlayerBoard,public QWidget{
 public:
-    GPlayerBoard(NotifiableInterface* tar, QWidget *parent = nullptr,int size = 41);
+    GPlayerBoard(QWidget *parent = nullptr,int size = 41);
     ~GPlayerBoard() = default;;
 
     void initHexTiles();

@@ -24,4 +24,3 @@ void GMenu<T>::show(){
 
 template class GMenu<std::string>;
 template class GMenu<std::tuple<std::string, std::string>>;
-template class GMenu<unsigned short int>;

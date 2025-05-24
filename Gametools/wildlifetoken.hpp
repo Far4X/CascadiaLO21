@@ -13,6 +13,7 @@ class WildlifeToken {
 public:
     WildlifeToken(Wildlife type, int x_dpos = 0, int y_dpos = 0);
     Wildlife getWildlifeType() const { return m_type; }
+    bool matchesType(Wildlife type) const { return m_type == type; }
 };
 
 #endif // WILDLIFETOKEN_HPP
