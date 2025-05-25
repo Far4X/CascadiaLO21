@@ -22,6 +22,7 @@ public:
     GameTile* getNeighborTile(const GameTile& tile, Direction d) const;
     std::vector<GameTile*> getNeighborTiles(const GameTile& tile) const;
     void show() override;
+    NotifiableInterface* getTarget() const{return m_target;}
     std::string getSaveString() const override;
     //void moveHz(short int step = 1);
     //void moveVt(short int step = 1);

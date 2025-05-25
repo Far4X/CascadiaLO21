@@ -1,6 +1,7 @@
 #ifndef GTOKENMENU_HPP
 #define GTOKENMENU_HPP
 
+#include <QWidget>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>

@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "../Gametools/customerror.hpp"
+#include "GameActors/GraphicalComponents/GraphX/graphxvue.hpp"
 #include "scoring/scoreutils.hpp"
 #include <iostream>
 #include <random>
@@ -132,12 +133,14 @@ void Game::makePlayerTurn(){
     if (m_is_console){
         std::cout << "----- \nTour de " << m_players[current_player]->getName() << std::endl;
         m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
+        m_players[current_player]->getBoard()->show();
     }
     else {
-        m_menu_token = new GTokenMenu(this, m_decktile, m_players[current_player]);
+        m_players[current_player]->getBoard()->show(); // obligé car la vue doit etre initialisé
+        GTokenMenu* gMenu = new GTokenMenu(this, m_decktile, m_players[current_player]);
+        m_menu_token = gMenu;
+        GraphXVue::instance()->addMenu(gMenu);
     }
-
-    m_players[current_player]->getBoard()->show();
     return m_menu_token->show();
 
     /*HexCell target;

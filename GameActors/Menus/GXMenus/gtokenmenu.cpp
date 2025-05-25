@@ -1,6 +1,6 @@
 #include "gtokenmenu.hpp"
 
-GTokenMenu::GTokenMenu(NotifiableInterface* tar, DeckTile* decktile, Player *caller) : GMenu(tar, nullptr, 300, 200, 200, 200), m_caller(caller){
+GTokenMenu::GTokenMenu(NotifiableInterface* tar,DeckTile* decktile, Player *caller) : GMenu(tar, nullptr, 300, 200, 200, 200), m_caller(caller){
     m_main_layout = new QGridLayout(this);
     m_btn_clear_tokens  = new QPushButton("Regénérer les tokens", this);
     m_btn_no_token = new QPushButton("Ne pas utiliser de token", this);;
@@ -74,6 +74,7 @@ void GTokenMenu::pushResults(){
     if (m_spin_token != nullptr){
         addResult(m_spin_token->value());
     }
+    m_target->notifyInterface(4);
 }
 
 void GTokenMenu::show(){

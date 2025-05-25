@@ -16,6 +16,7 @@ GraphXVue::GraphXVue(QObject *parent)
     //Left panel
     m_left_panel = new QWidget;
     m_left_panel->setFixedWidth(150);
+    m_left_panel_layout = new QVBoxLayout(m_left_panel);
     m_main_layout->addWidget(m_left_panel);
 
     //Right panel
@@ -100,12 +101,14 @@ void GraphXVue::onRightClickAt(const QPointF& scenePos)
     int row = static_cast<int>(yAdjusted / tileHeight);
 
     // Debug
+    std::cout<<currentboard<<" ";
     qDebug() << "Clique droit sur col:" << col << "row:" << row;
     HexCell::Offset off(row,col);
     HexCell hex (PlayerBoard::offsetToAxial(off));
     if(boards[currentboard]->getTile(hex.getQ(),hex.getR()) != nullptr)
     {
         boards[currentboard]->setPointedCell(hex);
+        boards[currentboard]->getTarget()->notifyInterface(4); // j'ai cliqué sur le plateau est ce que je peux poser | 3 une fois qu'on a select toekn et carte
 
 
     }
@@ -114,6 +117,11 @@ void GraphXVue::onRightClickAt(const QPointF& scenePos)
     return;
 }
 
+
+void GraphXVue::addMenu(QWidget* menu){
+    m_right_panel_layout->addWidget(menu);
+
+}
 
 
 

@@ -1,6 +1,7 @@
 #ifndef GRAPHXVUE_H
 #define GRAPHXVUE_H
 
+
 #include <QObject>
 #include <QMainWindow>
 #include <QWidget>
@@ -11,6 +12,7 @@
 #include <QGraphicsProxyWidget>
 #include <vector>
 #include <QMouseEvent>
+
 
 class GPlayerBoard;
 
@@ -46,7 +48,9 @@ public:
 
     void addPlayerBoard(GPlayerBoard* board);
     void show();
-
+    QWidget* getWindow(){return m_window;}
+    QGraphicsScene* getScene() const { return m_scene; }
+    void addMenu(QWidget* menu);
 
 private slots:
     void onTabChanged(int index);
@@ -64,6 +68,7 @@ private:
 
     //left pannel de la fenetre
     QWidget* m_left_panel; // la pioche
+    QVBoxLayout* m_left_panel_layout; //
 
     //right pannel
     QWidget* m_right_panel;

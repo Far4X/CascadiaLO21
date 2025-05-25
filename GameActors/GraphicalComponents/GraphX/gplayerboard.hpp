@@ -34,8 +34,8 @@ public:
 
     void show() override;
     QWidget* getWidget() const;
-private:
     GraphXVue* m_manager = nullptr;
+private:
     int max_size;
     QWidget* m_widget = nullptr; // widget principal
     QVBoxLayout* m_layout = nullptr;  // Grid pour organiser les widgets
