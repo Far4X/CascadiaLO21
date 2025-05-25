@@ -20,8 +20,7 @@ App::App(int argc, char *argv[]) : QApplication(argc, argv){
     if (!m_is_console) {
         std::cout << "GraphX" << std::endl;
     }
-    m_game = new Game(m_is_console);
-
+    m_game = new Game(this, m_is_console);
     //Tests :
 }
 
@@ -31,7 +30,25 @@ App::~App(){
 }
 
 int App::exec(){
+    if (!m_is_console){
+        m_game->init();
+        return QApplication::exec();
+    }
+
+    m_game->init();
+    while(m_game->getGameStatus() == GameStatus::Running){
+        if (m_id_notification.size() == 0){
+            throw 99;
+        }
+        m_game->readNotification(m_id_notification.front());
+        m_id_notification.pop_front();
+    }
     m_game->init();
     std::cout << "Game Over" << std::endl;
     return QApplication::exec();
+}
+
+
+void App::notifyInterface(unsigned int code){
+    m_id_notification.push_back(code);
 }

@@ -6,7 +6,7 @@ public:
     NotifiableInterface() = default;
     virtual ~NotifiableInterface() = default;
 
-    virtual void notify(unsigned int code) = 0;
+    virtual void notifyInterface(unsigned int code) = 0;
 };
 
 #endif // NOTIFIABLEINTERFACE_HPP

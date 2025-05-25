@@ -81,7 +81,7 @@ void CPlayerBoard::show(){
         }
     }
 
-    m_target->notify(4);
+    m_target->notifyInterface(4);
 }
 
 void CPlayerBoard::reprBoard(){

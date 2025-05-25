@@ -7,7 +7,7 @@
 #include <QTextStream>
 
 
-Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console){
+Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players(0), m_is_console(is_console), m_target(interface){
     std::srand(std::time(0)); // debug
     m_cards = new GameTile*;
     readCards();
@@ -131,10 +131,10 @@ void Game::getTileAndToken(unsigned short int pos_tile, unsigned short int pos_t
 void Game::makePlayerTurn(){
     if (m_is_console){
         std::cout << "----- \nTour de " << m_players[current_player]->getName() << std::endl;
-        m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]->getNbNatureToken());
+        m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
     }
     else {
-        m_menu_token = new GTokenMenu(this, m_decktile, m_players[current_player]->getNbNatureToken());
+        m_menu_token = new GTokenMenu(this, m_decktile, m_players[current_player]);
     }
 
     m_players[current_player]->getBoard()->show();
@@ -179,7 +179,14 @@ void Game::scoreGame() {
     }
 }
 
-void Game::notify(unsigned int code){
+void Game::notifyInterface(unsigned int code){
+    if (!m_is_console){
+        return readNotification(code);
+    }
+    m_target->notifyInterface(code);
+}
+
+void Game::readNotification(unsigned int code){
     if (code == 1){
         Player *pl = nullptr;
         for (Menu<std::string>::Iterator it = m_player_menu->getIterator(); !it.isDone(); it++){
@@ -209,6 +216,7 @@ void Game::notify(unsigned int code){
             if (key == "Use cards") {
                 m_scorer.configureCards(value);
             }
+
         }
         if (m_is_console){
             m_player_menu = new CPlayerMenu(this);
@@ -284,35 +292,46 @@ void Game::notify(unsigned int code){
 
                 m_players[current_player]->getBoard()->addTile(*m_tile_to_add);
                 m_tile_to_add = nullptr;
+
+                //Check here if possible to place token
+
                 return m_players[current_player]->getBoard()->show();
             }
             else {
-                HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
-                if ((m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) != nullptr) && (m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->getToken() == nullptr)){
-                    // Check if token well in list !!!!!!!!
-
-                    m_is_waiting_for_position = false;
-                    m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
-                    if (m_is_console){
-                        std::cout << "Le token a bien été placé." << std::endl;
-                    }
-                    current_player++;
-                    if (current_player == m_nb_players){
-                        current_player = 0;
-                        current_tour++;
-                        if (current_tour == 20){
-                            return scoreGame();
-                        }
-                        return makePlayerTurn();
-                    }
-                }
-                else {
-
-                }
+                return m_players[current_player]->getBoard()->show();
             }
         }
         else {
-            std::cout << "Here cap" << std::endl;
+            HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
+            if ((m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) != nullptr) && (m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->getToken() == nullptr)){
+                const GameTile* tile = m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR());
+                for (int i = 0; i < tile->getNbWildlife(); i++){
+                    if (m_token_to_add->getWildlifeType() == tile->getWildlife(i)){
+                        m_is_waiting_for_position = false;
+                        if (tile->isKeystone()){
+                            m_players[current_player]->addNatureToken();
+                        }
+                        m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
+                        if (m_is_console){
+                            std::cout << "Le token a bien été placé." << std::endl;
+                        }
+                        current_player++;
+                        if (current_player == m_nb_players){
+                            current_player = 0;
+                            std::cout << "Tour : " << current_tour + 1 << std::endl;
+                            std::cout << "Tour : " << current_tour + 1 << std::endl;
+                            current_tour++;
+                            if (current_tour == 20){
+                                return scoreGame();
+                            }
+                            return makePlayerTurn();
+                        }
+                    }
+                }
+            }
+            else {
+                return m_players[current_player]->getBoard()->show();
+            }
         }
     }
 }
