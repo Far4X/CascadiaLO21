@@ -63,6 +63,17 @@ int PlayerBoard::getNbNeighbors(const GameTile& tile) const {
     return count;
 }
 
+int PlayerBoard::getNbSameNeighbors(const GameTile& tile, Wildlife animal) const {
+    std::vector<GameTile*> neighbors = getNeighborTiles(tile);
+    int count = 0;
+    for (size_t i = 0; i < neighbors.size(); i++) {
+        if (neighbors[i] != nullptr && neighbors[i]->getToken()->getWildlifeType() == animal) {
+            count++;
+        }
+    }
+    return count;
+}
+
 std::string PlayerBoard::getSaveString() const { // genere un string qui permet de déchiffrer l'affichage
     std::string desc = "c:";
     for (int i = 0; i < MAX_SIZE; i++){

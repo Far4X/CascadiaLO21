@@ -208,6 +208,11 @@ void Game::notify(unsigned int code){
             const std::string& value = std::get<1>(tup);
             if (key == "Use cards") {
                 m_scorer.configureCards(value);
+                std::cout << "cartes configurees avec succes";
+            }
+            if (key == "Test scroring") {
+                readCards();
+                scoreGame();
             }
         }
         if (m_is_console){

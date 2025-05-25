@@ -22,6 +22,7 @@ public:
     GameTile* getNeighborTile(const GameTile& tile, Direction d) const;
     std::vector<GameTile*> getNeighborTiles(const GameTile& tile) const;
     int getNbNeighbors(const GameTile& tile) const;
+    int getNbSameNeighbors(const GameTile& tile, Wildlife animal) const;
     PlayerBoard();
     void show() override;
     std::string getSaveString() const override;

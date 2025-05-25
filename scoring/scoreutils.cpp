@@ -163,7 +163,7 @@ namespace ScoreUtils {
     }
 
     // Fonction principale
-    TileGrid getAdjacentComponents(const PlayerBoard& board, int size, const AdjacencyPolicy& policy) {
+    TileGrid getComponents(const PlayerBoard& board, int size, const AdjacencyPolicy& policy) {
         TileGrid tiles(size, std::vector<GameTile*>(size, nullptr));
         UnionFind uf = buildUnionFind(board, size, policy, tiles);
         TileGrid buckets = buildBuckets(tiles, uf);
@@ -213,15 +213,107 @@ namespace ScoreUtils {
         );
     }
 
-    // Mode 3: Adjacence - nombre de voisins
-    AdjacencyPolicy makeNeighborPolicy(const PlayerBoard& board, int threshold, CompareFunction cmp) {
+    // Mode 2: Singletons - tokens
+    AdjacencyPolicy makeSingletonPolicy(Wildlife filter) {
         return AdjacencyPolicy(
-            [&board, threshold, cmp](GameTile* tile) {
-                return cmp(board.getNbNeighbors(*tile), threshold);
+            [filter](GameTile* tile) {
+                return tile->matchesType(filter);
+            },
+            [](GameTile* /*curr*/, GameTile* /*neigh*/) {
+                return false;
+            }
+            );
+    }
+
+    // Mode 3: Adjacence - nombre de voisins similaires
+    AdjacencyPolicy makeNeighborPolicy(const PlayerBoard& board, Wildlife filter, int threshold, CompareFunction cmp) {
+        return AdjacencyPolicy(
+            [&board, filter, threshold, cmp](GameTile* tile) {
+                return tile->matchesType(filter) && cmp(board.getNbSameNeighbors(*tile, filter), threshold);
             },
             [](GameTile* /*curr*/, GameTile* /*neigh*/) {  // pareil ici mais pour les deux
                 return true;  // ici le comportement est déjà géré par la fonction shouldKeep donc c'est bidon
             }
         );
+    }
+    /*
+    // Mode 3: Adjacence - nombre de voisins
+    AdjacencyPolicy makeNeighborPolicy(const PlayerBoard& board, Wildlife filter, int threshold, CompareFunction cmp) {
+        return AdjacencyPolicy(
+            [&board, filter, threshold, cmp](GameTile* tile) {
+                return cmp(board.getNbNeighbors(*tile), threshold);
+            },
+            [](GameTile*, GameTile*) {  // pareil ici mais pour les deux
+                return true;  // ici le comportement est déjà géré par la fonction shouldKeep donc c'est bidon
+            }
+        );
+    }
+    */
+
+    // Combiner des modes
+    AdjacencyPolicy combinePolicies(const AdjacencyPolicy& a, const AdjacencyPolicy& b) {
+        return AdjacencyPolicy(
+            // ne conserve que si les deux policies gardent
+            [a,b](GameTile* t){ return a.shouldKeep(t) && b.shouldKeep(t); },
+            // unit deux tiles si les deux policies unissent
+            [a,b](GameTile* curr, GameTile* nb){
+                return a.shouldUnite(curr, nb) && b.shouldUnite(curr, nb);
+            }
+        );
+    }
+
+    std::vector<GameTile*> flatten(const std::vector<std::vector<GameTile*>>& groups) {
+        std::vector<GameTile*> flat;
+        for (const auto& group : groups) {
+            flat.insert(flat.end(), group.begin(), group.end());
+        }
+        return flat;
+    }
+
+    GameTile* findTile(const std::vector<GameTile*>& tiles, int q, int r) {
+        for (auto tile : tiles) {
+            if (tile == nullptr) {
+                continue;
+            }
+            if (*tile == HexCell(q, r))
+                return tile;
+        }
+        return nullptr;
+    }
+
+    std::vector<std::pair<GameTile*,GameTile*>> getLinesOfSight(const PlayerBoard& board, Wildlife filter) {
+        auto groups = getComponents(board, MAX_SIZE, makeWildlifePolicy(filter));
+        auto tiles = flatten(groups);  // juste pour avoir un vecteur simple au lieu d'un vecteur de vecteurs à un élément à l'intérieur
+        std::vector<std::pair<GameTile*, GameTile*>> lines;  // lines of sight (paire tuile source et tuile destination)
+        for (auto src : tiles) {
+            int q0 = src->getQ();
+            int r0 = src->getR();
+            for (const HexCell& dir : HexCell::directions) {
+                int q = q0;
+                int r = r0;
+                while (true) {
+                    // on avance d'un pas dans la direction dir
+                    q += dir.getQ();
+                    r += dir.getR();
+
+                    GameTile* hit = findTile(tiles, q, r);  // tuile atteinte
+                    if (hit == nullptr) {
+                        break;
+                    }
+                    bool seen = false;
+                    for (const auto& pair : lines) {
+                        if ((pair.first == src && pair.second == hit) || (pair.first == hit && pair.second == src)) {  // si on a déjà vu la paire
+                            seen = true;
+                            break;
+                        }
+                    }
+                    if (!seen) {
+                        lines.emplace_back(src, hit);
+                    }
+                    break;  // on sort pour explorer une autre direction
+                }
+            }
+        }
+        return lines;
     }
 }

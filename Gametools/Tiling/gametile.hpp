@@ -43,7 +43,7 @@ public:
             return m_wltoken->getWildlifeType() == type;
         }
         else {
-            throw "No token on this tile";
+            return false;
         }
     }
     bool matchesType(Biome biome) const {

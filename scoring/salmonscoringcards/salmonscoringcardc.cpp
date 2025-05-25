@@ -3,29 +3,27 @@
 
 std::vector<double> SalmonScoringCardC::computeScore(const PlayerBoard& board) const {
 
-    auto salmons = ScoreUtils::getAdjacentComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Salmon));
+    ScoreUtils::AdjacencyPolicy salmon_c = ScoreUtils::makeNeighborPolicy(board, Salmon, 2, [](int count, int threshold){ return count <= threshold; });
+    auto salmons = ScoreUtils::getComponents(board, MAX_SIZE, salmon_c);
 
-    int cpt = 0;
-    for (size_t i = 0; i < salmons.size(); i++) {
-        if (salmons[i].size() == 2) {
-            cpt += 1;
-        }
-    }
     double final_score = 0;
-    switch (cpt) {
-    case 0:
-        break;
-    case 1:
-        final_score += 4;
-        break;
-    case 2:
-        final_score += 11;
-        break;
-    case 3:
-        final_score += 19;
-        break;
-    default:
-        final_score += 27;
+    for (size_t i = 0; i < salmons.size(); i++) {
+        switch (salmons[i].size()) {
+        case 0:
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            final_score += 10;
+            break;
+        case 4:
+            final_score += 12;
+            break;
+        default:
+            final_score += 15;
+        }
     }
     return {final_score};
 }

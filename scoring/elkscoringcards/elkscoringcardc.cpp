@@ -3,7 +3,7 @@
 
 std::vector<double> ElkScoringCardC::computeScore(const PlayerBoard& board) const {
 
-    auto elks = ScoreUtils::getAdjacentComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Elk));
+    auto elks = ScoreUtils::getComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Elk));
 
     double final_score = 0;
     for (size_t i = 0; i < elks.size(); i++) {

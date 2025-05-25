@@ -1,31 +1,26 @@
 #include "salmonscoringcardd.hpp"
 #include "scoring/scoreutils.hpp"
+#include <unordered_set>
 
 std::vector<double> SalmonScoringCardD::computeScore(const PlayerBoard& board) const {
 
-    auto salmons = ScoreUtils::getAdjacentComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Salmon));
+    ScoreUtils::AdjacencyPolicy salmon_a = ScoreUtils::makeNeighborPolicy(board, Salmon, 2, [](int count, int threshold){ return count <= threshold; });
+    auto salmons = ScoreUtils::getComponents(board, MAX_SIZE, salmon_a);
 
-    int cpt = 0;
-    for (size_t i = 0; i < salmons.size(); i++) {
-        if (salmons[i].size() == 2) {
-            cpt += 1;
+    int salmon_count = 0;
+    int animal_count = 0;
+    for (const std::vector<GameTile*>& run : salmons) {
+        std::unordered_set<GameTile*> seen;
+        for (GameTile* salmon : run) {
+            salmon_count++;
+            for (GameTile* neigh : board.getNeighborTiles(*salmon)) {
+                if (neigh->getToken() != nullptr && !neigh->matchesType(Salmon) && seen.insert(neigh).second) {
+                    animal_count++;
+                }
+            }
         }
     }
-    double final_score = 0;
-    switch (cpt) {
-    case 0:
-        break;
-    case 1:
-        final_score += 4;
-        break;
-    case 2:
-        final_score += 11;
-        break;
-    case 3:
-        final_score += 19;
-        break;
-    default:
-        final_score += 27;
-    }
+
+    double final_score = salmon_count + animal_count;
     return {final_score};
 }

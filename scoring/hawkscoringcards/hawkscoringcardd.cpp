@@ -3,7 +3,7 @@
 
 std::vector<double> HawkScoringCardD::computeScore(const PlayerBoard& board) const {
 
-    auto hawks = ScoreUtils::getAdjacentComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Hawk));
+    auto hawks = ScoreUtils::getComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Hawk));
 
     int cpt = 0;
     for (size_t i = 0; i < hawks.size(); i++) {

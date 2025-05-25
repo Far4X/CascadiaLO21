@@ -72,10 +72,14 @@ namespace ScoreUtils {
     UnionFind buildUnionFind(const PlayerBoard& board, int size, const AdjacencyPolicy& policy, TileGrid& tiles);
     TileGrid buildBuckets(const TileGrid& tiles, UnionFind uf);
     TileGrid extractGroups(TileGrid buckets);
-    TileGrid getAdjacentComponents(const PlayerBoard& board, int size, const AdjacencyPolicy& policy);
+    TileGrid getComponents(const PlayerBoard& board, int size, const AdjacencyPolicy& policy);
     AdjacencyPolicy makeBiomePolicy(const PlayerBoard& board, Biome filter);
     AdjacencyPolicy makeWildlifePolicy(Wildlife filter);
-    AdjacencyPolicy makeNeighborPolicy(const PlayerBoard& board, int threshold, CompareFunction cmp);
-    // TileGrid getLongestRun(const PlayerBoard& board, std::vector<std::vector<GameTile*>> tiles);
+    AdjacencyPolicy makeNeighborPolicy(const PlayerBoard& board, Wildlife filter, int threshold, CompareFunction cmp);
+    AdjacencyPolicy makeSingletonPolicy(Wildlife filter);
+    AdjacencyPolicy combinePolicies(const AdjacencyPolicy& a, const AdjacencyPolicy& b);
+    std::vector<GameTile*> flatten(const std::vector<std::vector<GameTile*>>& groups);
+    GameTile* findTile(const std::vector<GameTile*>& tiles, int q, int r);
+    std::vector<std::pair<GameTile*,GameTile*>> getLinesOfSight(const PlayerBoard& board, Wildlife filter);
 }
 
