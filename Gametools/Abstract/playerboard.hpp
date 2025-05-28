@@ -32,6 +32,8 @@ public:
     inline HexCell getPointedCell() const {return m_pointed_cell;};
     inline void resetPointedCell() {m_pointed_cell = HexCell(0,0);};
     GameTile* getTile(int const &q, int const &r) const;
+    void pointCell(int q, int r) ;
+
 };
 
 #endif // PLAYERBOARD_HPP

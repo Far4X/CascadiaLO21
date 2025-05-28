@@ -4,6 +4,9 @@
 #include "../Tiling/gametile.hpp"
 #include "salvablething.hpp"
 #include "printable.hpp"
+#include <vector>
+#include <utility>
+
 
 //Q analog x
 //R analog y
@@ -20,6 +23,10 @@ public:
     GameTile* getTile(int posx, int posy) const;
     void addTile(GameTile& tile, int x, int y, bool overwrite = false);
     virtual void show() = 0;
+    std::vector<std::pair<int, int>> getFilledTilePositions() const;
+    std::vector<HexCell> getFreeAdjacentCells(int max_size) const;
+
+
 };
 
 #endif // TILEHOLDER_HPP

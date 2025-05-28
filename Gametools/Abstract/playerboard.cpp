@@ -1,5 +1,6 @@
 #include "playerboard.hpp"
 #include <iostream>
+#include <set>
 
 
 PlayerBoard::PlayerBoard(NotifiableInterface *tar) : TileHolder(MAX_SIZE, MAX_SIZE){
@@ -110,3 +111,8 @@ GameTile* PlayerBoard::getTile(int const &q, int const &r) const{
     //std::cout << "Offset pos : " << offset_pos.getCol() << " " << offset_pos.getRow() << std::endl;
     return TileHolder::getTile(offset_pos.getCol(), offset_pos.getRow());
 }
+
+void PlayerBoard::pointCell(int q, int r) {
+    m_pointed_cell = HexCell(q, r);
+}
+

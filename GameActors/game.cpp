@@ -261,6 +261,8 @@ void Game::readNotification(unsigned int code){
         m_is_waiting_for_position = true;
         m_is_waiting_to_place_tile = true;
         return m_players[current_player]->getBoard()->show();
+
+
     }
 
     if (code == 4){
