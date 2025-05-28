@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Gametools/Abstract/playerboard.hpp"
+#include "../Gametools/Abstract/playerboard.hpp"
 #include <memory>
+#include <vector>
 
 class ScoringStrategy;
 class WildlifeScoringStrategy;

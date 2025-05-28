@@ -10,12 +10,14 @@ void CTokenMenu::show(){
 
     std::cout << "Voulez-vous utiliser un pion nature; vous en avez : " << m_caller->getNbNatureToken() << ". n : Non, c : Enlever tous les jeton faune actuel, b : Prendre séparément pion faune et tuile" << std::endl;
     //TODO : Removetoken;
+    //TODO : clear token if possible
     bool cnt = true;
     bool choose_distinc;
     std::string out;
     while (cnt){
         std::cin >> out;
         if (out.size() == 1 && out[0] == 'b'){
+            m_caller->removeNatureToken();
             choose_distinc = true;
             cnt = false;
         }
@@ -24,10 +26,19 @@ void CTokenMenu::show(){
             cnt = false;
         }
         else if (out.size() == 1 && out[0] == 'c'){
-            choose_distinc = false;
-            cnt = false;
+            if (m_deck_tile->canFlushWithoutNaturetoken()){
+                m_deck_tile->clearTokens();
+                m_deck_tile->show();
 
-            //Clear tokens
+            }
+            else {
+                choose_distinc = false;
+                cnt = false;
+                m_deck_tile->clearTokens();
+                m_caller->removeNatureToken();
+                m_deck_tile->show();
+
+            }
         }
         else {
             std::cout << "Résultat non valide. Merci d'écrire n, c ou b." << std::endl;

@@ -19,6 +19,7 @@ public:
     virtual ~TileHolder();
     GameTile* getTile(int posx, int posy) const;
     void addTile(GameTile& tile, int x, int y, bool overwrite = false);
+    void removeTile(int x, int y);
     virtual void show() = 0;
 };
 

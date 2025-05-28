@@ -27,6 +27,10 @@ GameTile* TileHolder::getTile(int posx, int posy) const{
     throw CustomError("Tile not in range", 201);
 }
 
+void TileHolder::removeTile(int x, int y){
+    m_tiles[x][y] = nullptr;
+}
+
 
 void TileHolder::addTile(GameTile& tile, int x, int y, bool overwrite){
     if (x < 0 || y < 0){

@@ -56,7 +56,7 @@ void CDeckTile::show(){
             }
         }
         char token = ' ';
-        switch (m_deck_token[i]->getWildlifeType()){
+        switch (m_displayed_tokens[i]->getWildlifeType()){
         case Hawk :
             token = 'H';
             break;
@@ -75,7 +75,7 @@ void CDeckTile::show(){
         default :
             break;
         }
-        tab[0][i * 5 * m_size_tile] = token;
+        tab[0][i * 5 * m_size_tile + m_size_tile] = token;
     }
 
     for (unsigned short int i = 0; i < tile_height; i++){

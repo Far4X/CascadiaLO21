@@ -7,6 +7,7 @@
 #include "player.hpp"
 #include "../../scoring/scoringstrategies/tilescoringstrategy.hpp"
 #include "../../scoring/scoringstrategies/wildlifescoringstrategy.hpp"
+#include "../../scoring/score.hpp"
 #include <QObject>
 
 #include <vector>
@@ -23,16 +24,17 @@ class Game : public SalvableThing, public NotifiableInterface, public QObject {
     Menu<std::string>* m_player_menu = nullptr;
     Menu<std::tuple<std::string, std::string>>* m_game_menu = nullptr;
     Menu<unsigned short int>* m_menu_token = nullptr;
+    Menu<bool>* m_menu_validate = nullptr;
     DeckTile* m_decktile = nullptr;
-
     const bool m_is_console;
 
-    bool m_is_waiting_for_position = false;
+    bool m_is_waiting_for_position = false; //Variable booléenne pour savoir si on attend une position
     bool m_is_waiting_to_place_tile = false;
-    GameTile* m_tile_to_add = nullptr;
+    GameTile* m_tile_to_add = nullptr; //Stocke la tuile en attente
     const WildlifeToken* m_token_to_add = nullptr;
 
     std::vector<Player*> m_players;
+    PlayerBoard* m_board_before_change = nullptr;
     std::vector<const WildlifeToken*> m_tokens;
     GameTile** m_cards = nullptr;
     GameTile* m_starter_cards[5][3];

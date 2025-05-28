@@ -64,11 +64,6 @@ std::string PlayerBoard::getSaveString() const { // genere un string qui permet 
     return desc;
 }
 
-void PlayerBoard::show(){
-
-}
-
-
 /*void PlayerBoard::moveHz(short int step){
     if ((step >= 0 && m_r_center > step) || (step < 0 && m_q_center >= 2*step)){ //TODO: check if superior to MAXSIZE;
         m_q_center += 2*step;
@@ -85,14 +80,32 @@ void PlayerBoard::moveVt(short int step){
 void PlayerBoard::addTile(GameTile& tile){
     int x;
     int y;
+    m_pos_last_tile = tile;
     GameTile::Offset offset_value(0, 0);
     offset_value = this->axialToOffset(HexCell(tile.getQ(), tile.getR()));
     x = offset_value.getCol();
     y = offset_value.getRow();
 
     TileHolder::addTile(tile, x, y, true);
-
 }
+
+void PlayerBoard::addToken(const WildlifeToken* token, HexCell& pos_target){
+    getTile(pos_target.getQ(), pos_target.getR())->setWildLifeToken(token);
+    m_pos_last_token = pos_target;
+}
+
+void PlayerBoard::removeLast(){
+    if (m_pos_last_token != HexCell(MAX_SIZE+1, MAX_SIZE+1) && m_pos_last_tile != HexCell(MAX_SIZE+1, MAX_SIZE+1) ){
+        std::cout << "Rmv" << std::endl;
+        getTile(m_pos_last_token.getQ(), m_pos_last_token.getR())->setWildLifeToken(nullptr);
+        HexCell::Offset of = axialToOffset(m_pos_last_tile);
+        removeTile(of.getCol(), of.getRow());
+    }
+    std::cout << "Out rmv" << std::endl;
+    m_pos_last_token = HexCell(MAX_SIZE+1, MAX_SIZE+1);
+    m_pos_last_tile = HexCell(MAX_SIZE+1, MAX_SIZE+1);
+}
+
 
 bool PlayerBoard::hasNeighbour(const HexCell& pos){
     for (size_t i = 0; i < pos.getNeighbors().size(); i++){

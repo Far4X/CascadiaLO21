@@ -28,6 +28,16 @@ GameTile* DeckTile::getTile(unsigned short int i){
     throw CustomError("Tile not in range", 202);
 }
 
+void DeckTile::validateChanges(){
+    if (m_id_card_to_rm < 4 && m_id_card_to_rm < 4){
+        m_displayed_tokens[m_id_token_to_rm] = nullptr;
+        m_tiles[m_id_card_to_rm] = nullptr;
+        fillPlate();
+    }
+    m_id_token_to_rm = 5;
+    m_id_card_to_rm = 5;
+}
+
 
 void DeckTile::addTile(GameTile* tile){
     //std::cout << "Added tile : " << tile << std::endl;
@@ -59,6 +69,8 @@ void DeckTile::clearTokens(){
 
 
 int DeckTile::fillPlate(){
+    /*Permet de remplir la liste des tuiles et tokens*/
+    m_can_flush = false;
     for (int i = 0; i < 4; i++){
         if (m_tiles[i] == nullptr){
             //std::cout << "Adding " << m_deck_tiles[m_deck_tiles.size()-1] << std::endl;
@@ -80,10 +92,23 @@ int DeckTile::fillPlate(){
             }
         }
     }
+    unsigned short int nb_same_token = 1;
+    for (int i = 1; i < 4; i++){
+        if (m_displayed_tokens[0]->getWildlifeType() == m_displayed_tokens[i]->getWildlifeType() || (m_displayed_tokens[1]->getWildlifeType() == m_displayed_tokens[i]->getWildlifeType()) && i != 1){
+            nb_same_token++;
+        }
+    }
+    if (nb_same_token == 4){
+        clearTokens();
+    }
+    else if (nb_same_token == 3){
+        m_can_flush = true;
+    }
     return 0;
 }
 
 std::tuple<GameTile*, const WildlifeToken*> DeckTile::getCouple(int id_card, int id_token){
+    /*Permet de récupérer les tokens et tuiles séléctionnés par l'utilisateur pour les afficher*/
     if (id_token == 65535){
         id_token = id_card;
     }
@@ -93,9 +118,8 @@ std::tuple<GameTile*, const WildlifeToken*> DeckTile::getCouple(int id_card, int
     const WildlifeToken* token_rt = m_displayed_tokens[id_token];
     GameTile* tiles_rt = m_tiles[id_card];
 
-    m_displayed_tokens[id_token] = nullptr;
-    m_tiles[id_card] = nullptr;
-    fillPlate();
+    m_id_card_to_rm = id_card;
+    m_id_token_to_rm = id_token;
 
     return std::tuple<GameTile*, const WildlifeToken*>(tiles_rt, token_rt);
 }

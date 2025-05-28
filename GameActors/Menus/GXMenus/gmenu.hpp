@@ -12,6 +12,7 @@ class GMenu : public QWidget, public Menu<T>{
     unsigned int m_pos_y;
 public:
     GMenu(NotifiableInterface* target, QWidget* parent = nullptr, unsigned int size_x = 800, unsigned int size_y = 600, unsigned int pos_x = 600, unsigned int pos_y = 600);
+    virtual ~GMenu() = default;
     void actualize();
     void show();
     inline void setSizeX(unsigned int x){m_size_x = x;actualize();}

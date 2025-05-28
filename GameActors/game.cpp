@@ -124,7 +124,7 @@ void Game::getTileAndToken(unsigned short int pos_tile, unsigned short int pos_t
     std::tuple<GameTile*, const WildlifeToken*> tmp = m_decktile->getCouple(pos_tile, pos_token);
     m_tile_to_add = std::get<0>(tmp);
     m_token_to_add = std::get<1>(tmp);
-    std::cout << "Token : " << m_token_to_add << std::endl;
+    std::cout << "Token : " << m_token_to_add->getWildlifeType() << std::endl;
     std::cout << "Tile : " << m_tile_to_add << std::endl;
 }
 
@@ -269,7 +269,7 @@ void Game::readNotification(unsigned int code){
         }
         if (m_is_waiting_to_place_tile){
             HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
-            if ((m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
+            if (target != HexCell(MAX_SIZE, MAX_SIZE) && (m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
                 m_is_waiting_to_place_tile = false;
                 m_tile_to_add->setPos(target.getQ(), target.getR());
                 unsigned short int rotation = 0;
@@ -292,18 +292,17 @@ void Game::readNotification(unsigned int code){
 
                 m_players[current_player]->getBoard()->addTile(*m_tile_to_add);
                 m_tile_to_add = nullptr;
-
-                //Check here if possible to place token
-
+                m_players[current_player]->getBoard()->resetPointedCell();
                 return m_players[current_player]->getBoard()->show();
             }
             else {
+                m_players[current_player]->getBoard()->resetPointedCell();
                 return m_players[current_player]->getBoard()->show();
             }
         }
         else {
             HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
-            if ((m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) != nullptr) && (m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->getToken() == nullptr)){
+            if (target != HexCell(MAX_SIZE, MAX_SIZE) && (m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) != nullptr) && (m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->getToken() == nullptr)){
                 const GameTile* tile = m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR());
                 for (int i = 0; i < tile->getNbWildlife(); i++){
                     if (m_token_to_add->getWildlifeType() == tile->getWildlife(i)){
@@ -312,27 +311,70 @@ void Game::readNotification(unsigned int code){
                             m_players[current_player]->addNatureToken();
                         }
                         m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
+                        m_players[current_player]->getBoard()->addToken(m_token_to_add, target);
                         if (m_is_console){
                             std::cout << "Le token a bien été placé." << std::endl;
                         }
-                        current_player++;
-                        if (current_player == m_nb_players){
-                            current_player = 0;
-                            std::cout << "Tour : " << current_tour + 1 << std::endl;
-                            std::cout << "Tour : " << current_tour + 1 << std::endl;
-                            current_tour++;
-                            if (current_tour == 20){
-                                return scoreGame();
-                            }
-                            return makePlayerTurn();
+                        m_token_to_add = nullptr;
+
+                        if (m_is_console){
+                            m_menu_validate = new CValidateMenu(this);
                         }
+                        else {
+                            m_menu_validate = new GValidateMenu(this);
+                        }
+                        return m_menu_validate->show();
+                    }
+                }
+
+                std::cout << "Token not good" << std::endl;
+                m_players[current_player]->getBoard()->resetPointedCell();
+                return m_players[current_player]->getBoard()->show();
+            }
+            else {
+                std::cout << "Pos not good" << std::endl;
+                m_players[current_player]->getBoard()->resetPointedCell();
+                return m_players[current_player]->getBoard()->show();
+            }
+        }
+    }
+
+    else if (code == 5){
+        std::cout << "1" << std::endl;
+        if (m_menu_validate == nullptr){
+            return;
+        }
+        std::cout << "2" << std::endl;
+        unsigned short int control = 0;
+        for (Menu<bool>::Iterator it = m_menu_validate->getIterator(); !it.isDone(); it++){
+            if (control >= 1){
+                return;
+            }
+            control++;
+            std::cout << "3" << std::endl;
+            if (it.getValue()){
+                m_decktile->validateChanges();
+                current_player++;
+                if (current_player == m_nb_players){
+                    current_player = 0;
+                    std::cout << "Tour : " << current_tour + 1 << std::endl;
+                    std::cout << "Tour : " << current_tour + 1 << std::endl;
+                    current_tour++;
+                    if (current_tour == 20){
+                        return scoreGame();
                     }
                 }
             }
             else {
-                return m_players[current_player]->getBoard()->show();
+                std::cout << "3.2" << std::endl;
+                m_players[current_player]->getBoard()->removeLast();
             }
         }
+        std::cout << "4" << std::endl;
+        delete m_menu_validate;
+        m_menu_validate = nullptr;
+        std::cout << "5" << std::endl;
+        return makePlayerTurn();
     }
 }
 
