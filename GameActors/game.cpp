@@ -27,9 +27,9 @@ Game::~Game(){
     delete[] m_cards;
     delete m_player_menu;
 
-    for (size_t i = 0; i < throwaway.size(); i++){
+    /*for (size_t i = 0; i < throwaway.size(); i++){
         delete throwaway[i];
-    }
+    }*/
     for (size_t i = 0; i < m_tokens.size(); i++){
         delete m_tokens[i];
     }
@@ -279,7 +279,8 @@ void Game::readNotification(unsigned int code){
             if (target != HexCell(MAX_SIZE, MAX_SIZE) && (m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
                 m_is_waiting_to_place_tile = false;
                 m_tile_to_add->setPos(target.getQ(), target.getR());
-                unsigned short int rotation = 0;
+
+                /*unsigned short int rotation = 0;
 
                 if (m_is_console){
                     std::cout << "Indiquez de combien de 1/6 de tour vous voulez tourner la tuile, dans le sens trigo : (0 à 5)";
@@ -290,12 +291,15 @@ void Game::readNotification(unsigned int code){
                             rotation = result[0] - '0';
                         }
                     }
-                    std::cout << "Merci de choisir l'emplacement pour le pion faune : ";
                 }
 
                 for (int i = 0; i < rotation; i++){
                     m_tile_to_add->Rotate(Trigonometric);
                 }
+
+                */
+                std::cout << "Merci de choisir l'emplacement pour le pion faune : ";
+
 
                 m_players[current_player]->getBoard()->addTile(*m_tile_to_add);
                 m_tile_to_add = nullptr;

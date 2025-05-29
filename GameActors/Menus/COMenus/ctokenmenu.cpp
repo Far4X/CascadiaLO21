@@ -65,30 +65,30 @@ void CTokenMenu::show(){
     std::cout << "\nTuile choisie :\n";
     selected_tile->show();
 
-    char reponse_rotation;
+    std::string reponse_rotation;
     do {
-        std::cout << "Souhaitez-vous faire pivoter la tuile ? (d = droite / g = gauche / n = non) : ";
+        std::cout << "Souhaitez-vous faire pivoter la tuile ? (d = droite / g = gauche / autre : valider) : ";
         std::cin >> reponse_rotation;
 
-        if (reponse_rotation == 'd' || reponse_rotation == 'D') {
-            selected_tile->Rotate(Trigonometric); // rotation horaire
-            std::cout << "Tuile après rotation horaire :" << std::endl;
+        if (reponse_rotation[0] == 'd' || reponse_rotation[0] == 'D') {
+            selected_tile->Rotate(Anti_Trigonometric); // rotation horaire
+            std::cout << "Tuile apres rotation horaire :" << std::endl;
             selected_tile->show();
         }
-        else if (reponse_rotation == 'g' || reponse_rotation == 'G') {
-            selected_tile->Rotate(Anti_Trigonometric); // rotation anti-horaire
-            std::cout << "Tuile après rotation anti-horaire :" << std::endl;
+        else if (reponse_rotation[0] == 'g' || reponse_rotation[0] == 'G') {
+            selected_tile->Rotate(Trigonometric); // rotation anti-horaire
+            std::cout << "Tuile apres rotation anti-horaire :" << std::endl;
             selected_tile->show();
         }
-    } while (reponse_rotation == 'd' || reponse_rotation == 'D' || reponse_rotation == 'g' || reponse_rotation == 'G');
+    } while (reponse_rotation[0] == 'd' || reponse_rotation[0] == 'D' || reponse_rotation[0] == 'g' || reponse_rotation[0] == 'G');
 
 
-    // Récupérer les emplacements disponibles en axial
+    /*// Récupérer les emplacements disponibles en axial
     unsigned int max_size = getX();
     std::vector<HexCell> adjacentsDisponibles = m_caller->getBoard()->getFreeAdjacentCells(max_size);
 
     // Affichage
-    std::cout << "Vous avez choisi la tuile numéro " << id_tile + 1 << ".\n\n";
+    std::cout << "Vous avez choisi la tuile numero " << id_tile + 1 << ".\n\n";
     std::cout << "Où souhaitez-vous la placer ? Voici les emplacements disponibles autour de votre board :\n\n";
 
     for (size_t i = 0; i < adjacentsDisponibles.size(); ++i) {
@@ -121,9 +121,9 @@ void CTokenMenu::show(){
     HexCell::Offset coordChoisie = HexCell::axialToOffset(adjacentsDisponibles[choixPlacement], max_size);
     this->addResult(coordChoisie.getCol());
     this->addResult(coordChoisie.getRow());
-
+    */
     if (choose_distinc){
-        std::cout << "Quelle jeton voulez-vous choisir ? (1 à 4) : ";
+        std::cout << "Quel jeton voulez-vous choisir ? (1 à 4) : ";
         while (cnt){
             std::cin >> out;
             if (out.size() == 1 && out[0] > '0' && out[0] <= '4'){
