@@ -12,6 +12,13 @@ HexCell HexCell::operator+(const HexCell& other) const {
 HexCell HexCell::operator-(const HexCell& other) const {
 	return HexCell(m_q - other.m_q, m_r - other.m_r);
 }
+
+bool HexCell::operator==(const HexCell& other) const{
+    return other.m_q == m_q && other.m_r == m_r;
+}
+bool HexCell::operator!=(const HexCell& other) const{
+    return !(other == *this);
+}
 /*
  Puisque les cellules hexagonales ne vont pas bouger, ces operateurs ne servent a rien, je les garde au cas ou
  j'en ai besoin pour une autre classe qui va etre composee et non pas heritee de HexCell

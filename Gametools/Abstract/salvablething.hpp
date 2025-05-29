@@ -2,14 +2,8 @@
 #define SALVABLETHING_HPP
 #include <string>
 
-/*
-Type of saving
-
-{nb_player:2;turn:2;boards:{pid:0,nb_tiles:10,tiles:{...}},{...} }
-
-*/
-
 class SalvableThing{
+    /*Classe abstraite qui permet l'enregistrement du jeu*/
 public:
     SalvableThing();
     virtual ~SalvableThing() = default;

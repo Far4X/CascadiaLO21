@@ -53,6 +53,10 @@ void GTokenMenu::selectTile(){
 }
 
 void GTokenMenu::clearTokens(){
+    if (m_decktile->canFlushWithoutNaturetoken()){
+        m_decktile->clearTokens();
+        return;
+    }
     m_decktile->clearTokens();
     m_caller->removeNatureToken();
     selectTile();

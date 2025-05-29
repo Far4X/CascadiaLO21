@@ -40,6 +40,7 @@ int App::exec(){
         if (m_id_notification.size() == 0){
             throw 99;
         }
+        std::cout << "Reading : " << m_id_notification.front() << std::endl;;
         m_game->readNotification(m_id_notification.front());
         m_id_notification.pop_front();
     }
@@ -51,4 +52,5 @@ int App::exec(){
 
 void App::notifyInterface(unsigned int code){
     m_id_notification.push_back(code);
+    std::cout << "App received : " << code << std::endl;
 }
