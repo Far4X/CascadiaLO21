@@ -265,6 +265,8 @@ void Game::readNotification(unsigned int code){
         m_is_waiting_to_place_tile = true;
         std::cout << "End of code 3" << std::endl;
         return m_players[current_player]->getBoard()->show();
+
+
     }
 
     if (code == 4){

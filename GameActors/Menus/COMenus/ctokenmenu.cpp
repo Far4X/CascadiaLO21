@@ -60,6 +60,68 @@ void CTokenMenu::show(){
         }
     }
     this->addResult(id_tile);
+
+    GameTile* selected_tile = m_deck_tile->getTile(id_tile);
+    std::cout << "\nTuile choisie :\n";
+    selected_tile->show();
+
+    char reponse_rotation;
+    do {
+        std::cout << "Souhaitez-vous faire pivoter la tuile ? (d = droite / g = gauche / n = non) : ";
+        std::cin >> reponse_rotation;
+
+        if (reponse_rotation == 'd' || reponse_rotation == 'D') {
+            selected_tile->Rotate(Trigonometric); // rotation horaire
+            std::cout << "Tuile après rotation horaire :" << std::endl;
+            selected_tile->show();
+        }
+        else if (reponse_rotation == 'g' || reponse_rotation == 'G') {
+            selected_tile->Rotate(Anti_Trigonometric); // rotation anti-horaire
+            std::cout << "Tuile après rotation anti-horaire :" << std::endl;
+            selected_tile->show();
+        }
+    } while (reponse_rotation == 'd' || reponse_rotation == 'D' || reponse_rotation == 'g' || reponse_rotation == 'G');
+
+
+    // Récupérer les emplacements disponibles en axial
+    unsigned int max_size = getX();
+    std::vector<HexCell> adjacentsDisponibles = m_caller->getBoard()->getFreeAdjacentCells(max_size);
+
+    // Affichage
+    std::cout << "Vous avez choisi la tuile numéro " << id_tile + 1 << ".\n\n";
+    std::cout << "Où souhaitez-vous la placer ? Voici les emplacements disponibles autour de votre board :\n\n";
+
+    for (size_t i = 0; i < adjacentsDisponibles.size(); ++i) {
+        // Conversion axial → offset
+        HexCell::Offset off = HexCell::axialToOffset(adjacentsDisponibles[i], max_size);
+        std::cout << i << " : (" << off.getCol() << ", " << off.getRow() << ") – Tuile vide\n";
+    }
+
+    // Choix utilisateur
+    int choixPlacement = -1;
+    bool saisieValide = false;
+
+    while (!saisieValide) {
+        std::cout << "\nVeuillez saisir le numéro de l’emplacement choisi : ";
+        std::cin >> out;
+
+        if (out.size() == 1 && isdigit(out[0])) {
+            choixPlacement = out[0] - '0';
+            if (choixPlacement >= 0 && static_cast<size_t>(choixPlacement) < adjacentsDisponibles.size()) {
+                saisieValide = true;
+            } else {
+                std::cout << "Numéro hors plage. Essayez encore.\n";
+            }
+        } else {
+            std::cout << "Entrée invalide. Merci d’écrire un chiffre valide.\n";
+        }
+    }
+
+    // On enregistre les coordonnées converties dans les résultats
+    HexCell::Offset coordChoisie = HexCell::axialToOffset(adjacentsDisponibles[choixPlacement], max_size);
+    this->addResult(coordChoisie.getCol());
+    this->addResult(coordChoisie.getRow());
+
     if (choose_distinc){
         std::cout << "Quelle jeton voulez-vous choisir ? (1 à 4) : ";
         while (cnt){
@@ -73,6 +135,9 @@ void CTokenMenu::show(){
             }
         }
         this->addResult(id_token);
+
+
+
     }
     m_target->notifyInterface(3);
 }

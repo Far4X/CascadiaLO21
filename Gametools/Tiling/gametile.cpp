@@ -285,3 +285,40 @@ bool GameTile::isKeystone(const std::string& description)const {
     }
     return true;
 }
+
+
+void GameTile::show(unsigned short int size) const {
+    const unsigned short int height = 2 * size + 1;
+    const unsigned short int width = 4 * size;
+
+    // Créer un tableau pour la représentation
+    char** tile_rpr = new char*[height];
+    for (unsigned short int i = 0; i < height; i++) {
+        tile_rpr[i] = new char[width];
+        for (unsigned short int j = 0; j < width; j++) {
+            tile_rpr[i][j] = ' ';
+        }
+    }
+
+    tile_rpr = getRepresentation(this, size, 4, false);
+
+    // Affichage ligne par ligne
+    for (int i = 0; i < 30; ++i) std::cout << "-";
+    std::cout << std::endl;
+
+    for (unsigned short int i = 0; i < height; i++) {
+        for (unsigned short int j = 0; j < width; j++) {
+            std::cout << tile_rpr[i][j];
+        }
+        std::cout << std::endl;
+    }
+
+    for (int i = 0; i < 30; ++i) std::cout << "-";
+    std::cout << std::endl;
+
+    // Libération mémoire
+    for (unsigned short int i = 0; i < height; i++) {
+        delete[] tile_rpr[i];
+    }
+    delete[] tile_rpr;
+}

@@ -4,6 +4,9 @@
 #include "../Tiling/gametile.hpp"
 #include "salvablething.hpp"
 #include "printable.hpp"
+#include <vector>
+#include <utility>
+
 
 class TileHolder : public Printable, SalvableThing{
     /*Classe qui permet de stocker des tuiles dans un tableau 2D*/
@@ -34,6 +37,10 @@ public:
     void addTile(GameTile& tile, int x, int y, bool overwrite = false);
     void removeTile(int x, int y);
     virtual void show() = 0;
+    std::vector<std::pair<int, int>> getFilledTilePositions() const;
+    std::vector<HexCell> getFreeAdjacentCells(int max_size) const;
+
+
 };
 
 #endif // TILEHOLDER_HPP
