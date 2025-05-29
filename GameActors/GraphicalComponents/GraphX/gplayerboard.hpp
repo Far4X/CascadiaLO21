@@ -8,6 +8,7 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QFrame>
+#include <vector>
 
 
 //#include "widgethexboard.hpp"
@@ -28,6 +29,7 @@ public:
     ~GPlayerBoard() = default;;
 
     void initHexTiles();
+    void updateHexTiles();
     void addGxTile(int x,int y); // x,y de la matrice pas q,r !
 
     QSize sizeHint() const override;
@@ -40,6 +42,7 @@ private:
     QWidget* m_widget = nullptr; // widget principal
     QVBoxLayout* m_layout = nullptr;  // Grid pour organiser les widgets
     QPoint m_last_mouse_pos;
+    std::vector<QLabel*> tiles;
     bool m_dragging = false;
 
 };

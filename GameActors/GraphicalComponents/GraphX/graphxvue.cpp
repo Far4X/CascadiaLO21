@@ -60,8 +60,6 @@ void GraphXVue::addPlayerBoard(GPlayerBoard* board){
 
     //On s'assure que chaque board n'a pas d'autre parent;
     board->setParent(nullptr);
-
-
     QGraphicsProxyWidget* proxy = m_scene->addWidget(board);
     proxy->setVisible(false);
     //proxy->setPos(200,100); // a revoir c trop fais main si on change quoi que ce soit ça
@@ -105,15 +103,8 @@ void GraphXVue::onRightClickAt(const QPointF& scenePos)
     qDebug() << "Clique droit sur col:" << col << "row:" << row;
     HexCell::Offset off(row,col);
     HexCell hex (PlayerBoard::offsetToAxial(off));
-    if(boards[currentboard]->getTile(hex.getQ(),hex.getR()) != nullptr)
-    {
-        boards[currentboard]->setPointedCell(hex);
-        boards[currentboard]->getTarget()->notifyInterface(4); // j'ai cliqué sur le plateau est ce que je peux poser | 3 une fois qu'on a select toekn et carte
-
-
-    }
-
-
+    boards[currentboard]->setPointedCell(hex);
+    boards[currentboard]->getTarget()->notifyInterface(4); // j'ai cliqué sur le plateau est ce que je peux poser | 3 une fois qu'on a select toekn et carte
     return;
 }
 

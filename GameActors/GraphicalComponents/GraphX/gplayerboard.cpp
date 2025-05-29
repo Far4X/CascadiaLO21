@@ -74,10 +74,32 @@ void GPlayerBoard::initHexTiles(){
 
             tileLabel->move(x, y);  // Déplacement relatif au widget
             tileLabel->setAttribute(Qt::WA_TransparentForMouseEvents); // permet de skip les cliques souris
-
+            tiles.push_back(tileLabel);
         }
     }
 }
+
+void GPlayerBoard::updateHexTiles(){
+    int i = 0;
+    int j = 0;
+    for (int col = 0; col < max_size; ++col) {
+        for (int row = 0; row < max_size; ++row) {
+            HexCell::Offset off(row,col);
+            HexCell hex (PlayerBoard::offsetToAxial(off));
+            if (getTile(hex.getQ(),hex.getR()) == nullptr)
+            {
+                QPixmap pixmapL(":/Assets/Assets/Tiles/desert.png");
+                tiles[col * max_size + row]->setPixmap(pixmapL);
+            }
+            else {
+                QPixmap pixmapL(":/Assets/Assets/Tiles/lake.png");
+                 tiles[col * max_size + row]->setPixmap(pixmapL);
+            }
+         }
+    }
+}
+
+
 
 void GPlayerBoard::addGxTile(int col,int row){
     QLabel* tileLabel = new QLabel(this);  // Création d'un QLabel pour chaque tuile
@@ -101,8 +123,9 @@ void GPlayerBoard::addGxTile(int col,int row){
     tileLabel->move(x, y);  // Déplacement relatif au widget
 }
 
+
 void GPlayerBoard::show(){
-    initHexTiles();
+    updateHexTiles();
     m_manager->show();
 }
 

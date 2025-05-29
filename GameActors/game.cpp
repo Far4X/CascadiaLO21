@@ -136,6 +136,7 @@ void Game::makePlayerTurn(){
         m_players[current_player]->getBoard()->show();
     }
     else {
+        std::cout << "----- \nTour de " << m_players[current_player]->getName() << std::endl;
         m_players[current_player]->getBoard()->show(); // obligé car la vue doit etre initialisé
         GTokenMenu* gMenu = new GTokenMenu(this, m_decktile, m_players[current_player]);
         m_menu_token = gMenu;
@@ -270,7 +271,7 @@ void Game::readNotification(unsigned int code){
         if (m_is_waiting_for_position == false){
             return;
         }
-        if (m_is_waiting_to_place_tile){
+        if (m_is_waiting_to_place_tile){ // Faut il traiter le clic
             HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
             if ((m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
                 m_is_waiting_to_place_tile = false;
@@ -327,8 +328,9 @@ void Game::readNotification(unsigned int code){
                             if (current_tour == 20){
                                 return scoreGame();
                             }
-                            return makePlayerTurn();
+
                         }
+                        return makePlayerTurn();
                     }
                 }
             }

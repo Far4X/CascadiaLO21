@@ -74,7 +74,7 @@ void GTokenMenu::pushResults(){
     if (m_spin_token != nullptr){
         addResult(m_spin_token->value());
     }
-    m_target->notifyInterface(4);
+    m_target->notifyInterface(3);
 }
 
 void GTokenMenu::show(){
