@@ -34,6 +34,8 @@ public:
     bool hasNeighbour(const HexCell& pos);
     inline HexCell getPointedCell() const {return m_pointed_cell;};
     inline void resetPointedCell() {m_pointed_cell = HexCell(MAX_SIZE,MAX_SIZE);};
+    inline void setPointedCell(HexCell cell){m_pointed_cell = cell;};
+    inline NotifiableInterface* getTarget()const{return m_target;};
     GameTile* getTile(int const &q, int const &r) const;
     void pointCell(int q, int r) ;
 

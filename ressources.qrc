@@ -22,4 +22,17 @@
         <file>Assets/set5/set5_2.png</file>
         <file>Assets/set5/set5_3.png</file>
     </qresource>
+    <qresource prefix="/Tile"/>
+    <qresource prefix="/Token">
+        <file>Assets/Token/bear.png</file>
+        <file>Assets/Token/elk.png</file>
+        <file>Assets/Token/fox.png</file>
+        <file>Assets/Token/hawk.png</file>
+        <file>Assets/Token/salmon.png</file>
+        <file>Assets/Token/bearActive.png</file>
+        <file>Assets/Token/elkActive.png</file>
+        <file>Assets/Token/foxActive.png</file>
+        <file>Assets/Token/hawkActive.png</file>
+        <file>Assets/Token/salmonActive.png</file>
+    </qresource>
 </RCC>

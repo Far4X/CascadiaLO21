@@ -9,6 +9,8 @@ GValidateMenu::GValidateMenu(NotifiableInterface* tar) : GMenu(tar) {
     m_layout->addWidget(m_label, 0, 0, 1, 2);
     m_layout->addWidget(m_label, 1, 0, 1, 1);
     m_layout->addWidget(m_label, 1, 2, 1, 1);
+    m_layout->addWidget(m_btn_validate,0 , 1, 1, 1);
+    m_layout->addWidget(m_btn_reject, 1, 1, 1, 1);
 
     QObject::connect(m_btn_validate, &QPushButton::clicked, this, &GValidateMenu::validate);
     QObject::connect(m_btn_reject, &QPushButton::clicked, this, &GValidateMenu::reject);

@@ -187,7 +187,9 @@ void Game::endTurn(){
         m_menu_validate = new CValidateMenu(this);
     }
     else {
-        m_menu_validate = new GValidateMenu(this);
+        GValidateMenu* gMenu = new GValidateMenu(this);
+        m_menu_validate = gMenu;
+        GraphXVue::instance()->addMenu(gMenu);
     }
     return m_menu_validate->show();
 }

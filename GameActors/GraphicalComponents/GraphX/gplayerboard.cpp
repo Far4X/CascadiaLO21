@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "graphxvue.hpp"
+#include "gtile.hpp"
 
 GPlayerBoard::GPlayerBoard(NotifiableInterface* tar, QWidget *parent,int size) : PlayerBoard(tar), QWidget{parent}, max_size(size) {
 
@@ -46,18 +47,9 @@ void GPlayerBoard::initHexTiles(){
     for (int col = 0; col < max_size; ++col) {
         for (int row = 0; row < max_size; ++row) {
             QLabel* tileLabel = new QLabel(this);  // Création d'un QLabel pour chaque tuile
-            QPixmap pixmap;  // Charge une image de tuile
             HexCell::Offset off(row,col);
             HexCell hex (PlayerBoard::offsetToAxial(off));
-            if (getTile(hex.getQ(),hex.getR()) == nullptr)
-                {
-                QPixmap pixmapL(":/Assets/Assets/Tiles/desert.png");
-                pixmap = pixmapL;
-                }
-            else {
-                QPixmap pixmapL(":/Assets/Assets/Tiles/lake.png");
-                pixmap = pixmapL;
-                }
+            QPixmap pixmap = PixmapFactory::createTile(getTile(hex.getQ(),hex.getR()));
             if (pixmap.isNull()) {std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;}
             tileLabel->setPixmap(pixmap);
             tileLabel->setFixedSize(tileWidth, tileHeight);
@@ -86,15 +78,7 @@ void GPlayerBoard::updateHexTiles(){
         for (int row = 0; row < max_size; ++row) {
             HexCell::Offset off(row,col);
             HexCell hex (PlayerBoard::offsetToAxial(off));
-            if (getTile(hex.getQ(),hex.getR()) == nullptr)
-            {
-                QPixmap pixmapL(":/Assets/Assets/Tiles/desert.png");
-                tiles[col * max_size + row]->setPixmap(pixmapL);
-            }
-            else {
-                QPixmap pixmapL(":/Assets/Assets/Tiles/lake.png");
-                 tiles[col * max_size + row]->setPixmap(pixmapL);
-            }
+            tiles[col * max_size + row]->setPixmap(PixmapFactory::createTile(getTile(hex.getQ(),hex.getR())));
          }
     }
 }

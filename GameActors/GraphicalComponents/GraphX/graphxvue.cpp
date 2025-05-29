@@ -100,9 +100,10 @@ void GraphXVue::onRightClickAt(const QPointF& scenePos)
 
     // Debug
     std::cout<<currentboard<<" ";
-    qDebug() << "Clique droit sur col:" << col << "row:" << row;
+    qDebug() << "Clique droit sur row:" << row << "col:" << col;
     HexCell::Offset off(row,col);
     HexCell hex (PlayerBoard::offsetToAxial(off));
+    qDebug() << "Clique droit sur r:" << PlayerBoard::offsetToAxial(off).getR() << "q:" << PlayerBoard::offsetToAxial(off).getQ();
     boards[currentboard]->setPointedCell(hex);
     boards[currentboard]->getTarget()->notifyInterface(4); // j'ai cliqué sur le plateau est ce que je peux poser | 3 une fois qu'on a select toekn et carte
     return;
