@@ -139,17 +139,6 @@ void Game::makePlayerTurn(){
 
     m_players[current_player]->getBoard()->show();
     return m_menu_token->show();
-
-    /*HexCell target;
-    bool cnt = true;
-    while (cnt){
-        m_players[id_player]->getBoard()->show();
-        target = HexCell(m_players[id_player]->getBoard()->getPointedCell());
-        //std::cout << "Hexcell pos : " << target.getQ() << ", " << target.getR() << std::endl;
-        if ((m_players[id_player]->getBoard()->hasNeighbour(target)) && m_players[id_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
-            cnt = false;
-        }
-    }*/
 }
 
 
@@ -185,6 +174,20 @@ void Game::notifyInterface(unsigned int code){
     }
     m_target->notifyInterface(code);
 }
+
+void Game::endTurn(){
+    m_token_to_add = nullptr;
+    m_is_waiting_for_position = false;
+
+    if (m_is_console){
+        m_menu_validate = new CValidateMenu(this);
+    }
+    else {
+        m_menu_validate = new GValidateMenu(this);
+    }
+    return m_menu_validate->show();
+}
+
 
 void Game::readNotification(unsigned int code){
     if (code == 1){
@@ -239,6 +242,7 @@ void Game::readNotification(unsigned int code){
     }
 
     if (code == 3){
+        std::cout << "Received code 3" << std::endl;
         if (m_menu_token == nullptr){
             throw CustomError("Menu token not initialized", 1);
         }
@@ -248,7 +252,6 @@ void Game::readNotification(unsigned int code){
             params.push_back(it.getValue());
         }
         delete m_menu_token;
-        //throwaway.push_back(m_menu_token);
         m_menu_token = nullptr;
         if (params.size() == 2){
             getTileAndToken(params[0], params[1]);
@@ -260,10 +263,12 @@ void Game::readNotification(unsigned int code){
         m_players[current_player]->getBoard()->resetPointedCell();
         m_is_waiting_for_position = true;
         m_is_waiting_to_place_tile = true;
+        std::cout << "End of code 3" << std::endl;
         return m_players[current_player]->getBoard()->show();
     }
 
     if (code == 4){
+        std::cout << "Received code 4" << std::endl;
         if (m_is_waiting_for_position == false){
             return;
         }
@@ -292,6 +297,23 @@ void Game::readNotification(unsigned int code){
 
                 m_players[current_player]->getBoard()->addTile(*m_tile_to_add);
                 m_tile_to_add = nullptr;
+
+                //Checks if token can be placed
+                bool has_place = false;
+                std::cout << "Testing it : " << std::endl;
+                const GameTile* ct = nullptr;
+                for (PlayerBoard::Iterator it = m_players[current_player]->getBoard()->getIterator(); !it.isDone() && !has_place; it++){
+                    ct = it.getValue();
+                    for (unsigned short int i = 0; i < ct->getNbWildlife(); i++){
+                        if (ct->getWildlife(i) == m_token_to_add->getWildlifeType() && ct->getToken() == nullptr){
+                            has_place = true;
+                        }
+                    }
+                }
+                if (!has_place){
+                    return endTurn();
+                }
+
                 m_players[current_player]->getBoard()->resetPointedCell();
                 return m_players[current_player]->getBoard()->show();
             }
@@ -306,24 +328,15 @@ void Game::readNotification(unsigned int code){
                 const GameTile* tile = m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR());
                 for (int i = 0; i < tile->getNbWildlife(); i++){
                     if (m_token_to_add->getWildlifeType() == tile->getWildlife(i)){
-                        m_is_waiting_for_position = false;
                         if (tile->isKeystone()){
                             m_players[current_player]->addNatureToken();
                         }
-                        m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
+                        //m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
                         m_players[current_player]->getBoard()->addToken(m_token_to_add, target);
                         if (m_is_console){
                             std::cout << "Le token a bien été placé." << std::endl;
                         }
-                        m_token_to_add = nullptr;
-
-                        if (m_is_console){
-                            m_menu_validate = new CValidateMenu(this);
-                        }
-                        else {
-                            m_menu_validate = new GValidateMenu(this);
-                        }
-                        return m_menu_validate->show();
+                        return endTurn();
                     }
                 }
 
@@ -340,18 +353,17 @@ void Game::readNotification(unsigned int code){
     }
 
     else if (code == 5){
-        std::cout << "1" << std::endl;
+        std::cout << "Received code 5" << std::endl;
         if (m_menu_validate == nullptr){
+            std::cout << "Validate menu not good" << std::endl;
             return;
         }
-        std::cout << "2" << std::endl;
         unsigned short int control = 0;
         for (Menu<bool>::Iterator it = m_menu_validate->getIterator(); !it.isDone(); it++){
             if (control >= 1){
                 return;
             }
             control++;
-            std::cout << "3" << std::endl;
             if (it.getValue()){
                 m_decktile->validateChanges();
                 current_player++;
@@ -366,14 +378,12 @@ void Game::readNotification(unsigned int code){
                 }
             }
             else {
-                std::cout << "3.2" << std::endl;
                 m_players[current_player]->getBoard()->removeLast();
             }
         }
-        std::cout << "4" << std::endl;
         delete m_menu_validate;
         m_menu_validate = nullptr;
-        std::cout << "5" << std::endl;
+        std::cout << "End of code 5" << std::endl;
         return makePlayerTurn();
     }
 }

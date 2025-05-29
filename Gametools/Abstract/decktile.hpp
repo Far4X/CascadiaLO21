@@ -5,14 +5,10 @@
 #include <vector>
 
 class DeckTile : public Printable, public SalvableThing {
+    /*Classe qui permet de représenter la pioche et les tuiles et tokens visibles sur la table*/
 protected :
     std::vector<GameTile*> m_deck_tiles;
     std::vector<const WildlifeToken*> m_deck_token;
-    /*GameTile** m_deck_tiles;
-    const WildlifeToken** m_deck_token;
-    unsigned short int m_num_tiles = 0;
-    unsigned short int m_num_token = 0;*/
-
     GameTile* m_tiles[4];
 
     const WildlifeToken* m_displayed_tokens[4];

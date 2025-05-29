@@ -227,7 +227,8 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
                 out = 'f';
                 break;
             default :
-                std::cout << "Not here" << std::endl;
+                std::cout << "Not here : " << tile->getWildlife(i) << std::endl;
+                out = '_';
                 break;
             }
             rt[size][2*size + i+1] = out;

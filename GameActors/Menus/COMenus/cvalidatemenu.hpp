@@ -6,6 +6,7 @@
 class CValidateMenu final : public CMenu<bool>{
 public:
     CValidateMenu(NotifiableInterface* tar);
+    virtual ~CValidateMenu() = default;
     void show() override;
 };
 

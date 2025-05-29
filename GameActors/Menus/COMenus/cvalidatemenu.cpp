@@ -23,4 +23,5 @@ void CValidateMenu::show(){
         }
     }
     m_target->notifyInterface(5);
+    std::cout << "Notified 5" << std::endl;
 }

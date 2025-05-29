@@ -1,48 +1,18 @@
 #include "playerboard.hpp"
-#include <iostream>
-
 
 PlayerBoard::PlayerBoard(NotifiableInterface *tar) : TileHolder(MAX_SIZE, MAX_SIZE){
-    //m_q_center = MAX_SIZE/2;
-    //m_r_center = MAX_SIZE/2;
-
     m_target = tar;
 }
 
-/*int PlayerBoard::floorDiv(int n) {
-    // fonction utilitaire pour la forumule de conversion entre hex et offset (la division normale ne marche pas avec les negatifs de notre cas)
-    if (n >= 0) {
-        return n / 2;
-    }
-    else {
-        return (n - 1) / 2;
-    }
-}*/
-
-/*PlayerBoard::Offset PlayerBoard::axialToOffset(const HexCell& hex){
-    int q = hex.getQ();
-    int r = hex.getR();
-    int col = q + MAX_SIZE/2;
-    int row = r + floorDiv(q) + MAX_SIZE/2;
-    return PlayerBoard::Offset(col, row);
-}
-
-HexCell PlayerBoard::offsetToAxial(const Offset& off){
-    int col = off.getCol();
-    int row = off.getRow();
-    int q = col - MAX_SIZE/2;
-    int r = row - floorDiv(q) - MAX_SIZE/2;
-    return HexCell(q, r);
-}*/
-
-
 GameTile* PlayerBoard::getNeighborTile(const GameTile& tile, Direction d) const {
+    /*Permet de récupérer une tuile voisine*/
     HexCell hex = tile.getNeighbor(d);
     GameTile::Offset off = PlayerBoard::axialToOffset(hex);
     return this->getTile(off.getCol(), off.getRow());
 }
 
 std::vector<GameTile*> PlayerBoard::getNeighborTiles(const GameTile& tile) const {
+    /*Permet de récupérer les voisins d'une tuile. Utile pour le scoring*/
     std::vector<HexCell> hexes = tile.getNeighbors();
     std::vector<GameTile*> neighbors;
     for (const HexCell& hex : hexes) {
@@ -64,20 +34,8 @@ std::string PlayerBoard::getSaveString() const { // genere un string qui permet 
     return desc;
 }
 
-/*void PlayerBoard::moveHz(short int step){
-    if ((step >= 0 && m_r_center > step) || (step < 0 && m_q_center >= 2*step)){ //TODO: check if superior to MAXSIZE;
-        m_q_center += 2*step;
-        m_r_center -= 1;
-    }
-}
-
-void PlayerBoard::moveVt(short int step){
-    if (step + m_q_center > 0 && step + m_q_center < MAX_SIZE){
-        m_q_center += step;
-    }
-}*/
-
 void PlayerBoard::addTile(GameTile& tile){
+    /*Permet d'ajouter une tuile. La position de la tuile est donnée par les caractéristiques de cette dernière*/
     int x;
     int y;
     m_pos_last_tile = tile;
@@ -90,27 +48,27 @@ void PlayerBoard::addTile(GameTile& tile){
 }
 
 void PlayerBoard::addToken(const WildlifeToken* token, HexCell& pos_target){
+    /*Permet d'ajouter un token à une tuile*/
     getTile(pos_target.getQ(), pos_target.getR())->setWildLifeToken(token);
     m_pos_last_token = pos_target;
 }
 
 void PlayerBoard::removeLast(){
+    /*Permet d'effectuer le retour arrière en cas de non-validation des changements*/
     if (m_pos_last_token != HexCell(MAX_SIZE+1, MAX_SIZE+1) && m_pos_last_tile != HexCell(MAX_SIZE+1, MAX_SIZE+1) ){
-        std::cout << "Rmv" << std::endl;
         getTile(m_pos_last_token.getQ(), m_pos_last_token.getR())->setWildLifeToken(nullptr);
         HexCell::Offset of = axialToOffset(m_pos_last_tile);
         removeTile(of.getCol(), of.getRow());
     }
-    std::cout << "Out rmv" << std::endl;
     m_pos_last_token = HexCell(MAX_SIZE+1, MAX_SIZE+1);
     m_pos_last_tile = HexCell(MAX_SIZE+1, MAX_SIZE+1);
 }
 
 
 bool PlayerBoard::hasNeighbour(const HexCell& pos){
+    /*Permet de savoir si une tuile a des voisins ou pas. Utile pour la pose des tuiles*/
     for (size_t i = 0; i < pos.getNeighbors().size(); i++){
         HexCell::Offset neight = axialToOffset(pos.getNeighbors()[i]);
-        //std::cout << "Offset pos neigh : " << neight.getCol() << " " << neight.getRow() << std::endl;
         if (neight.getCol() >= 0 && neight.getRow() >= 0 && this->TileHolder::getTile(neight.getCol(), neight.getRow()) != nullptr){
             return true;
         }
@@ -119,7 +77,7 @@ bool PlayerBoard::hasNeighbour(const HexCell& pos){
 }
 
 GameTile* PlayerBoard::getTile(int const &q, int const &r) const{
+    /*Permet de retourner une tuile grâce à sa position qr*/
     HexCell::Offset offset_pos = PlayerBoard::axialToOffset(HexCell(q, r));
-    //std::cout << "Offset pos : " << offset_pos.getCol() << " " << offset_pos.getRow() << std::endl;
     return TileHolder::getTile(offset_pos.getCol(), offset_pos.getRow());
 }

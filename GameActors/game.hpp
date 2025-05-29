@@ -20,11 +20,12 @@ enum class GameStatus {
 };
 
 class Game : public SalvableThing, public NotifiableInterface, public QObject {
+    /*Classe qui représente le déroulement de la partie*/
     unsigned short m_nb_players = 0;
-    Menu<std::string>* m_player_menu = nullptr;
-    Menu<std::tuple<std::string, std::string>>* m_game_menu = nullptr;
-    Menu<unsigned short int>* m_menu_token = nullptr;
-    Menu<bool>* m_menu_validate = nullptr;
+    Menu<std::string>* m_player_menu = nullptr; //Représente le menu sélectionneur de joueurs
+    Menu<std::tuple<std::string, std::string>>* m_game_menu = nullptr;  //Représente le menu sélectionneur du jeu
+    Menu<unsigned short int>* m_menu_token = nullptr; //Représente le menu utile pour choisir le token et la tuile à poser
+    Menu<bool>* m_menu_validate = nullptr; //Représente le menu qui permet de valider les changements
     DeckTile* m_decktile = nullptr;
     const bool m_is_console;
 
@@ -46,6 +47,7 @@ class Game : public SalvableThing, public NotifiableInterface, public QObject {
     std::vector <void *> throwaway;
     Score m_scorer;
     NotifiableInterface* const m_target;
+    void endTurn();
 
 
 public:
@@ -56,7 +58,6 @@ public:
     void play();
     void init();
     void getTileAndToken(unsigned short int pos_tile, unsigned short int pos_token = -1);
-    //void makePlayerTurn(unsigned short int id_player, GameTile& tile, const WildlifeToken& token);
     void makePlayerTurn();
     void initPlayerboards();
     void getInfoConsole();
