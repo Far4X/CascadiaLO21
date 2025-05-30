@@ -96,7 +96,7 @@ void Game::initPlayerboards(){
 
     for (int i = 0; i < 5; i ++){
         m_starter_cards[i][0]->Rotate(Trigonometric);
-        m_starter_cards[i][0]->setPos(-1, 2);
+        m_starter_cards[i][0]->setPos(-1, 1);
         m_starter_cards[i][1]->setPos(0, 0);
         m_starter_cards[i][2]->setPos(0, 1);
 

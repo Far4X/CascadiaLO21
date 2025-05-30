@@ -89,14 +89,14 @@ void GraphXVue::onTabChanged(int index)
 
 void GraphXVue::onRightClickAt(const QPointF& scenePos)
 {
-    int col = static_cast<int>(scenePos.x() / xOffset);
+    int row = static_cast<int>(scenePos.x() / xOffset);
     float yAdjusted = scenePos.y();
 
-    if (col % 2 == 1) {
+    if (row % 2 == 1) {
         yAdjusted -= yOffset;  // décale vers le haut pour les colonnes impaires
     }
 
-    int row = static_cast<int>(yAdjusted / tileHeight);
+    int col = static_cast<int>(yAdjusted / tileHeight);
 
     // Debug
     std::cout<<currentboard<<" ";

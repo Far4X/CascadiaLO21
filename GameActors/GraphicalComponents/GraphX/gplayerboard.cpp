@@ -47,7 +47,7 @@ void GPlayerBoard::initHexTiles(){
     for (int col = 0; col < max_size; ++col) {
         for (int row = 0; row < max_size; ++row) {
             QLabel* tileLabel = new QLabel(this);  // Création d'un QLabel pour chaque tuile
-            HexCell::Offset off(row,col);
+            HexCell::Offset off(row, col);
             HexCell hex (PlayerBoard::offsetToAxial(off));
             QPixmap pixmap = PixmapFactory::createTile(getTile(hex.getQ(),hex.getR()));
             if (pixmap.isNull()) {std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;}
@@ -56,11 +56,11 @@ void GPlayerBoard::initHexTiles(){
             tileLabel->setScaledContents(true);  // Pour que l'image remplisse le QLabel
 
             // Calcul des positions x et y pour chaque tuile en utilisant un décalage
-            int x = (col) * xOffset;
-            int y = (row) * tileHeight;
+            int x = (row) * xOffset;
+            int y = (col) * tileHeight;
 
             // Décalage pour les lignes impaires
-            if (col % 2 == 1) {
+            if (row % 2 == 1) {
                 y += yOffset;  // Décalage vertical pour les colonnes impaires
             }
 

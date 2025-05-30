@@ -136,7 +136,7 @@ void CPlayerBoard::reprBoard(){
             base_y += m_size_tile * 2;
         }
         base_x += 3 * m_size_tile;
-        if (x % 2 == 0){
+        if (x % 2 == 1){
             base_y = -m_size_tile -m_y_swift;
         }
         else {

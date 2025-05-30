@@ -70,8 +70,11 @@ void PlayerBoard::removeLast(){
 
 bool PlayerBoard::hasNeighbour(const HexCell& pos){
     /*Permet de savoir si une tuile a des voisins ou pas. Utile pour la pose des tuiles*/
+    HexCell::Offset poso = axialToOffset(pos);
+    std::cout << "Self : " << poso.getCol() << ", " << poso.getRow() << std::endl;
     for (size_t i = 0; i < pos.getNeighbors().size(); i++){
         HexCell::Offset neight = axialToOffset(pos.getNeighbors()[i]);
+        std::cout << "Checking neight : " << neight.getCol() << ", " << neight.getRow() << std::endl;
         if (neight.getCol() >= 0 && neight.getRow() >= 0 && this->TileHolder::getTile(neight.getCol(), neight.getRow()) != nullptr){
             return true;
         }
