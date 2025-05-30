@@ -5,6 +5,11 @@
 #include "scoring/scoringstrategy.hpp"
 #include <vector>
 #include <memory>
+<<<<<<< Updated upstream
+=======
+#include <functional>
+#include <unordered_set>
+>>>>>>> Stashed changes
 
 
 namespace ScoreUtils {
@@ -54,6 +59,7 @@ namespace ScoreUtils {
         }
     };
 
+<<<<<<< Updated upstream
     template <typename Type>
     std::vector<std::vector<GameTile*>> getAdjacentComponents(const PlayerBoard& board, int mode, Type filter, int size) {
         /* idée : pour chaque tuile, on récupère les voisins, ensuite pour chaque voisin, on va comparer selon le critère d'adjacence
@@ -133,5 +139,43 @@ namespace ScoreUtils {
         }
         return groups;
     }
+=======
+#include <vector>
+#include <functional>
+
+    using TileGrid = std::vector<std::vector<GameTile*>>;
+
+    // struct représentant les conditions pour choisir une tuile
+    using KeepTile = std::function<bool(GameTile*)>;
+    using UniteTile = std::function<bool(GameTile*, GameTile*)>;
+    struct AdjacencyPolicy {
+        KeepTile shouldKeep;
+        UniteTile shouldUnite;
+        AdjacencyPolicy(KeepTile k, UniteTile u) : shouldKeep(std::move(k)), shouldUnite(std::move(u)) {}
+    };
+    UnionFind buildUnionFind(const PlayerBoard& board, int size, const AdjacencyPolicy& policy, TileGrid& tiles);
+    TileGrid buildBuckets(const TileGrid& tiles, UnionFind uf);
+    TileGrid extractGroups(TileGrid buckets);
+    TileGrid getComponents(const PlayerBoard& board, int size, const AdjacencyPolicy& policy);
+    AdjacencyPolicy makeBiomePolicy(const PlayerBoard& board, Biome filter);
+    AdjacencyPolicy makeWildlifePolicy(Wildlife filter);
+    AdjacencyPolicy makeNeighborPolicy(const PlayerBoard& board, Wildlife filter, int threshold, CompareFunction cmp);
+    AdjacencyPolicy makeSingletonPolicy(Wildlife filter);
+    AdjacencyPolicy combinePolicies(const AdjacencyPolicy& a, const AdjacencyPolicy& b);
+    std::vector<GameTile*> flatten(const std::vector<std::vector<GameTile*>>& groups);
+    GameTile* findTile(const std::vector<GameTile*>& tiles, int q, int r);
+    void getLineFormations(const PlayerBoard& board, int size, Wildlife filter, TileGrid& candidates, std::vector<int>& points, const std::vector<int>& points_lookup);
+    void getRingFormations(const PlayerBoard& board, int size, Wildlife filter, TileGrid& candidates, std::vector<int>& points, const std::vector<int>& points_lookup);
+    void getShapeFormations(const PlayerBoard& board, int size, Wildlife filter, TileGrid& candidates, std::vector<int>& points, const std::vector<int>& points_lookup);
+    void dfs(int idx, int curr_score, int& best_score, const std::vector<int>& points, const TileGrid& candidates, std::unordered_set<GameTile*>& used);
+    struct Match {
+        int matchId;
+        std::vector<GameTile*> tiles;
+    };
+    std::vector<std::pair<GameTile*,GameTile*>> getLinesOfSight(const PlayerBoard& board, Wildlife filter);
+    std::vector<std::vector<HexCell>> getOrientations(const std::vector<HexCell>& shape);
+    std::vector<std::vector<HexCell>> getAllTemplates(const std::vector<std::vector<HexCell>>& shapes);
+    int countUniqueTokensBetween(const PlayerBoard& board, GameTile* a, GameTile* b, Wildlife filter);
+>>>>>>> Stashed changes
 }
 

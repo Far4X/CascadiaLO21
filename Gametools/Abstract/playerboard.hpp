@@ -28,10 +28,23 @@ public:
     PlayerBoard();
     void show() override;
     std::string getSaveString() const override;
+<<<<<<< Updated upstream
     void moveHz(short int step = 1);
     void moveVt(short int step = 1);
     void addTile(GameTile& tile,int* q,int* r, bool overwrite);
     bool hasNeighbour(unsigned short int x, unsigned short int y);
+=======
+    //void moveHz(short int step = 1);
+    //void moveVt(short int step = 1);
+    inline bool getIntentionToken() const {return m_want_use_naturetoken;};
+    inline void setIntentionToken(bool val) {m_want_use_naturetoken = val;};
+    void addTile(GameTile& tile);
+    bool hasNeighbour(const HexCell& pos);
+    inline HexCell getPointedCell() const {return m_pointed_cell;};
+    inline void resetPointedCell() {m_pointed_cell = HexCell(0,0);};
+    GameTile* getTile(int const &q, int const &r) const;
+    GameTile* getOffsetTile(int const &x, int const &y) const;
+>>>>>>> Stashed changes
 };
 
 #endif // PLAYERBOARD_HPP

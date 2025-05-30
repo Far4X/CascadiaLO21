@@ -56,7 +56,7 @@ void Game::scoreGame() {
 
         // PARTIE TUILES
         TileScoringStrategy tile_strategy;
-        auto tile_scores = m_scorer.obtainScore(*board, tile_strategy);
+        std::vector<double> tile_scores = m_scorer.obtainScore(*board, tile_strategy);
         m_players[i]->setTilesScores(tile_scores);
 
         // PARTIE JETONS

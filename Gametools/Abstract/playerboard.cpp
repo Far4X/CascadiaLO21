@@ -108,3 +108,16 @@ bool PlayerBoard::hasNeighbour(unsigned short int x, unsigned short int y){
     }
     return false;
 }
+<<<<<<< Updated upstream
+=======
+
+GameTile* PlayerBoard::getTile(int const &q, int const &r) const{
+    HexCell::Offset offset_pos = PlayerBoard::axialToOffset(HexCell(q, r));
+    //std::cout << "Offset pos : " << offset_pos.getCol() << " " << offset_pos.getRow() << std::endl;
+    return TileHolder::getTile(offset_pos.getCol(), offset_pos.getRow());
+}
+
+GameTile* PlayerBoard::getOffsetTile(int const &x, int const &y) const{
+    return TileHolder::getTile(x, y);
+}
+>>>>>>> Stashed changes
