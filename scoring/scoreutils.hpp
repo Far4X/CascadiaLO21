@@ -5,14 +5,8 @@
 #include "scoring/scoringstrategy.hpp"
 #include <vector>
 #include <memory>
-<<<<<<< Updated upstream
-=======
 #include <functional>
 #include <unordered_set>
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 
 namespace ScoreUtils {
@@ -62,95 +56,10 @@ namespace ScoreUtils {
         }
     };
 
-<<<<<<< Updated upstream
-    template <typename Type>
-    std::vector<std::vector<GameTile*>> getAdjacentComponents(const PlayerBoard& board, int mode, Type filter, int size) {
-        /* idée : pour chaque tuile, on récupère les voisins, ensuite pour chaque voisin, on va comparer selon le critère d'adjacence
-        * qui nous intéresse. Enfin, on applique l'algo UnionFind.
-        */
-        TileGrid tiles(size, std::vector<GameTile*>(size, nullptr));
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                tiles[y][x] = board.getTile(x, y);
-            }
-        }
-        size_t n = size * size;
-        UnionFind uf(n);
-        // boucle principale sur tuiles
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                GameTile* curr_tile = tiles[y][x];
-                if (curr_tile == nullptr || !curr_tile->matchesType(filter)) {
-                    continue;
-                }
-                int curr_id = curr_tile->getId();
-                // traitement voisins
-                if (mode == 1) {
-                    // mode biome
-                    for (int side = 0; side < 6; side++) {
-                        if (curr_tile->getBiome(side) != filter) {
-                            continue;
-                        }
-                        Direction d = static_cast<Direction>(side);
-                        GameTile* neigh_tile = board.getNeighborTile(*curr_tile, d);
-                        if (neigh_tile == nullptr) {
-                            continue;
-                        }
-                        int opp_side = (side + 3) % 6;
-                        if (neigh_tile->getBiome(opp_side) != filter) {
-                            continue;
-                        }
-                        int neigh_id = neigh_tile->getId();
-                        if (neigh_id > curr_id) {
-                            uf.unite(neigh_id, curr_id);
-                        }
-                    }
-                }
-                else if (mode == 2){
-                    // mode wildlife
-                    auto neighs = board.getNeighborTiles(*curr_tile);
-                    for (size_t i = 0; i < neighs.size(); i++) {
-                        GameTile* neigh_tile = neighs[i];
-                        if (neigh_tile == nullptr || !neigh_tile->matchesType(filter)) {
-                            continue;
-                        }
-                        int neigh_id = neigh_tile->getId();
-                        uf.unite(curr_id, neigh_id);
-                    }
-                }
-                else {
-                    throw "Mode invalide";
-                }
-            }
-        }
-        // maintenant, on va regrouper les Component par parent (représentatif c.f. vidéo que j'ai envoyé sur Union Find)
-        std::vector<std::vector<GameTile*>> buckets(n);
-        for (int y = 0; y < size; ++y) {
-            for (int x = 0; x < size; ++x) {
-                GameTile* tile = tiles[y][x];
-                if (!tile || !tile->matchesType(filter))  // redondant mais au cas où
-                    continue;
-                int root = uf.find(tile->getId());
-                buckets[root].push_back(tile);
-            }
-        }
-        // enfin, on va créer les vrais groupes, cette fois ci en supprimant aussi les indices ou c'est vide
-        std::vector<std::vector<GameTile*>> groups;
-        for (size_t id = 0; id < n; id++) {
-            if (!buckets[id].empty())
-                groups.push_back(std::move(buckets[id]));
-        }
-        return groups;
-    }
-=======
-#include <vector>
-#include <functional>
-
-    using TileGrid = std::vector<std::vector<GameTile*>>;
-
     // struct représentant les conditions pour choisir une tuile
     using KeepTile = std::function<bool(GameTile*)>;
     using UniteTile = std::function<bool(GameTile*, GameTile*)>;
+    using CompareFunction = std::function<bool(int,int)>
     struct AdjacencyPolicy {
         KeepTile shouldKeep;
         UniteTile shouldUnite;
@@ -179,9 +88,5 @@ namespace ScoreUtils {
     std::vector<std::vector<HexCell>> getOrientations(const std::vector<HexCell>& shape);
     std::vector<std::vector<HexCell>> getAllTemplates(const std::vector<std::vector<HexCell>>& shapes);
     int countUniqueTokensBetween(const PlayerBoard& board, GameTile* a, GameTile* b, Wildlife filter);
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
 

@@ -34,16 +34,9 @@ public:
     inline void setR(const int& r){m_r = r;}
     HexCell operator+(const HexCell& other) const;
     HexCell operator-(const HexCell& other) const;
-<<<<<<< Updated upstream
-=======
     bool operator==(const HexCell& other) const;
     bool operator<(const HexCell& other) const;
     HexCell rotate60() const;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-
     HexCell operator+=(const HexCell& other);
     HexCell operator-=(const HexCell& other);
 

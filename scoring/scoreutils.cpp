@@ -4,11 +4,6 @@
 #include "bearscoringcards/bearscoringcardb.hpp"
 #include "bearscoringcards/bearscoringcardc.hpp"
 #include "bearscoringcards/bearscoringcardd.hpp"
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
 
 // Elk cards
 #include "elkscoringcards/elkscoringcarda.hpp"
@@ -37,10 +32,6 @@
 #include <cassert>
 #include <set>
 #include <algorithm>
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 namespace ScoreUtils {
     std::unique_ptr<WildlifeScoringStrategy> makeWildlifeStrategy(const std::string& animal, char code) {
@@ -118,8 +109,24 @@ namespace ScoreUtils {
             throw "invalid animal";
         }
     }
-<<<<<<< Updated upstream
-=======
+
+    // lines
+    std::vector<HexCell> line_1 = {HexCell(0, 0)};
+    std::vector<HexCell> line_2 = {HexCell(0, 0), HexCell(1, 0)};
+    std::vector<HexCell> line_3 = {HexCell(0, 0), HexCell(1, 0), HexCell(2, 0)};
+    std::vector<HexCell> line_4 = {HexCell(0, 0), HexCell(1, 0), HexCell(2, 0), HexCell(3, 0)};
+
+    // triangle
+    std::vector<HexCell> triangle = {HexCell(0, 0), HexCell(1, 0), HexCell(0, 1)};
+
+    // diamond
+    std::vector<HexCell> diamond = {HexCell(0, 0), HexCell(1, 0), HexCell(0, 1), HexCell(1, 1)};
+
+    // ring
+    std::vector<HexCell> ring = {HexCell(0, 0), HexCell(1, 0), HexCell(1, -1), HexCell(0, -1), HexCell(-1, 0), HexCell(-1, 1)};
+
+    std::vector<std::vector<HexCell>> shapes_b = { line_1, line_2, triangle, diamond };
+
 
     // lines
     std::vector<HexCell> line_1 = {HexCell(0, 0)};
@@ -565,8 +572,4 @@ namespace ScoreUtils {
         }
         return static_cast<int>(seen_animals.size());
     }
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
