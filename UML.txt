@@ -238,8 +238,27 @@ package Gametools {
             + ~BaseClass()
         }
 
-        abstract class DeckTile {
-            + DeckTile();
+    abstract class DeckTile {
+        -m_deck_tiles : std::vector<GameTile*> 
+        -m_deck_token : std::vector<const WildlifeToken*> 
+        -m_tiles[4] : GameTile* 
+        -m_displayed_tokens[4] :  const WildlifeToken* 
+        -getInstance() : static DeckTile& 
+        -DeckTile();
+        - {abstract} ~DeckTile()
+        -m_id_token_to_rm : unsigned short int 
+        -m_can_flush : bool
+        -m_id_card_to_rm : unsigned short int 
+
+        + getTile(unsigned short int i) : GameTile*
+        + fillPlate() : int
+        + canFlushWithoutNaturetoken() const : bool 
+        + addTile(GameTile* tile) : void
+        + addToken(const WildlifeToken* token) : void
+        + shuffle() : void
+        + clearTokens() : void
+        + validateChanges() : void
+        + getCouple(int id_card, int id_token = -1) : std::tuple<GameTile*, const WildlifeToken*> 
         }
 
         abstract NotifiableInterface {
@@ -259,8 +278,11 @@ package Gametools {
         }
 
         abstract class PlayerBoard {
-            - m_q_center : unsigned short int
-            - m_r_center : unsigned short int
+            - m_pos_last_token : HexCell
+            - m_pos_last_tile : HexCell
+
+            - m_pointed_cell : HexCell
+            - m_target : NotifiableInterface*
 
             + {static} int floorDiv(int n);
             + {static} axialToOffset(const HexCell& hex) : Offset
@@ -268,8 +290,16 @@ package Gametools {
             + PlayerBoard()
             + show() : void
             + getSaveString() const : std::string
-            + moveHz(short int step) : void
-            + moveVt(short int step) : void
+            + addTile(GameTile& tile) : void
+            + addToken(const WildlifeToken* token, HexCell& pos_target) : void
+            + removeLast() : void
+            + hasNeighbour(const HexCell& pos) : bool
+            + getPointedCell() const : HexCell
+            + resetPointedCell() : void
+            + setPointedCell(HexCell cell) : void
+            + getTarget()const : NotifiableInterface*
+            + getTile(int const &q, int const &r) const : GameTile* 
+            + pointCell(int q, int r) : void
         }
 
         abstract TileHolder {
@@ -318,9 +348,22 @@ package Gametools {
             - GameTile& operator=(const GameTile& oth)
             - GameTile(const GameTile& oth)
 
-            + void Rotate(Rotation dir)
-            + int draw();
-            + unsigned int getID() const
+            + Rotate(Rotation dir) : void
+            + draw() : int
+            + getID() const : unsigned int
+
+            + setPos(int const &q, int const &r) : void 
+            + getNbWildlife() const : int
+            + getWildlife(unsigned short int nb) const : Wildlife 
+            + GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy)
+            + getBiome(unsigned short int number) const : Biome
+            + getId() const : unsigned int
+            + getToken() const : const WildlifeToken* 
+            + setWildLifeToken(const WildlifeToken* wlt) : inline void 
+            + matchesType(Wildlife type) const : bool
+            + matchesType(Biome biome) const : bool
+            + isKeystone(const std::string& description) const : bool 
+            + show(unsigned short int size = 4) const : void
 
         }
         class HexCell {
