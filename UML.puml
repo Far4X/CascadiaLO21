@@ -1,6 +1,6 @@
 
 @startuml UML
-
+scale 0.5
 
 package Data_types {
     enum Wildlife
@@ -388,6 +388,7 @@ package Gametools {
         }
 
         BaseClass <|-- Printable
+        BaseClass <|-- SalvableThing
 
         DeckTile <|-- CDeckTile
         DeckTile <|-- GDeckCard
@@ -395,7 +396,6 @@ package Gametools {
         Printable <|-- GameTile
         Printable <|-- PlayerBoard
 
-        SalvableThing <|-- BaseClass
         SalvableThing <|-- Game
         SalvableThing <|-- GameTile
         SalvableThing <|-- PlayerBoard
@@ -440,29 +440,34 @@ package Gametools {
 
         }
         class HexCell {
-            - int m_q;
-            - int m_r;
-            + {static} const std::vector<HexCell> m_directions;
+            - int m_q
+            - int m_r
+            + {static} m_directions : const std::vector<HexCell>
 
             + {static} axialToOffset(const HexCell& hex, unsigned int size) : Offset
             + {static} offsetToAxial(const Offset& off, unsigned int size) : HexCell
             + {static} floorDiv(int n) : int
+            + {static} directionTo(const HexCell& a, const HexCell& b) : HexCell
 
             + HexCell(int q, int r)
             + getQ() const : int
             + getR() const :int
             + getS() const : int
 
-            + void setQ(const int& q)
-            + void setR(const int& r)
-            + HexCell operator+(const HexCell& other) const
-            + HexCell operator-(const HexCell& other) const
-            + bool operator==(const HexCell& other) const;
-            + bool operator!=(const HexCell& other) const;
+            + setQ(const int& q)
+            + setR(const int& r)
+            + HexCell operator+(const HexCell& other) const : HexCell
+            + HexCell operator-(const HexCell& other) const : HexCell
+            + operator==(const HexCell& other) const : bool
+            + operator!=(const HexCell& other) const : bool
+            + operator<(const HexCell& other) const : bool
+            + operator+=(const HexCell& other) : HexCell
+            + operator-=(const HexCell& other) : HexCell
+            + rotate60() const : HexCell
 
-            + HexCell getDirection(Direction d) const
-            + HexCell getNeighbors(Direction d) const
-            + std::vector<HexCell> getNeighbors() const
+            + getDirection(Direction d) const : HexCell
+            + getNeighbors(Direction d) const : HexCell
+            + getNeighbors() const : std::vector<HexCell>
         }
 
         GameTile --> Background
