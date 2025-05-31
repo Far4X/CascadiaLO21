@@ -60,8 +60,23 @@ package GameActors {
                 + CPlayerMenu()
                 + void show()
             }
+            class CTokenMenu {
+                - m_deck_tile : DeckTile*
+                - m_caller : Player* const
+                - m_nb_tokens : unsigned short int 
+                + CTokenMenu(NotifiableInterface* tar, DeckTile* decktile, Player* caller);
+                + ~CTokenMenu()
+                + show() : void
+            }
+            class CValidateMenu {
+                + CValidateMenu(NotifiableInterface* tar)
+                + ~CValidateMenu()
+                + show() : void
+            }
             CMenu <|-- CGameMenu
             CMenu <|-- CPlayerMenu
+            CMenu <|-- CTokenMenu
+            CMenu <|-- CValidateMenu
         }
         package GXMenus {
             abstract GMenu {
@@ -118,6 +133,42 @@ package GameActors {
                 + void validateNames()
                 + void show()
             }
+
+            class GTokenMenu {
+                - QGridLayout* m_main_layout
+                - QPushButton* m_btn_validate
+                - QPushButton* m_btn_clear_tokens
+                - QPushButton* m_btn_no_token
+                - QPushButton* m_btn_multichoice
+                - QLabel* m_label
+                - QLabel* m_label_token
+                - QLabel* m_label_tile
+                - QSpinBox* m_spin_tile
+                - QSpinBox* m_spin_token
+                - DeckTile* m_decktile
+                - Player* m_caller
+
+                + GTokenMenu(NotifiableInterface* tar, DeckTile* decktile, Player* caller)
+                + ~GTokenMenu()
+                + void selectTile()
+                + void clearTokens()
+                + void chooseMultiple()
+                + void pushResults()
+                + void show()
+            }
+            class GValidateMenu {
+                - QLabel* m_label
+                - QGridLayout* m_layout
+                - QPushButton* m_btn_validate
+                - QPushButton *m_btn_reject
+
+                + GValidateMenu(NotifiableInterface* tar);
+                + ~GValidateMenu();
+                + void show() override;
+                + void validate();
+                + void reject();
+            }
+
             GMenu <|-- GGameMenu
             GMenu  <|-- GPlayerMenu
         }
@@ -193,20 +244,36 @@ package GameActors {
     }
 
     class Game {
-        - m_nb_players: unsigned short = 0
+        - m_nb_players: unsigned short
         - m_player_menu: Menu<std::string>*
         - m_game_menu: Menu<std::tuple<std::string, std::string>>*
         - m_is_console: const bool
         - m_players: std::vector<Player*>
-        - m_cards: GameTile** = nullptr
-        - m_nb_cards: unsigned short int = 0
-        - m_status: GameStatus = GameStatus::NotStarted
+        - m_cards: GameTile**
+        - m_nb_cards: unsigned short int
+        - m_status: GameStatus
         - m_scorer: Score
+
+        - Menu<unsigned short int>* m_menu_token
+        - Menu<bool>* m_menu_validate
+        - DeckTile* m_decktile
+        - bool m_is_waiting_for_position
+        - bool m_is_waiting_to_place_tile
+        - GameTile* m_tile_to_add
+        - const WildlifeToken* m_token_to_add
+        - PlayerBoard* m_board_before_change
+        - std::vector<const WildlifeToken*> m_tokens
+        - GameTile* m_starter_cards[5][3];
+        - unsigned short int current_tour = 0;
+        - unsigned short int current_player = 0;
+        - std::vector <void *> throwaway;
+        - NotifiableInterface* const m_target;
+        - void endTurn();
 
         + Game(is_console: const bool = false)
         + ~Game()
         + getSaveString() const: std::string
-        + readCards(path: std::string = "tiles.cts"): void
+        + readCards(path: std::string): void
         + play(): void
         + init(): void
         + getInfoConsole(): void
@@ -216,6 +283,12 @@ package GameActors {
         + notify(code: unsigned int): void
         + restart(): void
         + quit(): void
+
+        + getTileAndToken(unsigned short int pos_tile, unsigned short int pos_token = -1) : void
+        + makePlayerTurn() : void
+        + initPlayerboards() : void
+        + notifyInterface(unsigned int code) : void
+        + const DeckTile* getDeckTile() const : : void
     }
 
     Player *-- "0..1" PlayerBoard
@@ -369,17 +442,23 @@ package Gametools {
         class HexCell {
             - int m_q;
             - int m_r;
-            - {static} const std::vector<HexCell> m_directions;
+            + {static} const std::vector<HexCell> m_directions;
+
+            + {static} axialToOffset(const HexCell& hex, unsigned int size) : Offset
+            + {static} offsetToAxial(const Offset& off, unsigned int size) : HexCell
+            + {static} floorDiv(int n) : int
 
             + HexCell(int q, int r)
-            + int getQ() const
-            + int getR() const
-            + int getS() const
+            + getQ() const : int
+            + getR() const :int
+            + getS() const : int
 
             + void setQ(const int& q)
             + void setR(const int& r)
             + HexCell operator+(const HexCell& other) const
             + HexCell operator-(const HexCell& other) const
+            + bool operator==(const HexCell& other) const;
+            + bool operator!=(const HexCell& other) const;
 
             + HexCell getDirection(Direction d) const
             + HexCell getNeighbors(Direction d) const
