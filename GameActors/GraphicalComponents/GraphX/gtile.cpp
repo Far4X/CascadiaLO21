@@ -43,7 +43,7 @@ QPixmap PixmapFactory::createIconWithOverlay(const QString& basePath, const QStr
     return result;
 }
 
-QString PixmapFactory::matchTile(GameTile* tile){
+QString PixmapFactory::matchTile(const GameTile* tile){
     int desert = 0;
     int lake = 0;
     int montains = 0;
@@ -96,33 +96,39 @@ QString PixmapFactory::matchTile(GameTile* tile){
 
 }
 
-QString PixmapFactory::matchToken(GameTile* tile,int token){
+QString PixmapFactory::matchToken(Wildlife wild){
+
+    if(wild == Bear)
+    {
+        return ":/Token/Assets/Token/bear.png";
+    }
+    if(wild == Fox)
+    {
+        return ":/Token/Assets/Token/fox.png";
+    }
+    if(wild == Elk)
+    {
+        return ":/Token/Assets/Token/elk.png";
+    }
+    if(wild == Hawk)
+    {
+        return ":/Token/Assets/Token/hawk.png";
+    }
+    if(wild == Salmon)
+    {
+        return ":/Token/Assets/Token/salmon.png";
+    }
+    return "";
+}
+
+QString PixmapFactory::matchToken(const GameTile* tile,int token){
     if(tile == nullptr)
     {
         return "";
     }
     if(tile->getToken() == nullptr)
     {
-        if(tile->getWildlife(token) == Bear)
-        {
-            return ":/Token/Assets/Token/bear.png";
-        }
-        if(tile->getWildlife(token) == Fox)
-        {
-            return ":/Token/Assets/Token/fox.png";
-        }
-        if(tile->getWildlife(token) == Elk)
-        {
-            return ":/Token/Assets/Token/elk.png";
-        }
-        if(tile->getWildlife(token) == Hawk)
-        {
-            return ":/Token/Assets/Token/hawk.png";
-        }
-        if(tile->getWildlife(token) == Salmon)
-        {
-            return ":/Token/Assets/Token/salmon.png";
-        }
+        return matchToken(tile->getWildlife(token));
     }
     if(tile->getToken()->getWildlifeType() == Bear)
     {
@@ -151,7 +157,7 @@ QString PixmapFactory::matchToken(GameTile* tile,int token){
 
 }
 
-QPixmap PixmapFactory::createTile(GameTile* tile){
+QPixmap PixmapFactory::createTile(const GameTile* tile){
     int nbtoken = 1;
     const WildlifeToken* token;
     if (tile!=nullptr)

@@ -93,23 +93,62 @@ void GraphXVue::onTabChanged(int index)
     currentboard = index;
 }
 
-void GraphXVue::onRightClickAt(const QPointF& scenePos)
-{
-    int row = static_cast<int>(scenePos.x() / xOffset);
-    float yAdjusted = scenePos.y();
+QPointF offsetToScenePos(HexCell::Offset offset) {
+    int row = offset.getRow();
+    int col = offset.getCol();
 
-    if (row % 2 == 1) {
-        yAdjusted -= yOffset;  // décale vers le haut pour les colonnes impaires
+    float x = col * xOffset;
+    float y = row * tileHeight;
+
+    if (col % 2 == 1) {
+        y += yOffset;
     }
 
-    int col = static_cast<int>(yAdjusted / tileHeight);
+    return QPointF(x, y);
+}
+
+void GraphXVue::onRightClickAt(const QPointF& scenePos)
+{
+    // On tente de deviner la tuile
+    int row = static_cast<int>(scenePos.x() / xOffset);  // horizontal (colonne)
+    float yAdjusted = scenePos.y();
+
+    if (row % 2 == 1)yAdjusted -= yOffset;
+
+    int col = static_cast<int>(yAdjusted / tileHeight);  // vertical (ligne)
+
+    HexCell::Offset guessed(row, col);
+
+    // NE FONCTIONNE PAS ENCORE
+
+    /*
+    QPointF center = offsetToScenePos(guessed);
+    float radius = tileHeight; // 2.0f; // on va verif si on a bien guess
+
+    if (!isPointInHex(scenePos, center, radius)) {
+        // tester les 6 voisines
+        std::vector<HexCell::Offset> neighbors = {
+            {row - 1, col}, {row + 1, col},
+            {row, col - 1}, {row, col + 1},
+            {col % 2 == 0 ? row - 1 : row + 1, col - 1},
+            {col % 2 == 0 ? row - 1 : row + 1, col + 1}
+        };
+
+        for (const auto& neighbor : neighbors) {
+            QPointF neighCenter = offsetToScenePos(neighbor);
+            if (isPointInHex(scenePos, neighCenter, radius)) {
+                guessed = neighbor;
+                break;
+            }
+        }
+    }
+    */
 
     // Debug
     std::cout<<currentboard<<" ";
-    qDebug() << "Clique droit sur row:" << row << "col:" << col;
-    HexCell::Offset off(row,col);
-    HexCell hex (PlayerBoard::offsetToAxial(off));
-    qDebug() << "Clique droit sur r:" << PlayerBoard::offsetToAxial(off).getR() << "q:" << PlayerBoard::offsetToAxial(off).getQ();
+    qDebug() << "Clique droit sur row:" << guessed.getRow() << "col:" << guessed.getCol();
+    HexCell hex (PlayerBoard::offsetToAxial(guessed));
+    qDebug() << "Clique droit sur r:" << PlayerBoard::offsetToAxial(guessed).getR() << "q:" << PlayerBoard::offsetToAxial(guessed).getQ();
     boards[currentboard]->setPointedCell(hex);
     boards[currentboard]->getTarget()->notifyInterface(4); // j'ai cliqué sur le plateau est ce que je peux poser | 3 une fois qu'on a select toekn et carte
     return;
@@ -119,6 +158,10 @@ void GraphXVue::onRightClickAt(const QPointF& scenePos)
 void GraphXVue::addMenu(QWidget* menu){
     m_right_panel_layout->addWidget(menu);
 
+}
+
+void GraphXVue::addDeck(QWidget* deck){
+    m_left_panel_layout->addWidget(deck);
 }
 
 

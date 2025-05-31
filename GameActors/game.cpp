@@ -141,6 +141,7 @@ void Game::makePlayerTurn(){
         GTokenMenu* gMenu = new GTokenMenu(this, m_decktile, m_players[current_player]);
         m_menu_token = gMenu;
         GraphXVue::instance()->addMenu(gMenu);
+
     }
     return m_menu_token->show();
 }
@@ -191,7 +192,6 @@ void Game::endTurn(){
         GValidateMenu* gMenu = new GValidateMenu(this);
         m_menu_validate = gMenu;
         GraphXVue::instance()->addMenu(gMenu);
-
     }
     return m_menu_validate->show();
 }

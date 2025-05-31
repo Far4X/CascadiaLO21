@@ -16,6 +16,7 @@
 
 class GPlayerBoard;
 
+
 class GraphXView : public QGraphicsView {
     Q_OBJECT
 public:
@@ -72,6 +73,7 @@ public:
     QWidget* getWindow(){return m_window;}
     QGraphicsScene* getScene() const { return m_scene; }
     void addMenu(QWidget* menu);
+    void addDeck(QWidget* deck);
 
 private slots:
     void onTabChanged(int index);
@@ -105,6 +107,18 @@ private:
     QGraphicsProxyWidget* proxy;
     std::vector<QGraphicsProxyWidget*> proxies;
 
+    //detection :
+
+    bool isPointInHex(QPointF point, QPointF center, float radius) {
+        QPolygonF hex;
+        for (int i = 0; i < 6; ++i) {
+            float angle_deg = 60 * i - 30;  // flat-topped
+            float angle_rad = M_PI / 180.0 * angle_deg;
+            hex << QPointF(center.x() + radius * std::cos(angle_rad),
+                           center.y() + radius * std::sin(angle_rad));
+        }
+        return hex.containsPoint(point, Qt::OddEvenFill);
+    }
 
     void onRightClickAt(const QPointF& scenePos);
 
