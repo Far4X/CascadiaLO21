@@ -40,19 +40,19 @@ GameTile::GameTile(int id, std::string description) : HexCell(), m_id(id){
     for (int i = 7; i < m_numtypes + 7; i++){
         switch (description[i]) {
         case '1' :
-            m_possible_wltoken[i] = Bear;
+            m_possible_wltoken[i-7] = Bear;
             break;
         case '2' :
-            m_possible_wltoken[i] = Salmon;
+            m_possible_wltoken[i-7] = Salmon;
             break;
         case '3' :
-            m_possible_wltoken[i] = Elk;
+            m_possible_wltoken[i-7] = Elk;
             break;
         case '4':
-            m_possible_wltoken[i] = Hawk;
+            m_possible_wltoken[i-7] = Hawk;
             break;
         case '5':
-            m_possible_wltoken[i] = Fox;
+            m_possible_wltoken[i-7] = Fox;
             break;
         default:
             break;
@@ -88,7 +88,7 @@ std::string GameTile::getSaveString() const{
     return "";
 }
 
-char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size){ //Merge with hexcell function
+char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size, bool add_pos){ //Merge with hexcell function
     unsigned short int height = 2*size+1;
     unsigned short int width = 4*size;
     char **rt = new char*[height];
@@ -196,18 +196,19 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
             }
         }
     }
+
     // Adding informations
 
-
-    HexCell::Offset pos = HexCell::axialToOffset(*tile, max_size);
-    rt[size][1] = char(pos.getCol() / 10) + '0';
-    rt[size][2] = char(pos.getCol() % 10) + '0';
-    rt[size][3] = ',';
-    rt[size][4] = char(pos.getRow() / 10) + '0';
-    rt[size][5] = char(pos.getRow() % 10) + '0';
-
+    if (add_pos){
+        HexCell::Offset pos = HexCell::axialToOffset(*tile, max_size);
+        rt[size][1] = char(pos.getCol() / 10) + '0';
+        rt[size][2] = char(pos.getCol() % 10) + '0';
+        rt[size][3] = ',';
+        rt[size][4] = char(pos.getRow() / 10) + '0';
+        rt[size][5] = char(pos.getRow() % 10) + '0';
+    }
     if (tile->getToken() == nullptr){
-        for (int i = 0; i > tile->getNbWildlife(); i++){
+        for (int i = 0; i < tile->getNbWildlife(); i++){
             char out = ' ';
             switch (tile->getWildlife(i)){
             case Bear :
@@ -225,10 +226,14 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
             case Fox :
                 out = 'f';
                 break;
+            default :
+                std::cout << "Not here : " << tile->getWildlife(i) << std::endl;
+                out = '_';
+                break;
             }
-            rt[size + 1][i+2] = out;
+            rt[size][2*size + i+1] = out;
         }
-    }
+    }    
     else {
         char out = ' ';
         switch(tile->getToken()->getWildlifeType()){
@@ -248,12 +253,19 @@ char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned
             out = 'F';
             break;
         }
-        rt[size +1][3] = out;
+        rt[size][2*size + 1] = out;
     }
+
     if (tile->isKeystone()){
         rt[size-1][3] = '#';
     }
+
     return rt;
+}
+
+void GameTile::setPos(int const &q, int const &r){
+    this->setQ(q);
+    this->setR(r);
 }
 
 bool GameTile::isKeystone(const std::string& description)const {
@@ -265,8 +277,6 @@ bool GameTile::isKeystone(const std::string& description)const {
         }
         return true;
     }
-
-
     char first = description[0];
     for (int i = 1; i < 6; ++i) {
         if (description[i] != first) {
@@ -274,4 +284,41 @@ bool GameTile::isKeystone(const std::string& description)const {
         }
     }
     return true;
+}
+
+
+void GameTile::show(unsigned short int size) const {
+    const unsigned short int height = 2 * size + 1;
+    const unsigned short int width = 4 * size;
+
+    // Créer un tableau pour la représentation
+    char** tile_rpr = new char*[height];
+    for (unsigned short int i = 0; i < height; i++) {
+        tile_rpr[i] = new char[width];
+        for (unsigned short int j = 0; j < width; j++) {
+            tile_rpr[i][j] = ' ';
+        }
+    }
+
+    tile_rpr = getRepresentation(this, size, 4, false);
+
+    // Affichage ligne par ligne
+    for (int i = 0; i < 30; ++i) std::cout << "-";
+    std::cout << std::endl;
+
+    for (unsigned short int i = 0; i < height; i++) {
+        for (unsigned short int j = 0; j < width; j++) {
+            std::cout << tile_rpr[i][j];
+        }
+        std::cout << std::endl;
+    }
+
+    for (int i = 0; i < 30; ++i) std::cout << "-";
+    std::cout << std::endl;
+
+    // Libération mémoire
+    for (unsigned short int i = 0; i < height; i++) {
+        delete[] tile_rpr[i];
+    }
+    delete[] tile_rpr;
 }

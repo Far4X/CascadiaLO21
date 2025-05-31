@@ -35,14 +35,20 @@ public:
     HexCell operator+(const HexCell& other) const;
     HexCell operator-(const HexCell& other) const;
     bool operator==(const HexCell& other) const;
+    bool operator!=(const HexCell& other) const;    bool operator==(const HexCell& other) const;
     bool operator<(const HexCell& other) const;
-    HexCell rotate60() const;
     HexCell operator+=(const HexCell& other);
     HexCell operator-=(const HexCell& other);
+    HexCell rotate60() const;
 
     HexCell getDirection(Direction d) const;
     HexCell getNeighbor(Direction d) const;  // retourne le voisin de direction d
     std::vector<HexCell> getNeighbors() const;  // overloaded : retourne tous les voisins (les 6)
-};
+    bool operator<(const HexCell& other) const {
+        if (m_q != other.m_q) {
+            return m_q < other.m_q;
+        }
+        return m_r < other.m_r;
+    }};
 char** getRepresentationCell(const HexCell* cell, unsigned short int size, unsigned int max_size);
 

@@ -6,3 +6,4 @@ build/
 CMakeSettings.json
 CMakeLists.txt
 
+.DS_Store

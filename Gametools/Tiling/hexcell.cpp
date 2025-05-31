@@ -13,6 +13,13 @@ HexCell HexCell::operator-(const HexCell& other) const {
 	return HexCell(m_q - other.m_q, m_r - other.m_r);
 }
 
+bool HexCell::operator==(const HexCell& other) const{
+    return other.m_q == m_q && other.m_r == m_r;
+}
+bool HexCell::operator!=(const HexCell& other) const{
+    return !(other == *this);
+}
+
 bool HexCell::operator==(const HexCell& other) const {
     return (m_q == other.getQ() && m_r == other.getR());
 }

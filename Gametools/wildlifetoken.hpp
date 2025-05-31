@@ -7,6 +7,7 @@ enum Wildlife {Bear, Salmon, Hawk, Elk, Fox};
 inline std::initializer_list<Wildlife> Animals = { Wildlife::Bear, Wildlife::Salmon, Wildlife::Hawk, Wildlife::Elk, Wildlife::Fox };
 
 class WildlifeToken {
+    /*Représente un token de faune*/
     Wildlife m_type;
     int m_xdprintpos; //Décalage de la position d'affichage par rapport au centre du holder
     int m_ydprintpos;

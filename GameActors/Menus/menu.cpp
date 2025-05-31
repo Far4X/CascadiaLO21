@@ -6,7 +6,8 @@
 template <typename T>
 Menu<T>::Menu(NotifiableInterface* target) : Printable(){
     if (target == nullptr){
-        std::cout << "STNPTR" << std::endl;
+        throw CustomError("No target found for menu", 300);
+        //std::cout << "STNPTR" << std::endl;
     }
     m_target = target;
 }
@@ -18,6 +19,7 @@ Menu<T>::~Menu(){
 
 template <typename T>
 void Menu<T>::addResult(const T& tar){
+    /*Permet d'ajouter un résultat au menu*/
     T* new_t = new T [m_nb_result + 1];
     for (int i = 0; i < m_nb_result; i++){
         new_t[i] = m_results[i];
@@ -35,5 +37,7 @@ typename Menu<T>::Iterator Menu<T>::getIterator() const {
 
 template class Menu<std::string>;
 template class Menu<std::tuple<std::string, std::string>>;
+template class Menu<unsigned short int>;
+template class Menu<bool>;
 
 

@@ -11,9 +11,10 @@
 
 namespace ScoreUtils {
     using TileGrid  = std::vector<std::vector<GameTile*>>;
-    using TokenGrid = std::vector<std::vector<WildlifeToken*>>;
+    using CompareFunction= std::function<bool(int,int)>;
     std::unique_ptr<WildlifeScoringStrategy> makeWildlifeStrategy(const std::string& wildlife, char card);
-    std::vector<std::vector<GameTile*>> gatherAllTiles(const PlayerBoard& board, int size = MAX_SIZE);
+    TileGrid gatherAllTiles(const PlayerBoard& board, int size = MAX_SIZE);
+    TileGrid pruneTiles(const PlayerBoard& board, std::vector<GameTile*> tiles, std::function<bool(int,int)> cmp, int threshold);
 
 
     class UnionFind {  // c'est une structure de données super utile que j'ai trouvée, elle permet de réunir des set de manière efficace ce dont j'ai besoin pour la recherche de groupes adjacents

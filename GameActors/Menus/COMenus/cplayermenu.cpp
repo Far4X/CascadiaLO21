@@ -36,5 +36,5 @@ void CPlayerMenu::show() {
         std::cout << "-";
     }
     std::cout << std::endl;
-    m_target->notify(1);
+    m_target->notifyInterface(1);
 }

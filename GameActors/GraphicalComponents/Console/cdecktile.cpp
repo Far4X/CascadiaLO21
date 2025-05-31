@@ -1,12 +1,23 @@
 #include "cdecktile.hpp"
 #include <iostream>
 
-CDeckTile::CDeckTile() : DeckTile() {}
+CDeckTile& CDeckTile::getInstance(){
+    static CDeckTile ins;
+    return ins;
+}
+
+CDeckTile::CDeckTile() : DeckTile(){}
+
+std::string CDeckTile::getSaveString() const {
+    return "";
+}
+
 
 void CDeckTile::show(){
     for (int i = 0; i < 30; i++){
         std::cout << "-";
     }
+    std::cout << std::endl;
 
     char **tab = new char*[m_max_height];
     for (int i = 0; i < m_max_height; i++){
@@ -31,9 +42,11 @@ void CDeckTile::show(){
     }
 
     for (int i = 0; i < 4; i++){
-        const GameTile* tile = getTile(i, 0);
-        tile_rpr = getRepresentation(tile, m_size_tile, 4);
-
+        const GameTile* tile = getTile(i);
+        if (tile == nullptr){
+            throw CustomError("Tile doesn't exists", 999);
+        }
+        tile_rpr = getRepresentation(tile, m_size_tile, 4, false);
         for (int j = 0; j < 2*m_size_tile +1; j++){
             for (int k = 0; k < 4*m_size_tile; k++){
                 //if (tile[i][j] != ' ' || tab[base_y + i][base_x + j] == '*'){
@@ -43,7 +56,7 @@ void CDeckTile::show(){
             }
         }
         char token = ' ';
-        switch (m_deck_token[i]->getWildlifeType()){
+        switch (m_displayed_tokens[i]->getWildlifeType()){
         case Hawk :
             token = 'H';
             break;
@@ -62,8 +75,13 @@ void CDeckTile::show(){
         default :
             break;
         }
-        tab[0][i * 5 * m_size_tile] = token;
+        tab[0][i * 5 * m_size_tile + m_size_tile] = token;
     }
+
+    for (unsigned short int i = 0; i < tile_height; i++){
+        delete[] tile_rpr[i];
+    }
+    delete[] tile_rpr;
 
     for (int i = 0; i < m_max_height; i++){
         for (int j = 0; j < m_max_width; j++){
