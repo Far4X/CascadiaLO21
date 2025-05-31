@@ -9,6 +9,9 @@
 =======
 #include <functional>
 #include <unordered_set>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 
@@ -176,6 +179,9 @@ namespace ScoreUtils {
     std::vector<std::vector<HexCell>> getOrientations(const std::vector<HexCell>& shape);
     std::vector<std::vector<HexCell>> getAllTemplates(const std::vector<std::vector<HexCell>>& shapes);
     int countUniqueTokensBetween(const PlayerBoard& board, GameTile* a, GameTile* b, Wildlife filter);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }
 

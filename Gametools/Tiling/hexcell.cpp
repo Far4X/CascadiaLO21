@@ -25,6 +25,9 @@ bool HexCell::operator==(const HexCell& other) const {
 bool HexCell::operator<(const HexCell& other) const {
     return (m_q < other.getQ() || (m_q == other.getQ() && m_r < other.getR()));
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 HexCell HexCell::rotate60() const {

@@ -44,6 +44,9 @@ public:
     inline void resetPointedCell() {m_pointed_cell = HexCell(0,0);};
     GameTile* getTile(int const &q, int const &r) const;
     GameTile* getOffsetTile(int const &x, int const &y) const;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 };
 

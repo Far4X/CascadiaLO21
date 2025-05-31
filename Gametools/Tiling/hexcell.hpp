@@ -39,6 +39,9 @@ public:
     bool operator==(const HexCell& other) const;
     bool operator<(const HexCell& other) const;
     HexCell rotate60() const;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     HexCell operator+=(const HexCell& other);

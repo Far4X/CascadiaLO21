@@ -120,4 +120,7 @@ GameTile* PlayerBoard::getTile(int const &q, int const &r) const{
 GameTile* PlayerBoard::getOffsetTile(int const &x, int const &y) const{
     return TileHolder::getTile(x, y);
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
