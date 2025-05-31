@@ -12,7 +12,7 @@ std::vector<double> TileScoringStrategy::computeScore(const PlayerBoard& board) 
     for (int biome = 0; biome < (int)Biomes.size(); biome++) {
         Biome filter = static_cast<Biome>(biome);
 
-        auto groups = ScoreUtils::getAdjacentComponents(board, 1, filter, MAX_SIZE);
+        auto groups = ScoreUtils::getComponents(board, MAX_SIZE, ScoreUtils::makeBiomePolicy(board, filter));
 
         int best = 1;
         for (auto& cluster : groups) {

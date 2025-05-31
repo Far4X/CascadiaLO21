@@ -18,13 +18,16 @@ protected :
     NotifiableInterface* m_target = nullptr;
 
 public:
-    virtual ~PlayerBoard() = default;
+    virtual ~PlayerBoard();
     static inline HexCell::Offset axialToOffset(const HexCell& hex){return HexCell::axialToOffset(hex, MAX_SIZE);};
     static inline HexCell offsetToAxial(const HexCell::Offset& off){return HexCell::offsetToAxial(off, MAX_SIZE);};
     PlayerBoard(NotifiableInterface* tar = nullptr);
     GameTile* getNeighborTile(const GameTile& tile, Direction d) const;
     std::vector<GameTile*> getNeighborTiles(const GameTile& tile) const;
-    //virtual void show() = 0;
+    int getNbNeighbors(const GameTile& tile) const;
+    int getNbSameNeighbors(const GameTile& tile, Wildlife animal) const;
+    PlayerBoard();
+    void show() override;
     std::string getSaveString() const override;
     //inline bool getIntentionToken() const {return m_want_use_naturetoken;};
     //inline void setIntentionToken(bool val) {m_want_use_naturetoken = val;};
@@ -37,8 +40,8 @@ public:
     inline void setPointedCell(HexCell cell){m_pointed_cell = cell;};
     inline NotifiableInterface* getTarget()const{return m_target;};
     GameTile* getTile(int const &q, int const &r) const;
+    GameTile* getOffsetTile(int const &x, int const &y) const;
     void pointCell(int q, int r) ;
-
 };
 
 #endif // PLAYERBOARD_HPP

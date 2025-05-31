@@ -8,7 +8,6 @@ enum Direction {N, NE, SE, S, SW, NW};
 class HexCell : public BaseClass {
     int m_q;
     int m_r;
-    //HexTile* m_tile;
 
 public:
     struct Offset {
@@ -22,6 +21,7 @@ public:
     static Offset axialToOffset(const HexCell& hex, unsigned int size);
     static HexCell offsetToAxial(const Offset& off, unsigned int size);
     static int floorDiv(int n);
+    static HexCell directionTo(const HexCell& a, const HexCell& b);
 
     HexCell(int q, int r) : m_q(q), m_r(r) {}
     HexCell() : m_q(0), m_r(0){}
@@ -36,17 +36,14 @@ public:
     HexCell operator-(const HexCell& other) const;
     bool operator==(const HexCell& other) const;
     bool operator!=(const HexCell& other) const;
-	// HexCell operator+=(const HexCell& other);
-	// HexCell operator-=(const HexCell& other);
+    bool operator<(const HexCell& other) const;
+    HexCell operator+=(const HexCell& other);
+    HexCell operator-=(const HexCell& other);
+    HexCell rotate60() const;
 
     HexCell getDirection(Direction d) const;
     HexCell getNeighbor(Direction d) const;  // retourne le voisin de direction d
     std::vector<HexCell> getNeighbors() const;  // overloaded : retourne tous les voisins (les 6)
-    bool operator<(const HexCell& other) const {
-        if (m_q != other.m_q) {
-            return m_q < other.m_q;
-        }
-        return m_r < other.m_r;
-    }};
+};
 char** getRepresentationCell(const HexCell* cell, unsigned short int size, unsigned int max_size);
 

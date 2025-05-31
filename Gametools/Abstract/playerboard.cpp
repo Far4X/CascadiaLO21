@@ -7,6 +7,10 @@ PlayerBoard::PlayerBoard(NotifiableInterface *tar) : TileHolder(MAX_SIZE, MAX_SI
     m_target = tar;
 }
 
+PlayerBoard::~PlayerBoard() {}
+
+void PlayerBoard::show() {}
+
 GameTile* PlayerBoard::getNeighborTile(const GameTile& tile, Direction d) const {
     /*Permet de récupérer une tuile voisine*/
     HexCell hex = tile.getNeighbor(d);
@@ -23,6 +27,28 @@ std::vector<GameTile*> PlayerBoard::getNeighborTiles(const GameTile& tile) const
         neighbors.push_back(getTile(off.getCol(), off.getRow()));
     }
     return neighbors;
+}
+
+int PlayerBoard::getNbNeighbors(const GameTile& tile) const {
+    std::vector<GameTile*> neighbors = getNeighborTiles(tile);
+    int count = 0;
+    for (size_t i = 0; i < neighbors.size(); i++) {
+        if (neighbors[i] != nullptr) {
+            count++;
+        }
+    }
+    return count;
+}
+
+int PlayerBoard::getNbSameNeighbors(const GameTile& tile, Wildlife animal) const {
+    std::vector<GameTile*> neighbors = getNeighborTiles(tile);
+    int count = 0;
+    for (size_t i = 0; i < neighbors.size(); i++) {
+        if (neighbors[i] != nullptr && neighbors[i]->getToken()->getWildlifeType() == animal) {
+            count++;
+        }
+    }
+    return count;
 }
 
 std::string PlayerBoard::getSaveString() const { // genere un string qui permet de déchiffrer l'affichage
@@ -88,7 +114,11 @@ GameTile* PlayerBoard::getTile(int const &q, int const &r) const{
     return TileHolder::getTile(offset_pos.getCol(), offset_pos.getRow());
 }
 
+GameTile* PlayerBoard::getOffsetTile(int const &x, int const &y) const{
+    /*Permet de retourner une tuile grâce à sa position xy*/
+    return TileHolder::getTile(x, y);
+}
+
 void PlayerBoard::pointCell(int q, int r) {
     m_pointed_cell = HexCell(q, r);
 }
-

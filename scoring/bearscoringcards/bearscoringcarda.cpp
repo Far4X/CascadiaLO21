@@ -3,7 +3,7 @@
 
 std::vector<double> BearScoringCardA::computeScore(const PlayerBoard& board) const {
 
-    auto bears = ScoreUtils::getAdjacentComponents(board, 2, Bear, MAX_SIZE);
+    auto bears = ScoreUtils::getComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Bear));
 
     int cpt = 0;
     for (size_t i = 0; i < bears.size(); i++) {

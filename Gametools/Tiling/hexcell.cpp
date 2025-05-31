@@ -2,7 +2,7 @@
 
 const std::vector<HexCell> HexCell::directions = {
     HexCell(0, -1), HexCell(+1, -1), HexCell(+1, 0),  // N, NE, SE
-	 HexCell(0, +1), HexCell(-1, +1), HexCell(-1, 0)  // S, SW, NW
+    HexCell(0, +1), HexCell(-1, +1), HexCell(-1, 0)  // S, SW, NW
 };
 
 HexCell HexCell::operator+(const HexCell& other) const {
@@ -16,13 +16,14 @@ HexCell HexCell::operator-(const HexCell& other) const {
 bool HexCell::operator==(const HexCell& other) const{
     return other.m_q == m_q && other.m_r == m_r;
 }
+
 bool HexCell::operator!=(const HexCell& other) const{
     return !(other == *this);
 }
-/*
- Puisque les cellules hexagonales ne vont pas bouger, ces operateurs ne servent a rien, je les garde au cas ou
- j'en ai besoin pour une autre classe qui va etre composee et non pas heritee de HexCell
 
+bool HexCell::operator<(const HexCell& other) const {
+    return (m_q < other.getQ() || (m_q == other.getQ() && m_r < other.getR()));
+}
 
 HexCell HexCell::operator+=(const HexCell& other) {
 	m_q += other.m_q;
@@ -35,7 +36,20 @@ HexCell HexCell::operator-=(const HexCell& other)  {
     m_r -= other.m_r;
 	return *this;
 }
-*/
+
+HexCell HexCell::rotate60() const {
+    return HexCell(-m_r, m_q + m_r);
+}
+
+int HexCell::floorDiv(int n) {
+    // fonction utilitaire pour la forumule de conversion entre hex et offset (la division normale ne marche pas avec les negatifs de notre cas)
+    if (n >= 0) {
+        return n / 2;
+    }
+    else {
+        return (n - 1) / 2;
+    }
+}
 
 HexCell::Offset HexCell::axialToOffset(const HexCell& hex, unsigned int size){
     int q = hex.getQ();
@@ -45,12 +59,48 @@ HexCell::Offset HexCell::axialToOffset(const HexCell& hex, unsigned int size){
     return HexCell::Offset(col, row);
 }
 
+
 HexCell HexCell::offsetToAxial(const Offset& off, unsigned int size){
     int col = off.getCol();
     int row = off.getRow();
     int q = col - size/2;
     int r = row - floorDiv(q) - size/2;
     return HexCell(q, r);
+}
+
+HexCell HexCell::directionTo(const HexCell& a, const HexCell& b) {
+    int q1 = a.getQ(), r1 = a.getR(), s1 = a.getS();
+    int q2 = b.getQ(), r2 = b.getR(), s2 = b.getS();
+    int dq = q2 - q1;
+    int dr = r2 - r1;
+
+    if (q1 == q2) {
+        if (dr > 0) {
+            return directions[static_cast<int>(S)];
+        }
+        else {
+            return directions[static_cast<int>(N)];
+        }
+    }
+    else if (r1 == r2) {
+        if (dq > 0) {
+            return directions[static_cast<int>(SE)];
+        }
+        else {
+            return directions[static_cast<int>(NW)];
+        }
+    }
+    else if (s1 == s2) {
+        if (dq > 0) {
+            return directions[static_cast<int>(NE)];
+        }
+        else {
+            return directions[static_cast<int>(SW)];
+        }
+    }
+    else {
+        throw "Tiles not aligned";
+    }
 }
 
 HexCell HexCell::getDirection(Direction d) const {
@@ -67,16 +117,6 @@ std::vector<HexCell> HexCell::getNeighbors() const {
 		neighbors.push_back(*this + getDirection(static_cast<Direction>(i)));  // on genere un vecteur contenant les voisins de le tuile
 	}
 	return neighbors;
-}
-
-int HexCell::floorDiv(int n) {
-    // fonction utilitaire pour la forumule de conversion entre hex et offset (la division normale ne marche pas avec les negatifs de notre cas)
-    if (n >= 0) {
-        return n / 2;
-    }
-    else {
-        return (n - 1) / 2;
-    }
 }
 
 char** getRepresentationCell(const HexCell* cell, unsigned short int size, unsigned int max_size){

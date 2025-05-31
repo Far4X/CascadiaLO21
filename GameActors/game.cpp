@@ -156,7 +156,7 @@ void Game::scoreGame() {
 
         // PARTIE TUILES
         TileScoringStrategy tile_strategy;
-        auto tile_scores = m_scorer.obtainScore(*board, tile_strategy);
+        std::vector<double> tile_scores = m_scorer.obtainScore(*board, tile_strategy);
         m_players[i]->setTilesScores(tile_scores);
 
         // PARTIE JETONS
@@ -224,6 +224,11 @@ void Game::readNotification(unsigned int code){
             const std::string& value = std::get<1>(tup);
             if (key == "Use cards") {
                 m_scorer.configureCards(value);
+                std::cout << "cartes configurees avec succes";
+            }
+            if (key == "Test scroring") {
+                readCards();
+                scoreGame();
             }
 
         }
