@@ -5,7 +5,6 @@
 
 GraphXVue* GraphXVue::s_instance = nullptr;
 
-
 GraphXVue::GraphXVue(QObject *parent)
     : QObject{parent}
 {
@@ -35,6 +34,7 @@ GraphXVue::GraphXVue(QObject *parent)
     m_view = new GraphXView(m_scene);
     m_view->setDragMode(GraphXView::ScrollHandDrag);  // clic-gauche pour dragger
     m_view->setRenderHint(QPainter::Antialiasing);
+    m_view->setRenderHint(QPainter::SmoothPixmapTransform); // éviter la pixellisation
     m_view->setTransformationAnchor(GraphXView::AnchorUnderMouse);
     m_right_panel_layout->addWidget(m_view);
     QRectF sceneRect(0, 0, 2600, 2600);  //plus tard remplacer par de vrai fonction qui permettent de gérer le zoom dezoom

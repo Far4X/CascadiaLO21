@@ -10,10 +10,9 @@ public:
     PixmapFactory() = delete;
     static QPixmap createTile(GameTile* tile);
 private:
-    static QPixmap createIconWithOverlay(const QString& basePath, const QString& token1,const QString& token2= QString(),const QString& token3= QString());
+    static QPixmap createIconWithOverlay(const QString& basePath, const QString& token1,const QString& token2= QString(),const QString& token3= QString(),int rot = 0);
     static QString matchTile(GameTile* tile);
     static QString matchToken(GameTile* tile, int token);
-
 };
 
 #endif // GTILE_H

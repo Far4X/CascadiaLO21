@@ -37,6 +37,26 @@ protected:
         }
         QGraphicsView::mousePressEvent(event); // sinon comportement normal
     }
+
+    void wheelEvent(QWheelEvent *event) override
+    {
+        const double scaleFactor = 1.15;
+
+        double currentScale = transform().m11();  // suppose uniform scale
+        if (currentScale < 0.1 && event->angleDelta().y() < 0)
+            return; // trop petit
+        if (currentScale > 10.0 && event->angleDelta().y() > 0)
+            return; // trop gros
+
+        if (event->angleDelta().y() > 0) {
+            // Zoom in
+            scale(scaleFactor, scaleFactor);
+        } else {
+            // Zoom out
+            scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+        }
+        event->accept();
+    }
 };
 
 
