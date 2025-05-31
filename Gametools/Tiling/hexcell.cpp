@@ -21,10 +21,6 @@ bool HexCell::operator<(const HexCell& other) const {
     return (m_q < other.getQ() || (m_q == other.getQ() && m_r < other.getR()));
 }
 
-HexCell HexCell::rotate60() const {
-    return HexCell(-m_r, m_q + m_r);
-}
-
 HexCell HexCell::operator+=(const HexCell& other) {
 	m_q += other.m_q;
     m_r += other.m_r;
@@ -35,6 +31,10 @@ HexCell HexCell::operator-=(const HexCell& other)  {
 	m_q -= other.m_q;
     m_r -= other.m_r;
 	return *this;
+}
+
+HexCell HexCell::rotate60() const {
+    return HexCell(-m_r, m_q + m_r);
 }
 
 int HexCell::floorDiv(int n) {
