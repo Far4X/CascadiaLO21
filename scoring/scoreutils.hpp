@@ -60,7 +60,7 @@ namespace ScoreUtils {
     // struct représentant les conditions pour choisir une tuile
     using KeepTile = std::function<bool(GameTile*)>;
     using UniteTile = std::function<bool(GameTile*, GameTile*)>;
-    using CompareFunction = std::function<bool(int,int)>
+    using CompareFunction = std::function<bool(int,int)>;
     struct AdjacencyPolicy {
         KeepTile shouldKeep;
         UniteTile shouldUnite;

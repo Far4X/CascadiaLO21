@@ -7,6 +7,10 @@ PlayerBoard::PlayerBoard(NotifiableInterface *tar) : TileHolder(MAX_SIZE, MAX_SI
     m_target = tar;
 }
 
+PlayerBoard::~PlayerBoard() {}
+
+void PlayerBoard::show() {}
+
 GameTile* PlayerBoard::getNeighborTile(const GameTile& tile, Direction d) const {
     /*Permet de récupérer une tuile voisine*/
     HexCell hex = tile.getNeighbor(d);

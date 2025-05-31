@@ -18,7 +18,7 @@ protected :
     NotifiableInterface* m_target = nullptr;
 
 public:
-    virtual ~PlayerBoard() = default;
+    virtual ~PlayerBoard();
     static inline HexCell::Offset axialToOffset(const HexCell& hex){return HexCell::axialToOffset(hex, MAX_SIZE);};
     static inline HexCell offsetToAxial(const HexCell::Offset& off){return HexCell::offsetToAxial(off, MAX_SIZE);};
     PlayerBoard(NotifiableInterface* tar = nullptr);
@@ -40,7 +40,6 @@ public:
     GameTile* getTile(int const &q, int const &r) const;
     GameTile* getOffsetTile(int const &x, int const &y) const;
     void pointCell(int q, int r) ;
-
 };
 
 #endif // PLAYERBOARD_HPP

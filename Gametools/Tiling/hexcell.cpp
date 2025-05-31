@@ -16,12 +16,9 @@ HexCell HexCell::operator-(const HexCell& other) const {
 bool HexCell::operator==(const HexCell& other) const{
     return other.m_q == m_q && other.m_r == m_r;
 }
+
 bool HexCell::operator!=(const HexCell& other) const{
     return !(other == *this);
-}
-
-bool HexCell::operator==(const HexCell& other) const {
-    return (m_q == other.getQ() && m_r == other.getR());
 }
 
 bool HexCell::operator<(const HexCell& other) const {
