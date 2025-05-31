@@ -37,7 +37,7 @@ GraphXVue::GraphXVue(QObject *parent)
     m_view->setRenderHint(QPainter::SmoothPixmapTransform); // éviter la pixellisation
     m_view->setTransformationAnchor(GraphXView::AnchorUnderMouse);
     m_right_panel_layout->addWidget(m_view);
-    QRectF sceneRect(0, 0, 2600, 2600);  //plus tard remplacer par de vrai fonction qui permettent de gérer le zoom dezoom
+    QRectF sceneRect(0, 0, 2600, 2600);
     m_scene->setSceneRect(sceneRect);
     connect(m_view, &GraphXView::rightClickAt, this, &GraphXVue::onRightClickAt);
 
@@ -67,10 +67,16 @@ void GraphXVue::addPlayerBoard(GPlayerBoard* board){
     //m_layout->addWidget(board);
 }
 
-void GraphXVue::show(){
+void GraphXVue::show(int playerIndex){
+    if (boards.empty() || proxies.empty())return;
+
     if(!boards.empty() && !proxies.empty()){
         proxies[0]->setVisible(true);
         m_view->centerOn(proxies[0]);
+    }
+    if(playerIndex != -1){ // -1 pour skip l'update d'onglet
+    boards[playerIndex]->updateHexTiles();
+    m_onglet->setCurrentIndex(playerIndex);
     }
     m_window->show();
 }

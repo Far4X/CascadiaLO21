@@ -67,7 +67,8 @@ public:
     static GraphXVue* instance();
 
     void addPlayerBoard(GPlayerBoard* board);
-    void show();
+    inline void setCurrentPlayuer(int current){currentboard = current;}
+    void show(int playerIndex = 0);
     QWidget* getWindow(){return m_window;}
     QGraphicsScene* getScene() const { return m_scene; }
     void addMenu(QWidget* menu);
