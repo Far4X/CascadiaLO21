@@ -6,6 +6,9 @@
 
 template <typename T>
 class Menu : public Printable{
+    /*
+    La classe menu est une classe abstraite qui permet de gérer plus facilement les menus en proposant un itérateur pour récupérer les résultats
+    */
     T* m_results = nullptr;
     int m_nb_result = 0;
     friend class Iterator;

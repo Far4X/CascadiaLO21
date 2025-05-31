@@ -7,7 +7,7 @@
 #include <QTextStream>
 
 
-Game::Game(const bool is_console) : m_nb_players(0), m_is_console(is_console){
+Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players(0), m_is_console(is_console), m_target(interface){
     std::srand(std::time(0)); // debug
     m_cards = new GameTile*;
     readCards();
@@ -27,9 +27,9 @@ Game::~Game(){
     delete[] m_cards;
     delete m_player_menu;
 
-    for (size_t i = 0; i < throwaway.size(); i++){
+    /*for (size_t i = 0; i < throwaway.size(); i++){
         delete throwaway[i];
-    }
+    }*/
     for (size_t i = 0; i < m_tokens.size(); i++){
         delete m_tokens[i];
     }
@@ -124,32 +124,21 @@ void Game::getTileAndToken(unsigned short int pos_tile, unsigned short int pos_t
     std::tuple<GameTile*, const WildlifeToken*> tmp = m_decktile->getCouple(pos_tile, pos_token);
     m_tile_to_add = std::get<0>(tmp);
     m_token_to_add = std::get<1>(tmp);
-    std::cout << "Token : " << m_token_to_add << std::endl;
+    std::cout << "Token : " << m_token_to_add->getWildlifeType() << std::endl;
     std::cout << "Tile : " << m_tile_to_add << std::endl;
 }
 
 void Game::makePlayerTurn(){
     if (m_is_console){
         std::cout << "----- \nTour de " << m_players[current_player]->getName() << std::endl;
-        m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]->getNbNatureToken());
+        m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
     }
     else {
-        m_menu_token = new GTokenMenu(this, m_decktile, m_players[current_player]->getNbNatureToken());
+        m_menu_token = new GTokenMenu(this, m_decktile, m_players[current_player]);
     }
 
     m_players[current_player]->getBoard()->show();
     return m_menu_token->show();
-
-    /*HexCell target;
-    bool cnt = true;
-    while (cnt){
-        m_players[id_player]->getBoard()->show();
-        target = HexCell(m_players[id_player]->getBoard()->getPointedCell());
-        //std::cout << "Hexcell pos : " << target.getQ() << ", " << target.getR() << std::endl;
-        if ((m_players[id_player]->getBoard()->hasNeighbour(target)) && m_players[id_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
-            cnt = false;
-        }
-    }*/
 }
 
 
@@ -179,7 +168,28 @@ void Game::scoreGame() {
     }
 }
 
-void Game::notify(unsigned int code){
+void Game::notifyInterface(unsigned int code){
+    if (!m_is_console){
+        return readNotification(code);
+    }
+    m_target->notifyInterface(code);
+}
+
+void Game::endTurn(){
+    m_token_to_add = nullptr;
+    m_is_waiting_for_position = false;
+
+    if (m_is_console){
+        m_menu_validate = new CValidateMenu(this);
+    }
+    else {
+        m_menu_validate = new GValidateMenu(this);
+    }
+    return m_menu_validate->show();
+}
+
+
+void Game::readNotification(unsigned int code){
     if (code == 1){
         Player *pl = nullptr;
         for (Menu<std::string>::Iterator it = m_player_menu->getIterator(); !it.isDone(); it++){
@@ -214,6 +224,7 @@ void Game::notify(unsigned int code){
                 readCards();
                 scoreGame();
             }
+
         }
         if (m_is_console){
             m_player_menu = new CPlayerMenu(this);
@@ -236,6 +247,7 @@ void Game::notify(unsigned int code){
     }
 
     if (code == 3){
+        std::cout << "Received code 3" << std::endl;
         if (m_menu_token == nullptr){
             throw CustomError("Menu token not initialized", 1);
         }
@@ -245,7 +257,6 @@ void Game::notify(unsigned int code){
             params.push_back(it.getValue());
         }
         delete m_menu_token;
-        //throwaway.push_back(m_menu_token);
         m_menu_token = nullptr;
         if (params.size() == 2){
             getTileAndToken(params[0], params[1]);
@@ -257,19 +268,24 @@ void Game::notify(unsigned int code){
         m_players[current_player]->getBoard()->resetPointedCell();
         m_is_waiting_for_position = true;
         m_is_waiting_to_place_tile = true;
+        std::cout << "End of code 3" << std::endl;
         return m_players[current_player]->getBoard()->show();
+
+
     }
 
     if (code == 4){
+        std::cout << "Received code 4" << std::endl;
         if (m_is_waiting_for_position == false){
             return;
         }
         if (m_is_waiting_to_place_tile){
             HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
-            if ((m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
+            if (target != HexCell(MAX_SIZE, MAX_SIZE) && (m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
                 m_is_waiting_to_place_tile = false;
                 m_tile_to_add->setPos(target.getQ(), target.getR());
-                unsigned short int rotation = 0;
+
+                /*unsigned short int rotation = 0;
 
                 if (m_is_console){
                     std::cout << "Indiquez de combien de 1/6 de tour vous voulez tourner la tuile, dans le sens trigo : (0 à 5)";
@@ -280,45 +296,106 @@ void Game::notify(unsigned int code){
                             rotation = result[0] - '0';
                         }
                     }
-                    std::cout << "Merci de choisir l'emplacement pour le pion faune : ";
                 }
 
                 for (int i = 0; i < rotation; i++){
                     m_tile_to_add->Rotate(Trigonometric);
                 }
 
+                */
+                std::cout << "Merci de choisir l'emplacement pour le pion faune : ";
+
+
                 m_players[current_player]->getBoard()->addTile(*m_tile_to_add);
                 m_tile_to_add = nullptr;
+
+                //Checks if token can be placed
+                bool has_place = false;
+                std::cout << "Testing it : " << std::endl;
+                const GameTile* ct = nullptr;
+                for (PlayerBoard::Iterator it = m_players[current_player]->getBoard()->getIterator(); !it.isDone() && !has_place; it++){
+                    ct = it.getValue();
+                    for (unsigned short int i = 0; i < ct->getNbWildlife(); i++){
+                        if (ct->getWildlife(i) == m_token_to_add->getWildlifeType() && ct->getToken() == nullptr){
+                            has_place = true;
+                        }
+                    }
+                }
+                if (!has_place){
+                    return endTurn();
+                }
+
+                m_players[current_player]->getBoard()->resetPointedCell();
                 return m_players[current_player]->getBoard()->show();
             }
             else {
-                HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
-                if ((m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) != nullptr) && (m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->getToken() == nullptr)){
-                    // Check if token well in list !!!!!!!!
-
-                    m_is_waiting_for_position = false;
-                    m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
-                    if (m_is_console){
-                        std::cout << "Le token a bien été placé." << std::endl;
-                    }
-                    current_player++;
-                    if (current_player == m_nb_players){
-                        current_player = 0;
-                        current_tour++;
-                        if (current_tour == 20){
-                            return scoreGame();
-                        }
-                        return makePlayerTurn();
-                    }
-                }
-                else {
-
-                }
+                m_players[current_player]->getBoard()->resetPointedCell();
+                return m_players[current_player]->getBoard()->show();
             }
         }
         else {
-            std::cout << "Here cap" << std::endl;
+            HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
+            if (target != HexCell(MAX_SIZE, MAX_SIZE) && (m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) != nullptr) && (m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->getToken() == nullptr)){
+                const GameTile* tile = m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR());
+                for (int i = 0; i < tile->getNbWildlife(); i++){
+                    if (m_token_to_add->getWildlifeType() == tile->getWildlife(i)){
+                        if (tile->isKeystone()){
+                            m_players[current_player]->addNatureToken();
+                        }
+                        //m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
+                        m_players[current_player]->getBoard()->addToken(m_token_to_add, target);
+                        if (m_is_console){
+                            std::cout << "Le token a bien été placé." << std::endl;
+                        }
+                        return endTurn();
+                    }
+                }
+
+                std::cout << "Token not good" << std::endl;
+                m_players[current_player]->getBoard()->resetPointedCell();
+                return m_players[current_player]->getBoard()->show();
+            }
+            else {
+                std::cout << "Pos not good" << std::endl;
+                m_players[current_player]->getBoard()->resetPointedCell();
+                return m_players[current_player]->getBoard()->show();
+            }
         }
+    }
+
+    else if (code == 5){
+        std::cout << "Received code 5" << std::endl;
+        if (m_menu_validate == nullptr){
+            std::cout << "Validate menu not good" << std::endl;
+            return;
+        }
+        unsigned short int control = 0;
+        for (Menu<bool>::Iterator it = m_menu_validate->getIterator(); !it.isDone(); it++){
+            if (control >= 1){
+                return;
+            }
+            control++;
+            if (it.getValue()){
+                m_decktile->validateChanges();
+                current_player++;
+                if (current_player == m_nb_players){
+                    current_player = 0;
+                    std::cout << "Tour : " << current_tour + 1 << std::endl;
+                    std::cout << "Tour : " << current_tour + 1 << std::endl;
+                    current_tour++;
+                    if (current_tour == 20){
+                        return scoreGame();
+                    }
+                }
+            }
+            else {
+                m_players[current_player]->getBoard()->removeLast();
+            }
+        }
+        delete m_menu_validate;
+        m_menu_validate = nullptr;
+        std::cout << "End of code 5" << std::endl;
+        return makePlayerTurn();
     }
 }
 

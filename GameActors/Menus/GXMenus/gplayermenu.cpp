@@ -81,7 +81,7 @@ void GPlayerMenu::validateNames(){
         std::cout << "Nullptr" << std::endl;
         return;
     }
-    m_target->notify(1);
+    m_target->notifyInterface(1);
 }
 
 void GPlayerMenu::show(){
