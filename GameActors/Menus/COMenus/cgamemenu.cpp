@@ -36,6 +36,7 @@ void CGameMenu::show(){
             break;
         case '2':
             this->addResult(std::tuple<std::string, std::string>("Load extension", "true"));
+            continue_menu = false;
             break;
         case '3':
             std::cout << "Merci de rentrer l'identifiant des cartes dans l'ordre Ours, Elan, Aigle, Renard, Saumon (ex : ABCDA)" << std::endl;

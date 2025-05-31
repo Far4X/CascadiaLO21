@@ -61,7 +61,10 @@ void GGameMenu::usePreviousGame(){
 void GGameMenu::loadExtension(){
     this->addResult(std::tuple<std::string, std::string>("Load extension", "true"));
     QObject::disconnect(m_btn_recover, &QPushButton::clicked, this, &GGameMenu::usePreviousGame);
-    m_btn_recover->hide();
+    this->hide();
+    if (m_target != nullptr){
+        m_target->notifyInterface(2);
+    }
 }
 
 
