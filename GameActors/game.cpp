@@ -41,8 +41,31 @@ GameStatus Game::getGameStatus() const {
 }
 
 std::string Game::getSaveString() const {
-    return "";
+    std::string rt = "{";
+    rt += m_nb_players;
+    rt += ";" + std::to_string(m_extension) + ";" + m_desc_cards + ";" + std::to_string(current_tour) + ";" + std::to_string(m_is_console);
+    for (size_t i = 0; i < m_nb_players; i++){
+        rt += m_players[i]->getSaveString();
+        rt += ";";
+    }
+    rt += m_decktile->getSaveString();
+    rt += ";}";
+    return rt;
 }
+
+void Game::interpretString(std::string &def){
+    std::vector<std::string> params = SalvableThing::separateParams(def);
+    m_nb_players = SalvableThing::stringToInt(params[0]);
+    m_extension = SalvableThing::stringToInt(params[1]);
+    m_desc_cards = params[2];
+    current_tour = SalvableThing::stringToInt(params[3]);
+    m_is_console = static_cast<bool>(SalvableThing::stringToInt(params[4]));
+    for (int i = 0; i < m_nb_players; i++){
+        m_players.push_back(new Player(params[5+i]));
+    }
+}
+
+
 void Game::init(){
     m_status = GameStatus::Running;
 
@@ -200,8 +223,6 @@ void Game::readNotification(unsigned int code){
         Player *pl = nullptr;
         for (Menu<std::string>::Iterator it = m_player_menu->getIterator(); !it.isDone(); it++){
             std::cout << it.getValue() << std::endl;
-            pl = new Player(it.getValue());
-            m_players.push_back(pl);
             PlayerBoard* bd;
             if (m_is_console){
                 bd = new CPlayerBoard(this);
@@ -209,8 +230,9 @@ void Game::readNotification(unsigned int code){
             else {
                 bd = new GPlayerBoard(this);
             }
-            m_players.back()->setBoard(bd);
-            std::cout << m_players.back()->getName() << std::endl;
+            pl = new Player(it.getValue(), bd);
+            m_players.push_back(pl);
+            //std::cout << m_players.back()->getName() << std::endl;
         }
         m_nb_players = m_players.size();
         initPlayerboards();

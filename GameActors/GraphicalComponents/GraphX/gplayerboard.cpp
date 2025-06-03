@@ -56,7 +56,7 @@ void GPlayerBoard::initHexTiles(){
             tileLabel->setScaledContents(true);  // Pour que l'image remplisse le QLabel
 
             // Calcul des positions x et y pour chaque tuile en utilisant un décalage
-            int x = (row) * xOffset;
+            int x = (row) * xOffset;    //Easter egg
             int y = (col) * tileHeight;
 
             // Décalage pour les lignes impaires

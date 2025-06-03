@@ -15,7 +15,6 @@ class Player : public SalvableThing {
     const unsigned int m_id;
     unsigned int m_score = 0;
     static unsigned int nb_players;
-
     std::vector<GameTile*> m_tiles;
     std::vector<WildlifeToken*> m_tokens;
     PlayerBoard* m_board = nullptr;
@@ -25,9 +24,10 @@ class Player : public SalvableThing {
 
 
 public:
-    Player(const std::string& name);
-
+    Player(const std::string& name, PlayerBoard* bd);
+    Player(const std::string& def); //Used to ressucite after reloading game
     Player(const Player&) = default;
+
     static int getNbPlayers() { return nb_players;}
     const std::string getName() const {return m_name;}
     unsigned int getId() const {return m_id;}
