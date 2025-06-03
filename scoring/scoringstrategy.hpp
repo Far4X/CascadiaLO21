@@ -1,8 +1,6 @@
 #pragma once
 
 #include "scoring/score.hpp"
-
-enum Cards { A, B, C, D };
 class WildlifeScoringStrategy;
 
 class ScoringStrategy {

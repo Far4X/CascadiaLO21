@@ -222,6 +222,11 @@ void Game::readNotification(unsigned int code){
             auto tup = it.getValue();
             const std::string& key = std::get<0>(tup);
             const std::string& value = std::get<1>(tup);
+            if (key == "Load extension") {
+                m_scorer.configureCards("IIIII");
+                // m_scorer.configureCards("FFFFF");
+                std::cout << "cartes des variantes configurees avec succes";
+            }
             if (key == "Use cards") {
                 m_scorer.configureCards(value);
                 std::cout << "cartes configurees avec succes";
