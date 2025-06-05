@@ -22,7 +22,21 @@
         <file>Assets/set5/set5_2.png</file>
         <file>Assets/set5/set5_3.png</file>
     </qresource>
-    <qresource prefix="/Tile"/>
+    <qresource prefix="/Tile">
+        <file>Assets/Tiles/desert+lake.png</file>
+        <file>Assets/Tiles/desert+swamp.png</file>
+        <file>Assets/Tiles/lake+mountain.png</file>
+        <file>Assets/Tiles/mountain.png</file>
+        <file>Assets/Tiles/mountain+desert.png</file>
+        <file>Assets/Tiles/mountain+forest.png</file>
+        <file>Assets/Tiles/mountain+swamp.png</file>
+        <file>Assets/Tiles/swamp.png</file>
+        <file>Assets/Tiles/swamp+lake.png</file>
+        <file>Assets/Tiles/forest.png</file>
+        <file>Assets/Tiles/forest+desert.png</file>
+        <file>Assets/Tiles/forest+lake.png</file>
+        <file>Assets/Tiles/forest+swamp.png</file>
+    </qresource>
     <qresource prefix="/Token">
         <file>Assets/Token/bear.png</file>
         <file>Assets/Token/elk.png</file>

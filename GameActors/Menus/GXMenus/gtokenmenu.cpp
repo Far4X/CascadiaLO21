@@ -74,13 +74,14 @@ void GTokenMenu::chooseMultiple(){
 }
 
 void GTokenMenu::pushResults(){
-    addResult(m_spin_tile->value());
+    addResult(m_spin_tile->value()-1);
     if (m_spin_token != nullptr){
-        addResult(m_spin_token->value());
+        addResult(m_spin_token->value()-1);
     }
     m_target->notifyInterface(3);
 }
 
 void GTokenMenu::show(){
+    m_decktile->show();
     return QWidget::show();
 }

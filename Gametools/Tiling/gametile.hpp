@@ -14,7 +14,7 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     friend class Game;
     //Hexcell m_position;
     Biome m_biomes[6]; //0 : top, 1 : topright...
-    unsigned char m_rotation = 0;
+    unsigned char m_rotation = 0; // 0 à 5;
     const WildlifeToken *m_wltoken = nullptr;
     Wildlife *m_possible_wltoken = nullptr;
     int m_numtypes;
