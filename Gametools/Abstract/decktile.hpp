@@ -13,7 +13,6 @@ protected :
     const WildlifeToken* m_displayed_tokens[4];
 
     void reinterpetString(const std::string& def);
-    std::string getSaveString() const override;
     static DeckTile& getInstance();
     DeckTile(const DeckTile &tar) = delete;
     DeckTile &operator=(const DeckTile &tar) = delete;
@@ -24,6 +23,8 @@ protected :
     unsigned short int m_id_token_to_rm = 5;
 
 public:
+    std::string getSaveString() const override;
+
     GameTile *getTile(unsigned short int i);
     int fillPlate();
     inline bool canFlushWithoutNaturetoken() const {return m_can_flush;};
