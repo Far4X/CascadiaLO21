@@ -55,6 +55,7 @@ public:
     }
     bool isKeystone(const std::string& description = "") const;
     void show(unsigned short int size = 4) const ;
+    inline unsigned int getRotation() const {return m_rotation;};
 
 };
 

@@ -40,7 +40,12 @@ GPlayerBoard::GPlayerBoard(NotifiableInterface* tar, QWidget *parent,int size) :
             // Ton code ici
         }
     });
-    }
+}
+
+GPlayerBoard::GPlayerBoard(NotifiableInterface *tar, const std::string& def, QWidget *parent, int size) : PlayerBoard(tar), QWidget{parent}, max_size(size){
+
+}
+
 
 
 void GPlayerBoard::initHexTiles(){

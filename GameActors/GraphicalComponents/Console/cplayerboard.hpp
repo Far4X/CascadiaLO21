@@ -13,6 +13,8 @@ class CPlayerBoard : public PlayerBoard{
     unsigned int step = 10;
 public:
     CPlayerBoard(NotifiableInterface *tar);
+    CPlayerBoard(NotifiableInterface *tar, const std::string& def);
+
     void show() override;
     void reprBoard();
 };

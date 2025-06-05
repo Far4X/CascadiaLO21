@@ -21,6 +21,13 @@ DeckTile::~DeckTile(){
 
 }
 
+std::string DeckTile::getSaveString() const {
+    for (unsigned char i = 0; i < 4; i++){
+
+    }
+}
+
+
 GameTile* DeckTile::getTile(unsigned short int i){
     if (i < 4){
         return m_tiles[i];

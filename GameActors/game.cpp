@@ -61,10 +61,9 @@ void Game::interpretString(std::string &def){
     current_tour = SalvableThing::stringToInt(params[3]);
     m_is_console = static_cast<bool>(SalvableThing::stringToInt(params[4]));
     for (int i = 0; i < m_nb_players; i++){
-        m_players.push_back(new Player(params[5+i]));
+        m_players.push_back(new Player(params[5+i], m_is_console, this));
     }
 }
-
 
 void Game::init(){
     m_status = GameStatus::Running;
