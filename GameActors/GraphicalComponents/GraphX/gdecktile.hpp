@@ -4,6 +4,7 @@
 #include "gtile.hpp"
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QHBoxLayout>
 #include <QPixmap>
 #include "graphxvue.hpp"
 
@@ -17,7 +18,9 @@ private:
     GDeckTile &operator=(const GDeckTile &tar) = delete;
     ~GDeckTile() = default;
     void construct();
-    QVBoxLayout* deck;
+    QVBoxLayout* tiles;
+    QVBoxLayout* tokens;
+    QHBoxLayout* deck;
     QWidget* widget;
 
 public:
