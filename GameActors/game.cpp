@@ -251,6 +251,7 @@ void Game::readNotification(unsigned int code){
             }
             if (key == "Use cards") {
                 m_scorer.configureCards(value);
+                m_desc_cards = value;
                 std::cout << "cartes configurees avec succes";
             }
             if (key == "Test scroring") {
