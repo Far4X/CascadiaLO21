@@ -3,6 +3,11 @@
 
 CPlayerBoard::CPlayerBoard(NotifiableInterface *tar) : PlayerBoard(tar){}
 
+CPlayerBoard::CPlayerBoard(NotifiableInterface *tar, const std::string& def) : PlayerBoard(tar){
+
+}
+
+
 void CPlayerBoard::show(){
     reprBoard();
     std::cout << "---" << std::endl;

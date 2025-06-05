@@ -11,6 +11,7 @@ class PlayerBoard : public TileHolder {
     //unsigned short int m_r_center;
     HexCell m_pos_last_token = HexCell(MAX_SIZE + 1, MAX_SIZE+1);
     HexCell m_pos_last_tile = HexCell(MAX_SIZE + 1, MAX_SIZE+1);
+    std::vector<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int>> m_required_cards;// Used when ressucite. Store cards with id, posx, posy, rotation, token
 
 protected :
     HexCell m_pointed_cell = HexCell(MAX_SIZE, MAX_SIZE);
@@ -41,7 +42,10 @@ public:
     inline NotifiableInterface* getTarget()const{return m_target;};
     GameTile* getTile(int const &q, int const &r) const;
     GameTile* getOffsetTile(int const &x, int const &y) const;
-    void pointCell(int q, int r) ;
+    void pointCell(int q, int r);
+    std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int> getNextNeededCard();
+    bool hasAllCards() const {return m_required_cards.size() == 0;}
+    void reinterpretString(const std::string &desc);
 };
 
 #endif // PLAYERBOARD_HPP

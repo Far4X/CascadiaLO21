@@ -2,8 +2,8 @@
 
 unsigned int Player::nb_players = 0;
 
-Player::Player(const std::string& name) : m_name(name), m_id(++nb_players), m_tiles_scores(5, 0.0), m_tokens_scores(5, 0.0){
-
+Player::Player(const std::string& name, PlayerBoard* bd) : m_name(name), m_id(++nb_players), m_tiles_scores(5, 0.0), m_tokens_scores(5, 0.0){
+    this->setBoard(bd);
 }
 
 Player::~Player() {
@@ -29,17 +29,32 @@ void Player::setTokensScores(const std::vector<double>& scores) {
     m_tokens_scores = scores;
 }
 
-void Player::addTile(GameTile* tile){
+/*void Player::addTile(GameTile* tile){
     m_tiles.push_back(tile);
 };
 void Player::addToken(WildlifeToken* token){
     m_tokens.push_back(token);
-};
+};*/
 
 void Player::setBoard(PlayerBoard* board){
     m_board = board;
 };
 
 std::string Player::getSaveString() const{
-    return "";
+    std::string rt = "{";
+    rt += m_name;
+    rt += ";" + std::to_string(m_nb_nature_token) + ";" + m_board->getSaveString()  + ";}";
+    return rt;
+}
+
+Player::Player(const std::string& def, const bool is_console, NotifiableInterface* tar_board) : m_id(++nb_players), m_tiles_scores(5, 0.0), m_tokens_scores(5, 0.0){
+    std::vector<std::string> params = SalvableThing::separateParams(def);
+    m_name = params[0];
+    m_nb_nature_token = static_cast<unsigned int>(SalvableThing::stringToInt(params[1]));
+    if (is_console){
+        m_board = new CPlayerBoard(tar_board, params[2]);
+    }
+    else {
+        m_board = new GPlayerBoard(tar_board, params[2]);
+    }
 }

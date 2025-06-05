@@ -52,16 +52,30 @@ int PlayerBoard::getNbSameNeighbors(const GameTile& tile, Wildlife animal) const
 }
 
 std::string PlayerBoard::getSaveString() const { // genere un string qui permet de déchiffrer l'affichage
-    std::string desc = "c:";
+    std::string desc = "{";
     for (int i = 0; i < MAX_SIZE; i++){
         for (int j = 0; j < MAX_SIZE; j++){
             if (TileHolder::getTile(i, j) != nullptr){
-                desc += std::to_string(TileHolder::getTile(i, j)->getId()) + ";";
+                desc += std::to_string(TileHolder::getTile(i, j)->getId()) + "," + std::to_string(i) + "," + std::to_string(j) + std::to_string(TileHolder::getTile(i, j)->getRotation()) + "," + std::to_string(TileHolder::getTile(i, j)->getToken()->getWildlifeType()) +";";
             }
         }
     }
+    desc += ";}";
     return desc;
 }
+
+
+void PlayerBoard::reinterpretString(const std::string &desc){
+    std::vector<std::string> params = separateParams(desc);
+    for (size_t i = 0; i < params.size(); i++){
+        std::vector<std::string> tile_params = separateParams(params[i], ',');
+        if (tile_params.size() != 5){
+            throw 1;
+        }
+        m_required_cards.push_back(std::tuple(stringToInt(tile_params[0]), stringToInt(tile_params[1]), stringToInt(tile_params[2]), stringToInt(tile_params[3]), stringToInt(tile_params[4])));
+    }
+    m_target->notifyInterface(100);
+} 
 
 void PlayerBoard::addTile(GameTile& tile){
     /*Permet d'ajouter une tuile. La position de la tuile est donnée par les caractéristiques de cette dernière*/
@@ -121,4 +135,10 @@ GameTile* PlayerBoard::getOffsetTile(int const &x, int const &y) const{
 
 void PlayerBoard::pointCell(int q, int r) {
     m_pointed_cell = HexCell(q, r);
+}
+
+std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int> PlayerBoard::getNextNeededCard(){
+    std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int> rt = m_required_cards.back();
+    m_required_cards.pop_back();
+    return rt;
 }

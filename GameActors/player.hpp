@@ -7,25 +7,28 @@
 #include "../Gametools/Tiling/gametile.hpp"
 #include "../Gametools/wildlifetoken.hpp"
 #include "../Gametools/Abstract/playerboard.hpp"
+#include "GraphicalComponents/Console/cplayerboard.hpp"
+#include "GraphicalComponents/GraphX/gplayerboard.hpp"
 
 class Player : public SalvableThing {
     friend class Game;
 
     std::string m_name;
+    unsigned int bonusScore = 0;// "C'est le score bonus tu sais pour celui qui est premier" Zakariae, 3 juin 2025 "C'est bien, c'est assez descriptif"
     const unsigned int m_id;
     unsigned int m_score = 0;
     static unsigned int nb_players;
-    std::vector<GameTile*> m_tiles;
-    std::vector<WildlifeToken*> m_tokens;
+    //std::vector<GameTile*> m_tiles;
+    //std::vector<WildlifeToken*> m_tokens;
     PlayerBoard* m_board = nullptr;
     unsigned short int m_nb_nature_token = 0;
     std::vector<double> m_tiles_scores;
     std::vector<double> m_tokens_scores;
+    Player(const std::string& def, const bool is_console, NotifiableInterface* tar_board); //Used to ressucite after reloading game
 
 
 public:
     Player(const std::string& name, PlayerBoard* bd);
-    Player(const std::string& def); //Used to ressucite after reloading game
     Player(const Player&) = default;
 
     static int getNbPlayers() { return nb_players;}

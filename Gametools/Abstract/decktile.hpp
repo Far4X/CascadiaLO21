@@ -10,8 +10,10 @@ protected :
     std::vector<GameTile*> m_deck_tiles;
     std::vector<const WildlifeToken*> m_deck_token;
     GameTile* m_tiles[4];
-
     const WildlifeToken* m_displayed_tokens[4];
+
+    void reinterpetString(const std::string& def);
+    std::string getSaveString() const override;
     static DeckTile& getInstance();
     DeckTile(const DeckTile &tar) = delete;
     DeckTile &operator=(const DeckTile &tar) = delete;

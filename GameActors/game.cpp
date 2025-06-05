@@ -61,10 +61,9 @@ void Game::interpretString(std::string &def){
     current_tour = SalvableThing::stringToInt(params[3]);
     m_is_console = static_cast<bool>(SalvableThing::stringToInt(params[4]));
     for (int i = 0; i < m_nb_players; i++){
-        m_players.push_back(new Player(params[5+i]));
+        m_players.push_back(new Player(params[5+i], m_is_console, this));
     }
 }
-
 
 void Game::init(){
     m_status = GameStatus::Running;
@@ -160,10 +159,11 @@ void Game::makePlayerTurn(){
     }
     else {
         std::cout << "----- \nTour de " << m_players[current_player]->getName() << std::endl;
-        m_players[current_player]->getBoard()->show(); // obligé car la vue doit etre initialisé
+        GraphXVue::instance()->show(current_player); // Update l'affichage
         GTokenMenu* gMenu = new GTokenMenu(this, m_decktile, m_players[current_player]);
         m_menu_token = gMenu;
         GraphXVue::instance()->addMenu(gMenu);
+
     }
     return m_menu_token->show();
 }
@@ -210,6 +210,7 @@ void Game::endTurn(){
         m_menu_validate = new CValidateMenu(this);
     }
     else {
+        GraphXVue::instance()->show(current_player); // Update l'affichage
         GValidateMenu* gMenu = new GValidateMenu(this);
         m_menu_validate = gMenu;
         GraphXVue::instance()->addMenu(gMenu);

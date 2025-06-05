@@ -8,7 +8,7 @@
 #include <utility>
 
 
-class TileHolder : public Printable, SalvableThing{
+class TileHolder : public Printable, public SalvableThing {
     /*Classe qui permet de stocker des tuiles dans un tableau 2D*/
 protected:
     GameTile ***m_tiles;

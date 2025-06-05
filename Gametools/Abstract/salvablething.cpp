@@ -2,7 +2,7 @@
 
 SalvableThing::SalvableThing() {}
 
-std::vector<std::string> SalvableThing::separateParams(const std::string& raw){
+std::vector<std::string> SalvableThing::separateParams(const std::string& raw, const char sep){
     std::vector<std::string> rt;
     std::string current_param;
     unsigned int bracket_level = 0;
@@ -10,7 +10,7 @@ std::vector<std::string> SalvableThing::separateParams(const std::string& raw){
         throw 99;
     }
     for (size_t i = 1; i < raw.size()-1; i++){
-        if (raw[i] == ';' && bracket_level == 0){
+        if (raw[i] == sep && bracket_level == 0){
             rt.push_back(current_param);
             current_param = "";
         }

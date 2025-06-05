@@ -26,6 +26,8 @@ const int yOffset = tileHeight / 2;    // Décalage vertical pour les lignes imp
 class GPlayerBoard : public PlayerBoard, public QWidget{
 public:
     GPlayerBoard(NotifiableInterface* tar, QWidget *parent = nullptr,int size = 41);
+    GPlayerBoard(NotifiableInterface *tar, const std::string& def, QWidget *parent = nullptr,int size = 41);
+
     ~GPlayerBoard() = default;;
 
     void initHexTiles();
@@ -33,8 +35,8 @@ public:
     void addGxTile(int x,int y); // x,y de la matrice pas q,r !
 
     QSize sizeHint() const override;
-
     void show() override;
+
     QWidget* getWidget() const;
     GraphXVue* m_manager = nullptr;
 private:
