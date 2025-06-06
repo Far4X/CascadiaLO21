@@ -15,6 +15,8 @@ void CDeckTile::show(){
     }
     std::cout << std::endl;
 
+    //On génère le tableau qui va contenir les représentations des tuiles
+
     char **tab = new char*[m_max_height];
     for (int i = 0; i < m_max_height; i++){
         tab[i] = new char[m_max_width];
@@ -22,7 +24,6 @@ void CDeckTile::show(){
 
     for (int i = 0; i < m_max_height; i++){
         for (int j = 0; j < m_max_width; j++){
-            //tab[i][j] = '*'; dbg
             tab[i][j] = ' ';
         }
     }
@@ -42,7 +43,7 @@ void CDeckTile::show(){
         if (tile == nullptr){
             throw CustomError("Tile doesn't exists", 999);
         }
-        tile_rpr = getRepresentation(tile, m_size_tile, 4, false);
+        tile_rpr = getRepresentation(tile, m_size_tile, 4, false); // On récupère l'image de la tuile
         for (int j = 0; j < 2*m_size_tile +1; j++){
             for (int k = 0; k < 4*m_size_tile; k++){
                 //if (tile[i][j] != ' ' || tab[base_y + i][base_x + j] == '*'){

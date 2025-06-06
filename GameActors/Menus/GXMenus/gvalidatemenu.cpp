@@ -1,8 +1,8 @@
 #include "gvalidatemenu.hpp"
 
 GValidateMenu::GValidateMenu(NotifiableInterface* tar) : GMenu(tar) {
-    m_label = new QLabel("Voulez-vous valider les actions réalisées ?", this);
     m_layout = new QGridLayout(this);
+    m_label = new QLabel("Voulez-vous valider les actions réalisées ?", this);
     m_btn_validate = new QPushButton("Valider", this);
     m_btn_reject = new QPushButton("Rejeter", this);
 
