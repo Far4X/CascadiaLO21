@@ -125,13 +125,10 @@ void Game::resurrectGame(){
         m_available_tokens.push_back(m_tokens[i]);
     }
 
-    std::cout << "1" << std::endl;
-
     for (size_t i = 0; i < m_players.size(); i++){
         std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int> params; // Used when ressucite. Store cards with id, posx, posy, rotation, token
         while (!m_players[i]->getBoard()->hasAllCards()){
             params = m_players[i]->getBoard()->getNextNeededCard();
-            std::cout << "Need cards  : " << std::get<0>(params) << ", Rota : " << std::get<3>(params) << std::endl;
             for (size_t j = 0; j < m_available_tiles.size(); j++){
                 //std::cout << "Scanned : " << m_available_tiles[j]->getId() << std::endl;;
                 if (m_available_tiles[j]->getId() == std::get<0>(params)){
@@ -142,7 +139,6 @@ void Game::resurrectGame(){
                         m_available_tiles[j]->Rotate();
                     }*/
                     while (m_available_tiles[j]->getRotation() != std::get<3>(params)){
-                        std::cout << "Rotating " << m_available_tiles[j]->getRotation() << ", ob : " << std::get<3>(params) << std::endl;
                         m_available_tiles[j]->Rotate();
                     }
                     for (unsigned int k = 0; k < m_available_tokens.size(); k++){
@@ -153,7 +149,6 @@ void Game::resurrectGame(){
                             k = m_available_tokens.size();
                         }
                     }
-                    std::cout << "Added to pb" << std::endl;
                     m_players[i]->getBoard()->addTile(*m_available_tiles[j]);
                     m_available_tiles.erase(m_available_tiles.begin() + j);
                     j = m_available_tiles.size();
@@ -252,6 +247,9 @@ void Game::getTileAndToken(unsigned short int pos_tile, unsigned short int pos_t
 }
 
 void Game::makePlayerTurn(){
+    if (current_tour >= MAX_TURN){
+        scoreGame();
+    }
     if (m_is_console){
         std::cout << "----- \nTour de " << m_players[current_player]->getName()<< " -- Tour : " << current_tour << std::endl;
         m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
