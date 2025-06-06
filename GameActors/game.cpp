@@ -68,7 +68,7 @@ void Game::saveGame() const{
         file.close();
     }
     else {
-        qDebug() << "Erreur lors de l'ouverture du fichier :" << file.errorString();
+        std::cout << "Erreur lors de l'ouverture du fichier :" << file.errorString().toStdString();
     }
 }
 
@@ -548,6 +548,7 @@ void Game::readNotification(unsigned int code){
 
                     std::cout << "Tour : " << current_tour + 1 << std::endl;
                     current_tour++;
+                    saveGame();
                     if (current_tour == MAX_TURN){
                         delete m_menu_validate;
                         m_menu_validate = nullptr;
