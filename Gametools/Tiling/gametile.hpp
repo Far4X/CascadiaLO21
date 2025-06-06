@@ -12,6 +12,7 @@ enum Rotation {Trigonometric, Anti_Trigonometric};
 
 class GameTile : public HexCell, public SalvableThing{ //Or inherits public hextile; if not rename HexTile HexTileCoord
     friend class Game;
+    static unsigned int nb_tiles;
     //Hexcell m_position;
     Biome m_biomes[6]; //0 : top, 1 : topright...
     unsigned char m_rotation = 0;
@@ -21,7 +22,7 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     const unsigned int m_id;
 
     //GameTile(const unsigned int id, Biome biomes[6], Wildlife *type = nullptr, int num_types = 0, int posx = 0, int posy = 0);
-    GameTile(int id, std::string description);
+    GameTile(std::string description);
     ~GameTile();
     GameTile& operator=(const GameTile& oth) = delete;
     GameTile(const GameTile& oth) = delete;
@@ -31,7 +32,7 @@ public:
     void setPos(int const &q, int const &r);
     inline int getNbWildlife() const {return m_numtypes;};
     inline Wildlife getWildlife(unsigned short int nb) const {if (nb < m_numtypes) return m_possible_wltoken[nb]; else throw CustomError("Not in range", 104);};
-    GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy);
+    GameTile(Biome biomes[6], Wildlife *type, int num_types, int posx, int posy);
     void Rotate(Rotation dir = Anti_Trigonometric);
     int draw();
     Biome getBiome(unsigned short int number) const {{return m_biomes[number%6];}}

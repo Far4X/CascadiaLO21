@@ -16,7 +16,6 @@ public:
     void show() override;
     static CDeckTile& getInstance();
 
-    std::string getSaveString() const override;
 };
 
 #endif // CDECKCARD_HPP

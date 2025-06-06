@@ -8,10 +8,6 @@ GDeckTile& GDeckTile::getInstance(){
     return ins;
 }
 
-std::string GDeckTile::getSaveString() const {
-    return "";
-}
-
 void GDeckTile::show(){
 
 }

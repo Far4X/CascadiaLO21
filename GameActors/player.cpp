@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include <iostream>
 
 unsigned int Player::nb_players = 0;
 
@@ -49,6 +50,10 @@ std::string Player::getSaveString() const{
 
 Player::Player(const std::string& def, const bool is_console, NotifiableInterface* tar_board) : m_id(++nb_players), m_tiles_scores(5, 0.0), m_tokens_scores(5, 0.0){
     std::vector<std::string> params = SalvableThing::separateParams(def);
+    std::cout << "Player def : " << def << std::endl;
+    for (const auto &a : params){
+        std::cout << a << std::endl;
+    }
     m_name = params[0];
     m_nb_nature_token = static_cast<unsigned int>(SalvableThing::stringToInt(params[1]));
     if (is_console){

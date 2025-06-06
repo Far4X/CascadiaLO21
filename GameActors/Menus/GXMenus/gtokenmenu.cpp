@@ -59,6 +59,7 @@ void GTokenMenu::clearTokens(){
     }
     m_decktile->clearTokens();
     m_caller->removeNatureToken();
+    this->show();
     selectTile();
 }
 

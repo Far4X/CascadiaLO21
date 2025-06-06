@@ -1,6 +1,6 @@
 #include "playerboard.hpp"
 #include <iostream>
-#include <set>
+#include <iostream>
 
 
 PlayerBoard::PlayerBoard(NotifiableInterface *tar) : TileHolder(MAX_SIZE, MAX_SIZE){
@@ -52,29 +52,39 @@ int PlayerBoard::getNbSameNeighbors(const GameTile& tile, Wildlife animal) const
 }
 
 std::string PlayerBoard::getSaveString() const { // genere un string qui permet de déchiffrer l'affichage
+    std::cout << "PB svg" << std::endl;
     std::string desc = "{";
     for (int i = 0; i < MAX_SIZE; i++){
         for (int j = 0; j < MAX_SIZE; j++){
             if (TileHolder::getTile(i, j) != nullptr){
-                desc += std::to_string(TileHolder::getTile(i, j)->getId()) + "," + std::to_string(i) + "," + std::to_string(j) + std::to_string(TileHolder::getTile(i, j)->getRotation()) + "," + std::to_string(TileHolder::getTile(i, j)->getToken()->getWildlifeType()) +";";
+                desc += std::to_string(TileHolder::getTile(i, j)->getId()) + "," + std::to_string(i) + "," + std::to_string(j) + "," + std::to_string(TileHolder::getTile(i, j)->getRotation()) + ",";
+                if (TileHolder::getTile(i, j)->getToken() != nullptr){
+                    desc += std::to_string(TileHolder::getTile(i, j)->getToken()->getWildlifeType());
+                }
+                else {
+                    desc += "100";
+                }
+                desc += ";";
             }
         }
     }
-    desc += ";}";
+    std::cout << "PB svg out" << std::endl;
+    desc += "}";
     return desc;
 }
 
 
 void PlayerBoard::reinterpretString(const std::string &desc){
     std::vector<std::string> params = separateParams(desc);
+    std::cout << "Def " << desc << std::endl;
     for (size_t i = 0; i < params.size(); i++){
         std::vector<std::string> tile_params = separateParams(params[i], ',');
         if (tile_params.size() != 5){
-            throw 1;
+            throw std::string("AAZ");
         }
+        std::cout << "Added needed tile" << std::endl;
         m_required_cards.push_back(std::tuple(stringToInt(tile_params[0]), stringToInt(tile_params[1]), stringToInt(tile_params[2]), stringToInt(tile_params[3]), stringToInt(tile_params[4])));
     }
-    m_target->notifyInterface(100);
 } 
 
 void PlayerBoard::addTile(GameTile& tile){
@@ -96,6 +106,11 @@ void PlayerBoard::addToken(const WildlifeToken* token, HexCell& pos_target){
     m_pos_last_token = pos_target;
 }
 
+const GameTile* PlayerBoard::getLast(){
+    return getTile(m_pos_last_token.getQ(), m_pos_last_token.getR());
+}
+
+
 void PlayerBoard::removeLast(){
     /*Permet d'effectuer le retour arrière en cas de non-validation des changements*/
     if (m_pos_last_token != HexCell(MAX_SIZE+1, MAX_SIZE+1) && m_pos_last_tile != HexCell(MAX_SIZE+1, MAX_SIZE+1) ){
@@ -111,10 +126,10 @@ void PlayerBoard::removeLast(){
 bool PlayerBoard::hasNeighbour(const HexCell& pos){
     /*Permet de savoir si une tuile a des voisins ou pas. Utile pour la pose des tuiles*/
     HexCell::Offset poso = axialToOffset(pos);
-    std::cout << "Self : " << poso.getCol() << ", " << poso.getRow() << std::endl;
+    //std::cout << "Self : " << poso.getCol() << ", " << poso.getRow() << std::endl;
     for (size_t i = 0; i < pos.getNeighbors().size(); i++){
         HexCell::Offset neight = axialToOffset(pos.getNeighbors()[i]);
-        std::cout << "Checking neight : " << neight.getCol() << ", " << neight.getRow() << std::endl;
+        //std::cout << "Checking neight : " << neight.getCol() << ", " << neight.getRow() << std::endl;
         if (neight.getCol() >= 0 && neight.getRow() >= 0 && this->TileHolder::getTile(neight.getCol(), neight.getRow()) != nullptr){
             return true;
         }

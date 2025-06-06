@@ -7,14 +7,15 @@
 class DeckTile : public Printable, public SalvableThing {
     /*Classe qui permet de représenter la pioche et les tuiles et tokens visibles sur la table*/
 protected :
+    friend class Game;
     std::vector<GameTile*> m_deck_tiles;
     std::vector<const WildlifeToken*> m_deck_token;
     GameTile* m_tiles[4];
     const WildlifeToken* m_displayed_tokens[4];
 
-    void reinterpetString(const std::string& def);
-    std::string getSaveString() const override;
     static DeckTile& getInstance();
+    std::vector<unsigned short int> m_expected_card;
+    std::vector<unsigned short int> m_expected_token;
     DeckTile(const DeckTile &tar) = delete;
     DeckTile &operator=(const DeckTile &tar) = delete;
     DeckTile();
@@ -32,7 +33,11 @@ public:
     void shuffle();
     void clearTokens();
     void validateChanges();
+    void reinterpetString(const std::string& def);
+    std::string getSaveString() const override;
     std::tuple<GameTile*, const WildlifeToken*> getCouple(int id_card, int id_token = -1);
+    inline std::vector<unsigned short int>& getCardsToAdd(){return m_expected_card;}
+    inline std::vector<unsigned short int>& getTokensToAdd(){return m_expected_token;}
 };
 
 #endif // DECKCARD_HPP
