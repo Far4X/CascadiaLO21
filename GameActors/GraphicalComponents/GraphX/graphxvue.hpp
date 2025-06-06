@@ -16,6 +16,7 @@
 
 class GPlayerBoard;
 
+
 class GraphXView : public QGraphicsView {
     Q_OBJECT
 public:
@@ -37,6 +38,26 @@ protected:
         }
         QGraphicsView::mousePressEvent(event); // sinon comportement normal
     }
+
+    void wheelEvent(QWheelEvent *event) override
+    {
+        const double scaleFactor = 1.15;
+
+        double currentScale = transform().m11();  // suppose uniform scale
+        if (currentScale < 0.1 && event->angleDelta().y() < 0)
+            return; // trop petit
+        if (currentScale > 10.0 && event->angleDelta().y() > 0)
+            return; // trop gros
+
+        if (event->angleDelta().y() > 0) {
+            // Zoom in
+            scale(scaleFactor, scaleFactor);
+        } else {
+            // Zoom out
+            scale(1.0 / scaleFactor, 1.0 / scaleFactor);
+        }
+        event->accept();
+    }
 };
 
 
@@ -47,10 +68,12 @@ public:
     static GraphXVue* instance();
 
     void addPlayerBoard(GPlayerBoard* board);
-    void show();
+    inline void setCurrentPlayuer(int current){currentboard = current;}
+    void show(int playerIndex = 0);
     QWidget* getWindow(){return m_window;}
     QGraphicsScene* getScene() const { return m_scene; }
     void addMenu(QWidget* menu);
+    void addDeck(QWidget* deck);
 
 private slots:
     void onTabChanged(int index);
@@ -84,6 +107,18 @@ private:
     QGraphicsProxyWidget* proxy;
     std::vector<QGraphicsProxyWidget*> proxies;
 
+    //detection :
+
+    bool isPointInHex(QPointF point, QPointF center, float radius) {
+        QPolygonF hex;
+        for (int i = 0; i < 6; ++i) {
+            float angle_deg = 60 * i - 30;  // flat-topped
+            float angle_rad = M_PI / 180.0 * angle_deg;
+            hex << QPointF(center.x() + radius * std::cos(angle_rad),
+                           center.y() + radius * std::sin(angle_rad));
+        }
+        return hex.containsPoint(point, Qt::OddEvenFill);
+    }
 
     void onRightClickAt(const QPointF& scenePos);
 

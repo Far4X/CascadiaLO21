@@ -8,12 +8,12 @@ class PixmapFactory
 {
 public:
     PixmapFactory() = delete;
-    static QPixmap createTile(GameTile* tile);
+    static QPixmap createTile(const GameTile* tile);
+    static QString matchToken(Wildlife wild);
 private:
-    static QPixmap createIconWithOverlay(const QString& basePath, const QString& token1,const QString& token2= QString(),const QString& token3= QString());
-    static QString matchTile(GameTile* tile);
-    static QString matchToken(GameTile* tile, int token);
-
+    static QPixmap createIconWithOverlay(const QString& basePath, const QString& token1,const QString& token2= QString(),const QString& token3= QString(),int rot = 0);
+    static QString matchTile(const GameTile* tile);
+    static QString matchToken(const GameTile* tile, int token);
 };
 
 #endif // GTILE_H

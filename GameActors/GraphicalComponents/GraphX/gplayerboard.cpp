@@ -147,7 +147,7 @@ void GPlayerBoard::addGxTile(int col,int row){
 
 void GPlayerBoard::show(){
     updateHexTiles();
-    m_manager->show();
+    m_manager->show(-1);
 }
 
 QSize GPlayerBoard::sizeHint() const {
