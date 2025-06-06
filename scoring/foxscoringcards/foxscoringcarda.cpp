@@ -12,7 +12,7 @@ std::vector<double> FoxScoringCardA::computeScore(const PlayerBoard& board) cons
         std::unordered_set<Wildlife> active;
         std::unordered_set<Wildlife> invalid;
         for (auto neigh : board.getNeighborTiles(*fox)) {
-            if (neigh == nullptr) {
+            if (neigh == nullptr || neigh->getToken() == nullptr) {
                 continue;
             }
             Wildlife animal = neigh->getToken()->getWildlifeType();

@@ -28,11 +28,13 @@ std::vector<double> FoxScoringCardD::computeScore(const PlayerBoard& board) cons
         }
 
         for (auto neigh : neighbors) {
-            Wildlife animal = neigh->getToken()->getWildlifeType();
-            if (animal == Fox) {
-                continue;
+            if (neigh != nullptr && neigh->getToken() != nullptr) {
+                Wildlife animal = neigh->getToken()->getWildlifeType();
+                if (animal == Fox) {
+                    continue;
+                }
+                counts[animal]++;
             }
-            counts[animal]++;
         }
 
         int count_pairs = 0;

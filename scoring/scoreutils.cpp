@@ -234,24 +234,15 @@ namespace ScoreUtils {
         return AdjacencyPolicy(
             // si la tuile courante possède le biome recherché du côté courant
             [filter](GameTile* tile) {
-                std::cout << "[DBG keepFn] Checking tile at ("
-                          << tile->getQ() << "," << tile->getR()
-                          << ") for filter=" << static_cast<int>(filter) << std::endl;
-
-                bool saw = false;
                 for (int side = 0; side < 6; side++) {
                     if (tile->getBiome(side) == filter) {
-                        saw = true;
-                        break;
+                        return true;
                     }
                 }
-
-                std::cout << "[DBG keepFn]   RESULT = " << (saw ? "KEEP" : "REJECT") << std::endl;
-                return saw;
+                return false;
             },
             // si le voisin possède le même biome du côté opposé
             [&board, filter](GameTile* curr, GameTile* neigh) {
-                std::cout << "ARE WE EVEN IN??";
                 for (int side = 0; side < 6; side++) {
                     Direction d = static_cast<Direction>(side);
                     if (board.getNeighborTile(*curr, d) != neigh) {
@@ -259,11 +250,10 @@ namespace ScoreUtils {
                     }
                     int opp_side = (side + 3) % 6;
                     if (curr->getBiome(side) == filter && neigh->getBiome(opp_side) == filter) {
-                        std::cout << "returning true" << std::endl;
+                        std::cout << "uniting (" << curr->getQ() << ", " << curr->getR() << ") with q (" << neigh->getQ() << ", " << neigh->getR() << ")" << std::endl;
                         return true;
                     }
                 }
-                std::cout << "returning false" << std::endl;
                 return false;
             }
         );

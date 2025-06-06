@@ -11,7 +11,7 @@ std::vector<double> FoxScoringCardC::computeScore(const PlayerBoard& board) cons
         std::unordered_map<Wildlife, int> counts;
         auto fox = component[0];
         for (auto neigh : board.getNeighborTiles(*fox)) {
-            if (neigh == nullptr) {
+            if (neigh == nullptr || neigh->getToken() == nullptr) {
                 continue;
             }
             Wildlife animal = neigh->getToken()->getWildlifeType();

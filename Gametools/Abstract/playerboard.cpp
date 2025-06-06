@@ -14,8 +14,7 @@ void PlayerBoard::show() {}
 GameTile* PlayerBoard::getNeighborTile(const GameTile& tile, Direction d) const {
     /*Permet de récupérer une tuile voisine*/
     HexCell hex = tile.getNeighbor(d);
-    GameTile::Offset off = PlayerBoard::axialToOffset(hex);
-    return this->getTile(off.getCol(), off.getRow());
+    return getTile(hex.getQ(), hex.getR());
 }
 
 std::vector<GameTile*> PlayerBoard::getNeighborTiles(const GameTile& tile) const {
@@ -23,8 +22,7 @@ std::vector<GameTile*> PlayerBoard::getNeighborTiles(const GameTile& tile) const
     std::vector<HexCell> hexes = tile.getNeighbors();
     std::vector<GameTile*> neighbors;
     for (const HexCell& hex : hexes) {
-        GameTile::Offset off = PlayerBoard::axialToOffset(hex);
-        neighbors.push_back(getTile(off.getCol(), off.getRow()));
+        neighbors.push_back(getTile(hex.getQ(), hex.getR()));
     }
     return neighbors;
 }
@@ -44,7 +42,7 @@ int PlayerBoard::getNbSameNeighbors(const GameTile& tile, Wildlife animal) const
     std::vector<GameTile*> neighbors = getNeighborTiles(tile);
     int count = 0;
     for (size_t i = 0; i < neighbors.size(); i++) {
-        if (neighbors[i] != nullptr && neighbors[i]->getToken()->getWildlifeType() == animal) {
+        if (neighbors[i] != nullptr && neighbors[i]->getToken() != nullptr && neighbors[i]->getToken()->getWildlifeType() == animal) {
             count++;
         }
     }

@@ -25,8 +25,6 @@ protected :
     unsigned short int m_id_token_to_rm = 5;
 
 public:
-    std::string getSaveString() const override;
-
     GameTile *getTile(unsigned short int i);
     int fillPlate();
     inline bool canFlushWithoutNaturetoken() const {return m_can_flush;};
