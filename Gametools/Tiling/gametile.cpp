@@ -68,6 +68,7 @@ GameTile::~GameTile(){
 }
 
 void GameTile::Rotate(Rotation rota){
+    //Permet de gérer la rotation des tuiles. Elle change les biomes du
     if (rota == Anti_Trigonometric){
         Biome tmp = m_biomes[5];
         for (int i = 5; i > 0; i--){
@@ -93,6 +94,7 @@ std::string GameTile::getSaveString() const{
 }
 
 char** getRepresentation(const GameTile* tile, unsigned short int size, unsigned int max_size, bool add_pos){ //Merge with hexcell function
+    //P
     unsigned short int height = 2*size+1;
     unsigned short int width = 4*size;
     char **rt = new char*[height];
@@ -291,11 +293,11 @@ bool GameTile::isKeystone(const std::string& description)const {
 }
 
 
-void GameTile::show(unsigned short int size) const {
+void GameTile::showCmd(unsigned short int size) const {
     const unsigned short int height = 2 * size + 1;
     const unsigned short int width = 4 * size;
 
-    // Créer un tableau pour la représentation
+    // On créé le tableau pour stocker la représentation
     char** tile_rpr = new char*[height];
     for (unsigned short int i = 0; i < height; i++) {
         tile_rpr[i] = new char[width];

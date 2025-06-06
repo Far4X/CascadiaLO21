@@ -63,7 +63,7 @@ void CTokenMenu::show(){
 
     GameTile* selected_tile = m_deck_tile->getTile(id_tile);
     std::cout << "\nTuile choisie :\n";
-    selected_tile->show();
+    selected_tile->showCmd();
 
     std::string reponse_rotation;
     do {
@@ -73,12 +73,12 @@ void CTokenMenu::show(){
         if (reponse_rotation[0] == 'd' || reponse_rotation[0] == 'D') {
             selected_tile->Rotate(Anti_Trigonometric); // rotation horaire
             std::cout << "Tuile apres rotation horaire :" << std::endl;
-            selected_tile->show();
+            selected_tile->showCmd();
         }
         else if (reponse_rotation[0] == 'g' || reponse_rotation[0] == 'G') {
             selected_tile->Rotate(Trigonometric); // rotation anti-horaire
             std::cout << "Tuile apres rotation anti-horaire :" << std::endl;
-            selected_tile->show();
+            selected_tile->showCmd();
         }
     } while (reponse_rotation[0] == 'd' || reponse_rotation[0] == 'D' || reponse_rotation[0] == 'g' || reponse_rotation[0] == 'G');
 
