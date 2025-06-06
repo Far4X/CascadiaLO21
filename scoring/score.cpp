@@ -2,6 +2,7 @@
 #include "score.hpp"
 #include "scoringstrategies/wildlifescoringstrategy.hpp"
 #include "scoringstrategies/tilescoringstrategy.hpp"
+#include "scoringstrategies/variantscoringstrategy.hpp"
 #include "scoring/scoreutils.hpp"
 
 
@@ -25,6 +26,10 @@ std::vector<double> Score::obtainScore(const PlayerBoard& board) const {
 }
 
 std::vector<double> Score::obtainScore(const PlayerBoard& board, const TileScoringStrategy& strat) const {
+    return strat.computeScore(board);
+}
+
+std::vector<double> Score::obtainScore(const PlayerBoard& board, const VariantScoringStrategy& strat) const {
     return strat.computeScore(board);
 }
 

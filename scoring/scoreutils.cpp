@@ -32,6 +32,7 @@
 #include <cassert>
 #include <set>
 #include <algorithm>
+#include <iostream>
 
 namespace ScoreUtils {
     std::unique_ptr<WildlifeScoringStrategy> makeWildlifeStrategy(const std::string& animal, char code) {
@@ -233,21 +234,36 @@ namespace ScoreUtils {
         return AdjacencyPolicy(
             // si la tuile courante possède le biome recherché du côté courant
             [filter](GameTile* tile) {
-                for (int side = 0; side < 6; side++)
-                    if (tile->getBiome(side) == filter)
-                        return true;
-                return false;
+                std::cout << "[DBG keepFn] Checking tile at ("
+                          << tile->getQ() << "," << tile->getR()
+                          << ") for filter=" << static_cast<int>(filter) << std::endl;
+
+                bool saw = false;
+                for (int side = 0; side < 6; side++) {
+                    if (tile->getBiome(side) == filter) {
+                        saw = true;
+                        break;
+                    }
+                }
+
+                std::cout << "[DBG keepFn]   RESULT = " << (saw ? "KEEP" : "REJECT") << std::endl;
+                return saw;
             },
             // si le voisin possède le même biome du côté opposé
             [&board, filter](GameTile* curr, GameTile* neigh) {
+                std::cout << "ARE WE EVEN IN??";
                 for (int side = 0; side < 6; side++) {
                     Direction d = static_cast<Direction>(side);
                     if (board.getNeighborTile(*curr, d) != neigh) {
                         continue;
                     }
                     int opp_side = (side + 3) % 6;
-                    return curr->getBiome(side) == filter && neigh->getBiome(opp_side) == filter;
+                    if (curr->getBiome(side) == filter && neigh->getBiome(opp_side) == filter) {
+                        std::cout << "returning true" << std::endl;
+                        return true;
+                    }
                 }
+                std::cout << "returning false" << std::endl;
                 return false;
             }
         );

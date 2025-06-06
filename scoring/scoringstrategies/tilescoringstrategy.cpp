@@ -2,10 +2,13 @@
 #include "scoring/scoreutils.hpp"
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 TileScoringStrategy::TileScoringStrategy() {}
 
 std::vector<double> TileScoringStrategy::computeScore(const PlayerBoard& board) const {
+
+    std::vector<std::string> biomes = {"Forest", "Wetland", "River", "Mountain", "Prairie"};
 
     std::vector<double> largestPerBiome(Biomes.size(), 0.0);
 

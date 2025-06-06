@@ -9,13 +9,10 @@ DISTFILES += \
 
 CONFIG += console
 
-SOURCES += $$files($$PWD/*.cpp, true) \
-    scoring/variants/familyvariant.cpp \
-    scoring/variants/intermediatevariant.cpp
+SOURCES += $$files($$PWD/*.cpp, true)
 
-HEADERS += $$files($$PWD/*.hpp, true) \
-    scoring/variants/familyvariant.hpp \
-    scoring/variants/intermediatevariant.hpp
+
+HEADERS += $$files($$PWD/*.hpp, true)
 
 RESOURCES += \
     ressources.qrc

@@ -19,7 +19,7 @@ void CGameMenu::show(){
         std::cout << "Merci de saisir une des options suivantes : " << std::endl;
         std::cout << "0 : Jouer" << std::endl;
         std::cout << "1 : Charger la dernière partie" << std::endl;
-        std::cout << "2 : Charger l'extension" << std::endl;
+        std::cout << "2 : Utiliser une variante " << std::endl;
         std::cout << "3 : Choisir les cartes de marquage points" << std::endl;
         std::cout << "4 : Tester le scoring" << std::endl;
 
@@ -35,8 +35,15 @@ void CGameMenu::show(){
             continue_menu = false;
             break;
         case '2':
-            this->addResult(std::tuple<std::string, std::string>("Load extension", "true"));
-            continue_menu = false;
+            std::cout << "Merci de rentrer la variante que vous voulez utiliser (F/f pour famille, I/i pour intermediaire)" << std::endl;
+            std::cin >> res;
+            if (res == "f" || res == "F" || res == "i" || res == "I"){
+                this->addResult(std::tuple<std::string, std::string>("Use variant", res));
+                continue_menu = false;
+            }
+            else {
+                std::cout << "Valeur entrée non valide, les changements n'ont pas été pris en compte." << std::endl;
+            }
             break;
         case '3':
             std::cout << "Merci de rentrer l'identifiant des cartes dans l'ordre Ours, Elan, Aigle, Renard, Saumon (ex : ABCDA)" << std::endl;

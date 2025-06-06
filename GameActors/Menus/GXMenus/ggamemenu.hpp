@@ -14,20 +14,22 @@ class GGameMenu : public GMenu<std::tuple<std::string, std::string>>{
     QGridLayout* m_main_layout = nullptr;
     QLabel* m_label = nullptr;
     QLabel* m_label_exp_recover = nullptr;
-    QLabel* m_label_exp_load_extension = nullptr;
+    QLabel* m_label_exp_variant = nullptr;
+    QLabel* m_label_exp_use_variant = nullptr;
     QLabel* m_label_exp_cards = nullptr;
 
     QPushButton* m_btn_recover = nullptr;
-    QPushButton* m_btn_load_extension = nullptr;
+    QPushButton* m_btn_use_variant = nullptr;
     QPushButton* m_btn_validate = nullptr;
 
     QLineEdit* m_line_edit_cards = nullptr;
+    QLineEdit* m_line_edit_variant = nullptr;
 public:
     GGameMenu(NotifiableInterface *tar);
     void show() override;
     void validate();
     void usePreviousGame();
-    void loadExtension();
+    void useVariant();
     /*void quitGame();
     void restartGame();*/
 

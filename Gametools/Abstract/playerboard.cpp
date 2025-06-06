@@ -125,11 +125,20 @@ bool PlayerBoard::hasNeighbour(const HexCell& pos){
 GameTile* PlayerBoard::getTile(int const &q, int const &r) const{
     /*Permet de retourner une tuile grâce à sa position qr*/
     HexCell::Offset offset_pos = PlayerBoard::axialToOffset(HexCell(q, r));
-    return TileHolder::getTile(offset_pos.getCol(), offset_pos.getRow());
+    int col = offset_pos.getCol();
+    int row = offset_pos.getRow();
+
+    if (col < 0 || col >= m_size_x || row < 0 || row >= m_size_y) {
+        return nullptr;
+    }
+    return TileHolder::getTile(col, row);
 }
 
 GameTile* PlayerBoard::getOffsetTile(int const &x, int const &y) const{
     /*Permet de retourner une tuile grâce à sa position xy*/
+    if (x < 0 || x >= m_size_x || y < 0 || y >= m_size_y) {
+        return nullptr;
+    }
     return TileHolder::getTile(x, y);
 }
 

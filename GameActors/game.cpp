@@ -78,7 +78,7 @@ void Game::init(){
 }
 
 void Game::play(){
-    for (int i = 0; i < 20; i++){
+    for (int i = 0; i < MAX_TURN; i++){
         for (int j = 0; j < m_nb_players; j++){
             makePlayerTurn();
         }
@@ -182,6 +182,14 @@ void Game::scoreGame() {
         std::vector<double> tile_scores = m_scorer.obtainScore(*board, tile_strategy);
         m_players[i]->setTilesScores(tile_scores);
 
+        // PARTIE VARIANTES
+        if (m_desc_cards.size() == 1) {
+            VariantScoringStrategy variant_strategy;
+            std::vector<double> variant_scores = m_scorer.obtainScore(*board, variant_strategy);
+            m_players[i]->setTokensScores(variant_scores);
+            break;
+        }
+
         // PARTIE JETONS
         /* Pour chaque carte de marquage, on va calculer le score et append ce score au vecteur wildlife_scores */
         const auto& cards = m_scorer.getScoringCards();
@@ -192,6 +200,22 @@ void Game::scoreGame() {
             // c'est un vecteur de double et pas un double normal parce que ça permet d'unifier la logique avec celle des tuiles
         }
         m_players[i]->setTokensScores(wildlife_scores);
+
+        std::vector<double> ti_scores = m_players[i]->getTilesScores();
+        std::vector<double> to_scores = m_players[i]->getTokensScores();
+
+        std::cout << "Player " << i << ": " << std::endl;
+        std::cout << "Bear:   " << to_scores[0] << std::endl;
+        std::cout << "Salmon: " << to_scores[1] << std::endl;
+        std::cout << "Hawk:   " << to_scores[2] << std::endl;
+        std::cout << "Elk:    " << to_scores[3] << std::endl;
+        std::cout << "Fox:    " << to_scores[4] << std::endl;
+
+        std::cout << "Forest:   " << ti_scores[0] << std::endl;
+        std::cout << "Wetland:  " << ti_scores[1] << std::endl;
+        std::cout << "River:    " << ti_scores[2] << std::endl;
+        std::cout << "Mountain: " << ti_scores[3] << std::endl;
+        std::cout << "Prairie:  " << ti_scores[4] << std::endl;
     }
 }
 
@@ -246,8 +270,7 @@ void Game::readNotification(unsigned int code){
             const std::string& key = std::get<0>(tup);
             const std::string& value = std::get<1>(tup);
             if (key == "Load extension") {
-                m_scorer.configureCards("IIIII");
-                // m_scorer.configureCards("FFFFF");
+                m_desc_cards = value;
                 std::cout << "cartes des variantes configurees avec succes";
             }
             if (key == "Use cards") {
@@ -418,7 +441,9 @@ void Game::readNotification(unsigned int code){
                     std::cout << "Tour : " << current_tour + 1 << std::endl;
                     std::cout << "Tour : " << current_tour + 1 << std::endl;
                     current_tour++;
-                    if (current_tour == 20){
+                    if (current_tour == MAX_TURN){
+                        delete m_menu_validate;
+                        m_menu_validate = nullptr;
                         return scoreGame();
                     }
                 }

@@ -6,11 +6,14 @@
 #include "GraphicalComponents/graphicalcomponents.hpp"
 #include "player.hpp"
 #include "../../scoring/scoringstrategies/tilescoringstrategy.hpp"
+#include "../../scoring/scoringstrategies/variantscoringstrategy.hpp"
 #include "../../scoring/scoringstrategies/wildlifescoringstrategy.hpp"
 #include "../../scoring/score.hpp"
 #include <QObject>
 
 #include <vector>
+
+#define MAX_TURN 5
 
 class GraphxVue;
 

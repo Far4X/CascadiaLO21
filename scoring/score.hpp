@@ -7,6 +7,7 @@
 class ScoringStrategy;
 class WildlifeScoringStrategy;
 class TileScoringStrategy;
+class VariantScoringStrategy;
 
 
 class Score {
@@ -21,6 +22,7 @@ public:
     const std::vector<std::unique_ptr<WildlifeScoringStrategy>>& getScoringCards() const { return m_scoring_cards; }
     std::vector<double> obtainScore(const PlayerBoard& board) const;  // for tokens
     std::vector<double> obtainScore(const PlayerBoard& board, const TileScoringStrategy& strat) const;  // for tiles
+    std::vector<double> obtainScore(const PlayerBoard& board, const VariantScoringStrategy& strat) const;  // for variants
     void setStrategy(size_t idx_card);  // for setting WildlifeScoringStrategy
     void configureCards(const std::string& cards);
 };
