@@ -41,21 +41,42 @@ GameStatus Game::getGameStatus() const {
 }
 
 std::string Game::getSaveString() const {
+    std::cout << "Saving game" << std::endl;
     std::string rt = "{";
-    rt += m_nb_players;
-    rt += ";" + std::to_string(m_extension) + ";" + m_desc_cards + ";" + std::to_string(current_tour) + ";" + std::to_string(m_is_console);
+    rt += std::to_string(m_nb_players);
+    rt += ";" + std::to_string(m_extension) + ";" + m_desc_cards + ";" + std::to_string(current_tour) + ";" + std::to_string(m_is_console) + ";";
+    std::cout << "Saving game 2" << std::endl;
     for (size_t i = 0; i < m_nb_players; i++){
+        std::cout << "Saving game p:" << i << std::endl;
         rt += m_players[i]->getSaveString();
         rt += ";";
     }
+    std::cout << "Saving game 3" << std::endl;
     rt += m_decktile->getSaveString();
     rt += ";}";
     return rt;
 }
 
+void Game::saveGame() const{
+    QFile file(QString::fromStdString("cache.svp"));
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
+        QTextStream out(&file);
+        std::cout << "Bf entering" << std::endl;
+        out <<QString::fromStdString(getSaveString());
+        std::cout << "After" << std::endl;
+        file.close();
+    }
+    else {
+        qDebug() << "Erreur lors de l'ouverture du fichier :" << file.errorString();
+    }
+}
+
+
 void Game::interpretString(std::string &def){
     std::vector<std::string> params = SalvableThing::separateParams(def);
     m_nb_players = SalvableThing::stringToInt(params[0]);
+    std::cout << "NB : " << m_nb_players << std::endl;
     m_extension = SalvableThing::stringToInt(params[1]);
     m_desc_cards = params[2];
     current_tour = SalvableThing::stringToInt(params[3]);
@@ -63,7 +84,114 @@ void Game::interpretString(std::string &def){
     for (int i = 0; i < m_nb_players; i++){
         m_players.push_back(new Player(params[5+i], m_is_console, this));
     }
+    if (m_is_console){
+        m_decktile = &CDeckTile::getInstance();
+    }
+    else {
+        m_decktile = &GDeckTile::getInstance();
+    }
+    for (size_t i = 0; i < params.size(); i++){
+    }
+    m_decktile->reinterpetString(params.back());
+
 }
+
+void Game::resurrectGame(){
+    QFile file(QString::fromStdString("cache.svp"));
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        throw CustomError("Fnf", 800);
+        return;
+    }
+
+    QTextStream in(&file);
+    std::string content = in.readAll().toStdString();
+    std::cout << content << std::endl;
+    file.close();
+    interpretString(content);
+
+    std::vector<GameTile*> m_available_tiles;
+    std::vector<const WildlifeToken*> m_available_tokens;
+    std::cout << "0" << std::endl;
+
+    for (size_t i = 0; i < m_nb_cards; i++){
+        m_available_tiles.push_back(m_cards[i]);
+    }
+    for (size_t i = 0; i < 5; i++){
+        for (size_t j = 0; j < 3; j++){
+            m_available_tiles.push_back(m_starter_cards[i][j]);
+        }
+    }
+    for (size_t i = 0; i < m_tokens.size(); i++){
+        m_available_tokens.push_back(m_tokens[i]);
+    }
+
+    std::cout << "1" << std::endl;
+
+    for (size_t i = 0; i < m_players.size(); i++){
+        std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int> params; // Used when ressucite. Store cards with id, posx, posy, rotation, token
+        while (!m_players[i]->getBoard()->hasAllCards()){
+            params = m_players[i]->getBoard()->getNextNeededCard();
+            std::cout << "Need cards  : " << std::get<0>(params) << ", Rota : " << std::get<3>(params) << std::endl;
+            for (size_t j = 0; j < m_available_tiles.size(); j++){
+                //std::cout << "Scanned : " << m_available_tiles[j]->getId() << std::endl;;
+                if (m_available_tiles[j]->getId() == std::get<0>(params)){
+                    HexCell pos = PlayerBoard::offsetToAxial(HexCell::Offset(std::get<1>(params), std::get<2>(params)));
+                    m_available_tiles[j]->setPos(pos.getQ(), pos.getR());
+                    /*for (unsigned int k = 0; k < std::get<3>(params); k++){
+                        std::cout << "R" << std::endl;
+                        m_available_tiles[j]->Rotate();
+                    }*/
+                    while (m_available_tiles[j]->getRotation() != std::get<3>(params)){
+                        std::cout << "Rotating " << m_available_tiles[j]->getRotation() << ", ob : " << std::get<3>(params) << std::endl;
+                        m_available_tiles[j]->Rotate();
+                    }
+                    for (unsigned int k = 0; k < m_available_tokens.size(); k++){
+                        //std::cout << static_cast<unsigned int>(m_available_tokens[i]->getWildlifeType()) << ", " << std::get<4>(params) << std::endl;
+                        if (static_cast<unsigned int>(m_available_tokens[k]->getWildlifeType()) == std::get<4>(params)){
+                            m_available_tiles[j]->setWildLifeToken(m_available_tokens[k]);
+                            m_available_tokens.erase(m_available_tokens.begin() + k);
+                            k = m_available_tokens.size();
+                        }
+                    }
+                    std::cout << "Added to pb" << std::endl;
+                    m_players[i]->getBoard()->addTile(*m_available_tiles[j]);
+                    m_available_tiles.erase(m_available_tiles.begin() + j);
+                    j = m_available_tiles.size();
+                }
+            }
+        }
+    }
+
+    std::vector<unsigned short int> things_to_add_to_decktile = m_decktile->getCardsToAdd();
+    for (size_t i = 0; i < 4; i ++) {
+        for (size_t j = 0; j < m_available_tiles.size(); j++){
+            if (m_available_tiles[j]->getId() == things_to_add_to_decktile[i]){
+                m_decktile->m_tiles[i] = m_available_tiles[j];
+                m_available_tiles.erase(m_available_tiles.begin() + j);
+                j = m_available_tiles.size();
+            }
+        }
+    }
+    things_to_add_to_decktile = m_decktile->getTokensToAdd();
+    for (size_t i = 0; i < 4; i ++) {
+        for (size_t j = 0; j < m_available_tokens.size(); j++){
+            if (static_cast<unsigned short int>(m_available_tokens[j]->getWildlifeType())== things_to_add_to_decktile[i]){
+                m_decktile->m_displayed_tokens[i] = m_available_tokens[j];
+                m_available_tokens.erase(m_available_tokens.begin() + j);
+                j = m_available_tokens.size();
+            }
+        }
+    }
+
+    for (size_t i = 0; i < m_available_tokens.size(); i ++){
+        m_decktile->addToken(m_available_tokens[i]);
+    }
+    for (size_t i = 0; i < m_available_tiles.size(); i++){
+        m_decktile->addTile(m_available_tiles[i]);
+    }
+    makePlayerTurn();
+}
+
 
 void Game::init(){
     m_status = GameStatus::Running;
@@ -96,34 +224,6 @@ void Game::getInfoGX(){
 void Game::initPlayerboards(){
     std::cout << "Init playerboard : " << m_nb_players << std::endl;
 
-    m_starter_cards[0][0] = new GameTile(1000, "2223333245");
-    m_starter_cards[0][1] = new GameTile(1001, "55555515");
-    m_starter_cards[0][2] = new GameTile(1002, "444111213");
-
-    m_starter_cards[1][0] = new GameTile(1003, "3331113423");
-    m_starter_cards[1][1] = new GameTile(1004, "22222214");
-    m_starter_cards[1][2] = new GameTile(1005, "444555215");
-
-    m_starter_cards[2][0] = new GameTile(1006, "1112223354");
-    m_starter_cards[2][1] = new GameTile(1007, "44444411");
-    m_starter_cards[2][2] = new GameTile(1008, "333555212");
-
-    m_starter_cards[3][0] = new GameTile(1009, "5551113123");
-    m_starter_cards[3][1] = new GameTile(1010, "33333312");
-    m_starter_cards[3][2] = new GameTile(1011, "444222245");
-
-    m_starter_cards[4][0] = new GameTile(1012, "4443333134");
-    m_starter_cards[4][1] = new GameTile(1013, "11111113");
-    m_starter_cards[4][2] = new GameTile(1014, "555222252");
-
-    for (int i = 0; i < 5; i ++){
-        m_starter_cards[i][0]->Rotate(Trigonometric);
-        m_starter_cards[i][0]->setPos(-1, 1);
-        m_starter_cards[i][1]->setPos(0, 0);
-        m_starter_cards[i][2]->setPos(0, 1);
-
-    }
-
     std::random_device rd;
     std::mt19937 rng(rd());
     for (int i = 0; i < m_nb_players; i++){
@@ -153,7 +253,7 @@ void Game::getTileAndToken(unsigned short int pos_tile, unsigned short int pos_t
 
 void Game::makePlayerTurn(){
     if (m_is_console){
-        std::cout << "----- \nTour de " << m_players[current_player]->getName() << std::endl;
+        std::cout << "----- \nTour de " << m_players[current_player]->getName()<< " -- Tour : " << current_tour << std::endl;
         m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
         m_players[current_player]->getBoard()->show();
     }
@@ -282,6 +382,10 @@ void Game::readNotification(unsigned int code){
                 readCards();
                 scoreGame();
             }
+            if (key == "Recover"){
+                return resurrectGame();
+                //return play();
+            }
 
         }
         if (m_is_console){
@@ -300,36 +404,39 @@ void Game::readNotification(unsigned int code){
             m_decktile->addTile(m_cards[i]);
         }
         m_decktile->fillPlate();
-        m_player_menu->show();
-        return play();
+        return m_player_menu->show();
+        //return play();
     }
 
     if (code == 3){
         std::cout << "Received code 3" << std::endl;
-        if (m_menu_token == nullptr){
-            throw CustomError("Menu token not initialized", 1);
+        if (m_menu_token != nullptr){
+            //throw CustomError("Menu token not initialized", 1);
+            std::cout << "Game notified with code 3" << std::endl;
+            std::vector<unsigned short int> params;
+            for (Menu<unsigned short int>::Iterator it = m_menu_token->getIterator(); !it.isDone(); it++){
+                params.push_back(it.getValue());
+            }
+            delete m_menu_token;
+            m_menu_token = nullptr;
+            if (params.size() == 2){
+                getTileAndToken(params[0], params[1]);
+            }
+            else {
+                getTileAndToken(params[0]);
+            }
         }
-        std::cout << "Game notified with code 3" << std::endl;
-        std::vector<unsigned short int> params;
-        for (Menu<unsigned short int>::Iterator it = m_menu_token->getIterator(); !it.isDone(); it++){
-            params.push_back(it.getValue());
+        std::cout << "Here 22" << std::endl;
+        if (m_players[current_player]->getBoard() == nullptr){
+            std::cout << "Cooked man" << std::endl;
         }
-        delete m_menu_token;
-        m_menu_token = nullptr;
-        if (params.size() == 2){
-            getTileAndToken(params[0], params[1]);
-        }
-        else {
-            getTileAndToken(params[0]);
-        }
-
         m_players[current_player]->getBoard()->resetPointedCell();
+        std::cout << "Here 23" << std::endl;
+
         m_is_waiting_for_position = true;
         m_is_waiting_to_place_tile = true;
         std::cout << "End of code 3" << std::endl;
         return m_players[current_player]->getBoard()->show();
-
-
     }
 
     if (code == 4){
@@ -438,7 +545,7 @@ void Game::readNotification(unsigned int code){
                 current_player++;
                 if (current_player == m_nb_players){
                     current_player = 0;
-                    std::cout << "Tour : " << current_tour + 1 << std::endl;
+
                     std::cout << "Tour : " << current_tour + 1 << std::endl;
                     current_tour++;
                     if (current_tour == MAX_TURN){
@@ -449,6 +556,9 @@ void Game::readNotification(unsigned int code){
                 }
             }
             else {
+                if (m_players[current_player]->getBoard()->getLast()->isKeystone()){
+                    m_players[current_player]->removeNatureToken();
+                }
                 m_players[current_player]->getBoard()->removeLast();
             }
         }
@@ -460,6 +570,34 @@ void Game::readNotification(unsigned int code){
 }
 
 void Game::readCards(std::string path){
+    m_starter_cards[0][0] = new GameTile("2223333245");
+    m_starter_cards[0][1] = new GameTile("55555515");
+    m_starter_cards[0][2] = new GameTile("444111213");
+
+    m_starter_cards[1][0] = new GameTile("3331113423");
+    m_starter_cards[1][1] = new GameTile("22222214");
+    m_starter_cards[1][2] = new GameTile("444555215");
+
+    m_starter_cards[2][0] = new GameTile("1112223354");
+    m_starter_cards[2][1] = new GameTile("44444411");
+    m_starter_cards[2][2] = new GameTile("333555212");
+
+    m_starter_cards[3][0] = new GameTile("5551113123");
+    m_starter_cards[3][1] = new GameTile("33333312");
+    m_starter_cards[3][2] = new GameTile("444222245");
+
+    m_starter_cards[4][0] = new GameTile("4443333134");
+    m_starter_cards[4][1] = new GameTile("11111113");
+    m_starter_cards[4][2] = new GameTile("555222252");
+
+    for (int i = 0; i < 5; i ++){
+        m_starter_cards[i][0]->Rotate(Trigonometric);
+        m_starter_cards[i][0]->setPos(-1, 1);
+        m_starter_cards[i][1]->setPos(0, 0);
+        m_starter_cards[i][2]->setPos(0, 1);
+
+    }
+
     for (int i = 0; i < 30; i++){
         m_tokens.push_back(new WildlifeToken(Fox));
         m_tokens.push_back(new WildlifeToken(Bear));
@@ -472,15 +610,15 @@ void Game::readCards(std::string path){
         // debug
         m_cards = new GameTile*[9];
         m_nb_cards = 9;
-        m_cards[0] = new GameTile(1, "11111111");
-        m_cards[1] = new GameTile(2, "222222212");
-        m_cards[2] = new GameTile(3, "33333313");
-        m_cards[3] = new GameTile(4, "44444414");
-        m_cards[4] = new GameTile(5, "55555515");
-        m_cards[5] = new GameTile(6, "111222234");
-        m_cards[6] = new GameTile(7, "3332223213");
-        m_cards[7] = new GameTile(8, "444222215");
-        m_cards[8] = new GameTile(9, "5552223214");
+        m_cards[0] = new GameTile("11111111");
+        m_cards[1] = new GameTile("222222212");
+        m_cards[2] = new GameTile("33333313");
+        m_cards[3] = new GameTile("44444414");
+        m_cards[4] = new GameTile("55555515");
+        m_cards[5] = new GameTile("111222234");
+        m_cards[6] = new GameTile("3332223213");
+        m_cards[7] = new GameTile("444222215");
+        m_cards[8] = new GameTile("5552223214");
 
         return;
     }
@@ -503,7 +641,7 @@ void Game::readCards(std::string path){
     m_cards = new GameTile*[m_nb_cards];
 
     for (int i = 1; i <= m_nb_cards && i < parts.size(); ++i) {
-        m_cards[i - 1] = new GameTile(i, parts[i].toStdString());
+        m_cards[i - 1] = new GameTile(parts[i].toStdString());
     }
 
 

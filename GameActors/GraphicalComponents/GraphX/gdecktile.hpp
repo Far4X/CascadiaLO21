@@ -27,7 +27,6 @@ public:
     void show() override;
     static GDeckTile& getInstance();
 
-    std::string getSaveString() const override;
 };
 
 #endif // GDECKCARD_HPP

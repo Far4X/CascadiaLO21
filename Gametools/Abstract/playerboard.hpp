@@ -35,6 +35,7 @@ public:
     void addTile(GameTile& tile);
     void addToken(const WildlifeToken* token, HexCell& pos_target);
     void removeLast();
+    const GameTile* getLast();
     bool hasNeighbour(const HexCell& pos);
     inline HexCell getPointedCell() const {return m_pointed_cell;};
     inline void resetPointedCell() {m_pointed_cell = HexCell(MAX_SIZE,MAX_SIZE);};

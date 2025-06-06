@@ -9,10 +9,6 @@ GDeckTile& GDeckTile::getInstance(){
     return ins;
 }
 
-std::string GDeckTile::getSaveString() const {
-    return "";
-}
-
 void GDeckTile::construct(){
     if(widget != nullptr) delete widget;
     widget = new QWidget;
@@ -58,5 +54,4 @@ void GDeckTile::show(){
     GraphXVue::instance()->addDeck(widget);
     widget->show();
     std::cout<<"ok";
-
 }

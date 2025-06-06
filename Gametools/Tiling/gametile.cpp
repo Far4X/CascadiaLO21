@@ -1,7 +1,10 @@
 #include "gametile.hpp"
 #include <iostream>
 
-GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy) : HexCell(posx, posy), m_id(id){
+unsigned int GameTile::nb_tiles = 0;
+
+
+GameTile::GameTile(Biome biomes[6], Wildlife *type, int num_types, int posx, int posy) : HexCell(posx, posy), m_id(nb_tiles++){
     for (int i = 0; i < 6; i++){
         m_biomes[i] = biomes[i];
     }
@@ -12,7 +15,7 @@ GameTile::GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_typ
     }
 }
 
-GameTile::GameTile(int id, std::string description) : HexCell(), m_id(id){
+GameTile::GameTile(std::string description) : HexCell(), m_id(nb_tiles++){
     for (int i = 0; i < 6; i++){
         switch (description[i]) {
         case '1' :
@@ -67,19 +70,20 @@ GameTile::~GameTile(){
 void GameTile::Rotate(Rotation rota){
     if (rota == Anti_Trigonometric){
         Biome tmp = m_biomes[5];
-        for (int i = 6; i > 0; i--){
+        for (int i = 5; i > 0; i--){
             m_biomes[i] = m_biomes[i-1];
         }
         m_biomes[0] = tmp;
         m_rotation++;
-        m_rotation%=6;
+        m_rotation %= 6;
         return;
     }
     Biome tmp = m_biomes[0];
     for (int i = 0; i < 5; i++){
         m_biomes[i] = m_biomes[i+1];
     }
-    m_rotation = (m_rotation-1)%6;
+    m_rotation = (m_rotation-1 + 6);
+    m_rotation %= 6;
     m_biomes[5] = tmp;
     return;
 }

@@ -21,12 +21,31 @@ DeckTile::~DeckTile(){
 
 }
 
-std::string DeckTile::getSaveString() const {
-    for (unsigned char i = 0; i < 4; i++){
-
+void DeckTile::reinterpetString(const std::string& def){
+    //std::cout << "Decktile " << def << std::endl;
+    std::vector<std::string> params = SalvableThing::separateParams(def);
+    if (params.size() != 4){
+        throw 99;
+    }
+    for (unsigned short i = 0; i < 4; i++){
+        std::vector<std::string> param_sep = separateParams(params[i], ',');
+        //std::cout << "Separated : " << param_sep[0] << ", " << param_sep[1] << std::endl;
+        m_expected_token.push_back(stringToInt(param_sep[0]));
+        m_expected_card.push_back(stringToInt(param_sep[1]));
     }
 }
 
+
+
+std::string DeckTile::getSaveString() const {
+    std::string rt = "{";
+    for (unsigned char i = 0; i < 4; i++){
+        rt += std::to_string(m_displayed_tokens[i]->getWildlifeType()) + ",";
+        rt += std::to_string(m_tiles[i]->getId()) + ";";
+    }
+    rt += "}";
+    return rt;
+}
 
 GameTile* DeckTile::getTile(unsigned short int i){
     if (i < 4){

@@ -57,6 +57,10 @@ class Game : public SalvableThing, public NotifiableInterface, public QObject {
     //std::vector <void *> throwaway;
     NotifiableInterface* const m_target;
     void endTurn();
+    void resurrectGame();
+    void interpretString(std::string &def);
+    void saveGame() const;
+
 
 
 public:
@@ -78,7 +82,6 @@ public:
     void restart();
     void quit();
     const DeckTile* getDeckTile() const {return m_decktile;};
-    void interpretString(std::string &def);
 };
 
 #endif // GAME_H

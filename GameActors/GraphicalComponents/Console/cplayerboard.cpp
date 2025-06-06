@@ -4,7 +4,7 @@
 CPlayerBoard::CPlayerBoard(NotifiableInterface *tar) : PlayerBoard(tar){}
 
 CPlayerBoard::CPlayerBoard(NotifiableInterface *tar, const std::string& def) : PlayerBoard(tar){
-
+    reinterpretString(def);
 }
 
 
@@ -113,7 +113,7 @@ void CPlayerBoard::reprBoard(){
         }
     }
     int base_x = -m_x_swift;
-    int base_y = -m_y_swift;
+    int base_y = -m_y_swift - m_size_tile;
     for (int x = 0; x < MAX_SIZE; x++){
         for (int y = 0; y < MAX_SIZE; y++){
             //std::cout << base_x << "; " << base_y << std::endl;
