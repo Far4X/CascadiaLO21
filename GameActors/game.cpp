@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QTextStream>
 
+#define NB_TYPE_TILES 5
 
 Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players(0), m_is_console(is_console), m_target(interface){
     std::srand(std::time(0)); // debug
@@ -275,6 +276,35 @@ void Game::makePlayerTurn(){
 
 
 void Game::scoreGame() {
+    class maxScore final{
+        std::vector<unsigned int> fst_players; //First players
+        std::vector<unsigned int> snd_players; //Second ones
+        unsigned int max_val = 0;
+        unsigned int snd_val = 0;
+    public :
+        maxScore() = default;
+        ~maxScore() = default;
+        const std::vector<unsigned int>& getFirsts() const {return fst_players;}
+        const std::vector<unsigned int>& getSeconds() const {return snd_players;}
+        void considerateScore(const unsigned int &val, const unsigned int &pl){
+            if (val > max_val){
+                snd_players = fst_players; snd_val = max_val;
+                fst_players = {}; fst_players.push_back(pl); max_val = val; return;
+            }
+            if (val == max_val){
+                fst_players.push_back(pl); return;
+            }
+            if (val > snd_val){
+                snd_players = {}; snd_players.push_back(pl); snd_val = val; return;
+            }
+            if (val == snd_val){
+                snd_players.push_back(pl);
+            }
+        }
+    };
+
+    maxScore* tab_max_scores = new maxScore[NB_TYPE_TILES];
+
     for (size_t i = 0; i < m_nb_players; i++) {  // boucle joueurs
         auto board = m_players[i]->getBoard();
 
@@ -307,7 +337,6 @@ void Game::scoreGame() {
             m_players[i]->setTokensScores(wildlife_scores);
         }
 
-        // SCORE TOTAL
         int total_score = 0;
         for (int j = 0; j < 5; j++) {
             total_score += m_players[i]->getTilesScores()[j] + m_players[i]->getTokensScores()[j];
@@ -315,17 +344,16 @@ void Game::scoreGame() {
         total_score += m_players[i]->getNbNatureToken();
         m_players[i]->setScore(total_score);
 
-
         std::vector<double> ti_scores = m_players[i]->getTilesScores();
         std::vector<double> to_scores = m_players[i]->getTokensScores();
         int nb_nature_tokens = m_players[i]->getNbNatureToken();
 
         std::cout << "Player " << i << ": " << std::endl;
         std::cout << "Bear:   " << to_scores[0] << std::endl;
-        std::cout << "Elk:    " << to_scores[1] << std::endl;
+        std::cout << "Elk: " << to_scores[1] << std::endl;
         std::cout << "Hawk:   " << to_scores[2] << std::endl;
         std::cout << "Fox:    " << to_scores[3] << std::endl;
-        std::cout << "Salmon: " << to_scores[4] << std::endl;
+        std::cout << "Salmon:    " << to_scores[4] << std::endl;
 
         std::cout << "Forest:   " << ti_scores[0] << std::endl;
         std::cout << "Wetland:  " << ti_scores[1] << std::endl;
@@ -334,7 +362,36 @@ void Game::scoreGame() {
         std::cout << "Prairie:  " << ti_scores[4] << std::endl;
 
         std::cout << "Nature token bonus: " << nb_nature_tokens << std::endl;
+
+        for (size_t j = 0; j < ti_scores.size(); j++){
+            tab_max_scores[j].considerateScore(ti_scores[j], i);
+        }
     }
+
+    for (unsigned short i = 0; i < NB_TYPE_TILES; i++){
+        unsigned int nb_firsts = tab_max_scores[i].getFirsts().size();
+        switch (nb_firsts) {
+        case 0 :
+            throw CustomError("Nobody wins. There is no war, so there is an error", 89);
+            break;
+        case 1:
+            m_players[tab_max_scores[i].getFirsts()[0]]->addScore(3);
+            for (unsigned int pl : tab_max_scores[i].getSeconds()){
+                m_players[pl]->addScore(1);
+            }
+            break;
+        case 2:
+            for (unsigned int pl : tab_max_scores[i].getFirsts()){
+                m_players[pl]->addScore(2);
+            }
+        default:
+            for (unsigned int pl : tab_max_scores[i].getFirsts()){
+                m_players[pl]->addScore(1);
+            }
+        }
+    }
+
+    delete[] tab_max_scores;
 }
 
 void Game::notifyInterface(unsigned int code){
