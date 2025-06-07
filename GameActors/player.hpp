@@ -14,7 +14,7 @@ class Player : public SalvableThing {
     friend class Game;
 
     std::string m_name;
-    std::vector<int> m_bonus_scores; // "C'est le score bonus tu sais pour celui qui est premier" Zakariae, 3 juin 2025 "C'est bien, c'est assez descriptif"
+    //unsigned int m_bonus_scores; // "C'est le score bonus tu sais pour celui qui est premier" Zakariae, 3 juin 2025 "C'est bien, c'est assez descriptif"
     const unsigned int m_id;
     unsigned int m_score = 0;
     static unsigned int nb_players;
@@ -35,7 +35,7 @@ public:
     const std::string getName() const {return m_name;}
     unsigned int getId() const {return m_id;}
     unsigned int getScore() const {return m_score;}
-    void setScore(int s) { if (s >= 0) { m_score = s; }}
+    //void setScore(int s) { if (s >= 0) { m_score = s; }}
     PlayerBoard* getBoard() const {return m_board;}
     unsigned short int getNbNatureToken() const {return m_nb_nature_token;};
     void addNatureToken() {m_nb_nature_token++;};
