@@ -12,6 +12,13 @@ Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players
     std::srand(std::time(0)); // debug
     m_cards = new GameTile*;
     readCards();
+    if (m_is_console){
+        m_message_box = new CMessageBox();
+    }
+    else {
+        m_message_box = new GMessageBox();
+
+    }
 }
 
 Game::~Game(){
@@ -34,6 +41,8 @@ Game::~Game(){
     for (size_t i = 0; i < m_tokens.size(); i++){
         delete m_tokens[i];
     }
+    delete m_message_box;
+    m_message_box = nullptr;
 }
 
 GameStatus Game::getGameStatus() const {
@@ -41,17 +50,13 @@ GameStatus Game::getGameStatus() const {
 }
 
 std::string Game::getSaveString() const {
-    std::cout << "Saving game" << std::endl;
     std::string rt = "{";
     rt += std::to_string(m_nb_players);
     rt += ";" + std::to_string(m_extension) + ";" + m_desc_cards + ";" + std::to_string(current_tour) + ";" + std::to_string(m_is_console) + ";";
-    std::cout << "Saving game 2" << std::endl;
     for (size_t i = 0; i < m_nb_players; i++){
-        std::cout << "Saving game p:" << i << std::endl;
         rt += m_players[i]->getSaveString();
         rt += ";";
     }
-    std::cout << "Saving game 3" << std::endl;
     rt += m_decktile->getSaveString();
     rt += ";}";
     return rt;
@@ -250,13 +255,15 @@ void Game::makePlayerTurn(){
     if (current_tour >= MAX_TURN){
         scoreGame();
     }
+    m_message_box->addMessage( "----- \nTour de " + m_players[current_player]->getName(), 1, 0);
+    m_message_box->show();
+    std::cout << "----- \nTour de " << m_players[current_player]->getName()<< " -- Tour : " << current_tour << std::endl;
+
     if (m_is_console){
-        std::cout << "----- \nTour de " << m_players[current_player]->getName()<< " -- Tour : " << current_tour << std::endl;
         m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
         m_players[current_player]->getBoard()->show();
     }
     else {
-        std::cout << "----- \nTour de " << m_players[current_player]->getName() << std::endl;
         GraphXVue::instance()->show(current_player); // Update l'affichage
         GTokenMenu* gMenu = new GTokenMenu(this, m_decktile, m_players[current_player]);
         m_menu_token = gMenu;
@@ -424,16 +431,14 @@ void Game::readNotification(unsigned int code){
                 getTileAndToken(params[0]);
             }
         }
-        std::cout << "Here 22" << std::endl;
         if (m_players[current_player]->getBoard() == nullptr){
             std::cout << "Cooked man" << std::endl;
+            //throw CustomError();
         }
         m_players[current_player]->getBoard()->resetPointedCell();
-        std::cout << "Here 23" << std::endl;
 
         m_is_waiting_for_position = true;
         m_is_waiting_to_place_tile = true;
-        std::cout << "End of code 3" << std::endl;
         return m_players[current_player]->getBoard()->show();
     }
 
@@ -527,7 +532,6 @@ void Game::readNotification(unsigned int code){
     }
 
     else if (code == 5){
-        std::cout << "Received code 5" << std::endl;
         if (m_menu_validate == nullptr){
             std::cout << "Validate menu not good" << std::endl;
             return;
@@ -544,8 +548,8 @@ void Game::readNotification(unsigned int code){
                 if (current_player == m_nb_players){
                     current_player = 0;
 
-                    std::cout << "Tour : " << current_tour + 1 << std::endl;
                     current_tour++;
+                    m_message_box->addMessage("Tour numéro " + std::to_string(current_tour + 1), 0, 0);
                     saveGame();
                     if (current_tour == MAX_TURN){
                         delete m_menu_validate;
@@ -563,7 +567,6 @@ void Game::readNotification(unsigned int code){
         }
         delete m_menu_validate;
         m_menu_validate = nullptr;
-        std::cout << "End of code 5" << std::endl;
         return makePlayerTurn();
     }
 }

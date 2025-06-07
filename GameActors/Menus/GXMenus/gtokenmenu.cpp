@@ -4,7 +4,7 @@ GTokenMenu::GTokenMenu(NotifiableInterface* tar,DeckTile* decktile, Player *call
     m_main_layout = new QGridLayout(this);
     m_btn_clear_tokens  = new QPushButton("Regénérer les tokens", this);
     m_btn_no_token = new QPushButton("Ne pas utiliser de token", this);;
-    m_btn_multichoice = new QPushButton("Choisir séparément token et tuile", this);;
+    m_btn_multichoice = new QPushButton("Choisir séparément token et tuile", this);
     std::string str = "Vous avez " + std::to_string(m_caller->getNbNatureToken()) + " Tokens";
     m_label = new QLabel(str.c_str(), this);
 
@@ -16,8 +16,9 @@ GTokenMenu::GTokenMenu(NotifiableInterface* tar,DeckTile* decktile, Player *call
     m_main_layout->addWidget(m_btn_multichoice, 1, 2, 1, 1);
 
     QObject::connect(m_btn_no_token, &QPushButton::clicked, this, &GTokenMenu::selectTile);
+    QObject::connect(m_btn_clear_tokens, &QPushButton::clicked, this, &GTokenMenu::clearTokens);
+
     if (m_caller->getNbNatureToken() > 0){
-        QObject::connect(m_btn_clear_tokens, &QPushButton::clicked, this, &GTokenMenu::clearTokens);
         QObject::connect(m_btn_multichoice, &QPushButton::clicked, this, &GTokenMenu::chooseMultiple);
     }
 
@@ -55,6 +56,7 @@ void GTokenMenu::selectTile(){
 void GTokenMenu::clearTokens(){
     if (m_decktile->canFlushWithoutNaturetoken()){
         m_decktile->clearTokens();
+        this->show();
         return;
     }
     m_decktile->clearTokens();

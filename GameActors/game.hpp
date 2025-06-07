@@ -35,6 +35,7 @@ class Game : public SalvableThing, public NotifiableInterface, public QObject {
     Menu<std::tuple<std::string, std::string>>* m_game_menu = nullptr;  //Représente le menu sélectionneur du jeu
     Menu<unsigned short int>* m_menu_token = nullptr; //Représente le menu utile pour choisir le token et la tuile à poser
     Menu<bool>* m_menu_validate = nullptr; //Représente le menu qui permet de valider les changements
+    MessageBox* m_message_box = nullptr;
 
     bool m_is_waiting_for_position = false; //Variable booléenne pour savoir si on attend une position
     bool m_is_waiting_to_place_tile = false;
