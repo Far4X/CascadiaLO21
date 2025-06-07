@@ -18,9 +18,11 @@ std::vector<double> TileScoringStrategy::computeScore(const PlayerBoard& board) 
 
         auto groups = ScoreUtils::getComponents(board, MAX_SIZE, ScoreUtils::makeBiomePolicy(board, filter));
 
+        /*
         for (size_t i = 0; i < groups.size(); i++) {
             std::cout << "Component " << i << " size = " << groups[i].size() << std::endl;
         }
+        */
 
         int best = 1;
         for (auto& cluster : groups) {

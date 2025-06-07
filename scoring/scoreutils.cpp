@@ -455,10 +455,9 @@ namespace ScoreUtils {
                 used.insert(tile);
             }
             dfs(idx + 1, curr_score + points[idx], best_score, points, candidates, used);
-        }
-
-        for (GameTile* tile : candidates[idx]) {
-            used.erase(tile);
+            for (GameTile* tile : candidates[idx]) {
+                used.erase(tile);
+            }
         }
     }
 

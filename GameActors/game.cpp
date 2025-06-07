@@ -275,10 +275,6 @@ void Game::makePlayerTurn(){
 
 
 void Game::scoreGame() {
-    // à rajouter
-    /* if (m_status != Finished) {
-     * throw "Cannot score an unfinished game";
-    */
     for (size_t i = 0; i < m_nb_players; i++) {  // boucle joueurs
         auto board = m_players[i]->getBoard();
 
@@ -306,21 +302,33 @@ void Game::scoreGame() {
         }
         m_players[i]->setTokensScores(wildlife_scores);
 
+        // SCORE TOTAL
+        int total_score = 0;
+        for (int j = 0; j < 5; j++) {
+            total_score += m_players[i]->getTilesScores()[j] + m_players[i]->getTokensScores()[j];
+        }
+        total_score += m_players[i]->getNbNatureToken();
+        m_players[i]->setScore(total_score);
+
+
         std::vector<double> ti_scores = m_players[i]->getTilesScores();
         std::vector<double> to_scores = m_players[i]->getTokensScores();
+        int nb_nature_tokens = m_players[i]->getNbNatureToken();
 
         std::cout << "Player " << i << ": " << std::endl;
         std::cout << "Bear:   " << to_scores[0] << std::endl;
-        std::cout << "Salmon: " << to_scores[1] << std::endl;
+        std::cout << "Elk:    " << to_scores[1] << std::endl;
         std::cout << "Hawk:   " << to_scores[2] << std::endl;
-        std::cout << "Elk:    " << to_scores[3] << std::endl;
-        std::cout << "Fox:    " << to_scores[4] << std::endl;
+        std::cout << "Fox:    " << to_scores[3] << std::endl;
+        std::cout << "Salmon: " << to_scores[4] << std::endl;
 
         std::cout << "Forest:   " << ti_scores[0] << std::endl;
         std::cout << "Wetland:  " << ti_scores[1] << std::endl;
         std::cout << "River:    " << ti_scores[2] << std::endl;
         std::cout << "Mountain: " << ti_scores[3] << std::endl;
         std::cout << "Prairie:  " << ti_scores[4] << std::endl;
+
+        std::cout << "Nature token bonus: " << nb_nature_tokens << std::endl;
     }
 }
 

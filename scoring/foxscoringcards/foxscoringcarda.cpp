@@ -10,22 +10,11 @@ std::vector<double> FoxScoringCardA::computeScore(const PlayerBoard& board) cons
     for (auto component : foxes) {
         auto fox = component[0];
         std::unordered_set<Wildlife> active;
-        std::unordered_set<Wildlife> invalid;
         for (auto neigh : board.getNeighborTiles(*fox)) {
-            if (neigh == nullptr || neigh->getToken() == nullptr) {
-                continue;
-            }
-            Wildlife animal = neigh->getToken()->getWildlifeType();
-            if (active.count(animal)) {
-                active.erase(animal);
-                final_score--;
-                invalid.insert(animal);
-            }
-            else if (!invalid.count(animal)) {
-                active.insert(animal);
-                final_score++;
-            }
+            if (neigh != nullptr && neigh->getToken() != nullptr)
+                active.insert(neigh->getToken()->getWildlifeType());
         }
+        final_score += active.size();
     }
-    return {final_score};
+    return { final_score };
 }

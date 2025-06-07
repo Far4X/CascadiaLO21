@@ -7,7 +7,17 @@ std::vector<double> SalmonScoringCardC::computeScore(const PlayerBoard& board) c
     auto salmons = ScoreUtils::getComponents(board, MAX_SIZE, salmon_c);
 
     double final_score = 0;
+    bool flag = true;
     for (size_t i = 0; i < salmons.size(); i++) {
+        for (GameTile* salmon : salmons[i]) {
+            if (board.getNbSameNeighbors(*salmon, Salmon) > 2) {
+                flag = false;
+            }
+        }
+        if (!flag) {
+            flag = true;
+            continue;  // on ignore ce groupe
+        }
         switch (salmons[i].size()) {
         case 0:
             break;
