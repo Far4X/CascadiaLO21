@@ -1,6 +1,8 @@
 #include "variantscoringstrategy.hpp"
 #include "scoring/scoreutils.hpp"
 
+VariantScoringStrategy::VariantScoringStrategy(Variant v) : variant(v) {}
+
 std::vector<double> VariantScoringStrategy::computeScore(const PlayerBoard& board) const {
     std::vector<double> final_score;
     std::vector<int> points_lookup;
@@ -11,7 +13,7 @@ std::vector<double> VariantScoringStrategy::computeScore(const PlayerBoard& boar
         points_lookup = {0, 0, 5, 8, 12};
     }
     for (Wildlife animal : Animals) {
-        auto groups = ScoreUtils::getComponents(board, animal, ScoreUtils::makeWildlifePolicy(animal));
+        auto groups = ScoreUtils::getComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(animal));
         double total_score = 0;
         for (size_t i = 0; i < groups.size(); i++) {
             if (groups[i].size() < points_lookup.size()) {

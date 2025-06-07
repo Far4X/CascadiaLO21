@@ -256,7 +256,7 @@ void Game::makePlayerTurn(){
         scoreGame();
     }
     m_message_box->addMessage( "----- \nTour de " + m_players[current_player]->getName(), 1, 0);
-    m_message_box->show();
+    // m_message_box->show();
     std::cout << "----- \nTour de " << m_players[current_player]->getName()<< " -- Tour : " << current_tour << std::endl;
 
     if (m_is_console){
@@ -284,23 +284,28 @@ void Game::scoreGame() {
         m_players[i]->setTilesScores(tile_scores);
 
         // PARTIE VARIANTES
+        // std::cout << "cards : " << m_desc_cards << " size :" << m_desc_cards.size() << std::endl;
         if (m_desc_cards.size() == 1) {
-            VariantScoringStrategy variant_strategy;
+            VariantScoringStrategy variant_strategy(Family);
+            if (m_desc_cards == "I" || m_desc_cards == "i") {
+                VariantScoringStrategy variant_strategy(Intermediate);
+            }
             std::vector<double> variant_scores = m_scorer.obtainScore(*board, variant_strategy);
             m_players[i]->setTokensScores(variant_scores);
-            break;
         }
 
         // PARTIE JETONS
         /* Pour chaque carte de marquage, on va calculer le score et append ce score au vecteur wildlife_scores */
-        const auto& cards = m_scorer.getScoringCards();
-        std::vector<double> wildlife_scores(cards.size());
-        for (size_t j = 0; j < cards.size(); j++) {
-            m_scorer.setStrategy(j);
-            wildlife_scores[j] = m_scorer.obtainScore(*board)[0];  // on copie la premiere valeur dans le vecteur de scores retourné par computeScore (le seul score)
-            // c'est un vecteur de double et pas un double normal parce que ça permet d'unifier la logique avec celle des tuiles
+        else {
+            const auto& cards = m_scorer.getScoringCards();
+            std::vector<double> wildlife_scores(cards.size());
+            for (size_t j = 0; j < cards.size(); j++) {
+                m_scorer.setStrategy(j);
+                wildlife_scores[j] = m_scorer.obtainScore(*board)[0];  // on copie la premiere valeur dans le vecteur de scores retourné par computeScore (le seul score)
+                // c'est un vecteur de double et pas un double normal parce que ça permet d'unifier la logique avec celle des tuiles
+            }
+            m_players[i]->setTokensScores(wildlife_scores);
         }
-        m_players[i]->setTokensScores(wildlife_scores);
 
         // SCORE TOTAL
         int total_score = 0;
@@ -382,11 +387,11 @@ void Game::readNotification(unsigned int code){
             auto tup = it.getValue();
             const std::string& key = std::get<0>(tup);
             const std::string& value = std::get<1>(tup);
-            if (key == "Load extension") {
+            if (key == "Use variant") {
                 m_desc_cards = value;
                 std::cout << "cartes des variantes configurees avec succes";
             }
-            if (key == "Use cards") {
+            else if (key == "Use cards") {
                 m_scorer.configureCards(value);
                 m_desc_cards = value;
                 std::cout << "cartes configurees avec succes";
@@ -557,6 +562,7 @@ void Game::readNotification(unsigned int code){
                     current_player = 0;
 
                     current_tour++;
+                    GraphXVue::instance()->nextTurn();
                     m_message_box->addMessage("Tour numéro " + std::to_string(current_tour + 1), 0, 0);
                     saveGame();
                     if (current_tour == MAX_TURN){

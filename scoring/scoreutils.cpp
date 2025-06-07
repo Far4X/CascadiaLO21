@@ -250,7 +250,7 @@ namespace ScoreUtils {
                     }
                     int opp_side = (side + 3) % 6;
                     if (curr->getBiome(side) == filter && neigh->getBiome(opp_side) == filter) {
-                        std::cout << "uniting (" << curr->getQ() << ", " << curr->getR() << ") with q (" << neigh->getQ() << ", " << neigh->getR() << ")" << std::endl;
+                        // std::cout << "uniting (" << curr->getQ() << ", " << curr->getR() << ") with q (" << neigh->getQ() << ", " << neigh->getR() << ")" << std::endl;
                         return true;
                     }
                 }

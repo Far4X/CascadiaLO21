@@ -16,6 +16,14 @@ GraphXVue::GraphXVue(QObject *parent)
     m_left_panel = new QWidget;
     m_left_panel->setFixedWidth(150);
     m_left_panel_layout = new QVBoxLayout(m_left_panel);
+
+    m_lcd = new QLCDNumber(m_left_panel);
+    m_lcd->setDigitCount(2);
+    m_lcd->setSegmentStyle(QLCDNumber::Filled);
+    m_lcd->setFixedHeight(40);
+    m_lcd->display(m_turn_count);
+    m_left_panel_layout->addWidget(m_lcd, 0);
+
     m_main_layout->addWidget(m_left_panel);
 
     //Right panel
@@ -163,6 +171,14 @@ void GraphXVue::addMenu(QWidget* menu){
 void GraphXVue::addDeck(QWidget* deck){
     m_left_panel_layout->addWidget(deck);
 }
+
+void GraphXVue::nextTurn() {
+    if (m_turn_count > 0) {
+        m_turn_count--;
+        m_lcd->display(m_turn_count);
+    }
+}
+
 
 
 
