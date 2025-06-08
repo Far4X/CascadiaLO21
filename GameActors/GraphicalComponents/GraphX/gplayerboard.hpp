@@ -44,8 +44,10 @@ private:
     QWidget* m_widget = nullptr; // widget principal
     QVBoxLayout* m_layout = nullptr;  // Grid pour organiser les widgets
     QPoint m_last_mouse_pos;
-    std::vector<QLabel*> tiles;
+    std::vector<std::vector <QLabel*>> tiles;
     bool m_dragging = false;
+    void setHighlight();
+    std::vector<GameTile*> posed;
 
 };
 
