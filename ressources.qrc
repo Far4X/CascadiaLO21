@@ -37,6 +37,7 @@
         <file>Assets/Tiles/forest+desert.png</file>
         <file>Assets/Tiles/forest+lake.png</file>
         <file>Assets/Tiles/forest+swamp.png</file>
+        <file>Assets/Tiles/potentialPlacement.png</file>
     </qresource>
     <qresource prefix="/Token">
         <file>Assets/Token/bear.png</file>

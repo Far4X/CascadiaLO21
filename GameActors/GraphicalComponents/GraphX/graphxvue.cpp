@@ -45,8 +45,8 @@ GraphXVue::GraphXVue(QObject *parent)
     m_view->setRenderHint(QPainter::SmoothPixmapTransform); // éviter la pixellisation
     m_view->setTransformationAnchor(GraphXView::AnchorUnderMouse);
     m_right_panel_layout->addWidget(m_view);
-    QRectF sceneRect(0, 0, 2600, 2600);
-    m_scene->setSceneRect(sceneRect);
+    //QRectF sceneRect(0, 0, 2600, 2600);
+    //m_scene->setSceneRect(sceneRect);
     connect(m_view, &GraphXView::rightClickAt, this, &GraphXVue::onRightClickAt);
 
     currentboard = 0;
@@ -118,14 +118,14 @@ QPointF offsetToScenePos(HexCell::Offset offset) {
 void GraphXVue::onRightClickAt(const QPointF& scenePos)
 {
     // On tente de deviner la tuile
-    int row = static_cast<int>(scenePos.x() / xOffset);  // horizontal (colonne)
+    int col = static_cast<int>(scenePos.x() / xOffset);  // horizontal (colonne)
     float yAdjusted = scenePos.y();
 
-    if (row % 2 == 1)yAdjusted -= yOffset;
+    if (col % 2 == 1)yAdjusted -= yOffset;
 
-    int col = static_cast<int>(yAdjusted / tileHeight);  // vertical (ligne)
+    int row = static_cast<int>(yAdjusted / tileHeight);  // vertical (ligne)
 
-    HexCell::Offset guessed(row, col);
+    HexCell::Offset guessed(col, row);
 
     // NE FONCTIONNE PAS ENCORE
 
@@ -156,7 +156,7 @@ void GraphXVue::onRightClickAt(const QPointF& scenePos)
     std::cout<<currentboard<<" ";
     qDebug() << "Clique droit sur row:" << guessed.getRow() << "col:" << guessed.getCol();
     HexCell hex (PlayerBoard::offsetToAxial(guessed));
-    qDebug() << "Clique droit sur r:" << PlayerBoard::offsetToAxial(guessed).getR() << "q:" << PlayerBoard::offsetToAxial(guessed).getQ();
+    qDebug() << "Clique droit sur q:" << PlayerBoard::offsetToAxial(guessed).getQ() << "r:" << PlayerBoard::offsetToAxial(guessed).getR();
     boards[currentboard]->setPointedCell(hex);
     boards[currentboard]->getTarget()->notifyInterface(4); // j'ai cliqué sur le plateau est ce que je peux poser | 3 une fois qu'on a select toekn et carte
     return;
