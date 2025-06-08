@@ -38,6 +38,7 @@ GameTile::GameTile(std::string description) : HexCell(), m_id(nb_tiles++){
         }
     }
     m_numtypes = description[6] - '0';
+    m_first_biome = m_biomes[0];
 
     m_possible_wltoken = new Wildlife[m_numtypes];
     for (int i = 7; i < m_numtypes + 7; i++){
