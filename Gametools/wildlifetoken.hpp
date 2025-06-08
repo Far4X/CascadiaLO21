@@ -3,8 +3,8 @@
 
 #include <initializer_list>
 
-enum Wildlife {Bear, Salmon, Hawk, Elk, Fox};
-inline std::initializer_list<Wildlife> Animals = { Wildlife::Bear, Wildlife::Salmon, Wildlife::Hawk, Wildlife::Elk, Wildlife::Fox };
+enum Wildlife {Bear, Elk, Hawk, Fox, Salmon};
+inline std::initializer_list<Wildlife> Animals = { Wildlife::Bear, Wildlife::Elk, Wildlife::Hawk, Wildlife::Fox, Wildlife::Salmon};
 
 class WildlifeToken {
     /*Représente un token de faune*/

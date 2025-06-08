@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QLCDNumber>
 #include <QGraphicsScene>
 #include <QTabBar>
 #include <QGraphicsView>
@@ -74,6 +75,7 @@ public:
     QGraphicsScene* getScene() const { return m_scene; }
     void addMenu(QWidget* menu);
     void addDeck(QWidget* deck);
+    void nextTurn();
 
 private slots:
     void onTabChanged(int index);
@@ -92,6 +94,9 @@ private:
     //left pannel de la fenetre
     QWidget* m_left_panel; // la pioche
     QVBoxLayout* m_left_panel_layout; //
+
+    int m_turn_count = 20;
+    QLCDNumber* m_lcd;  // nombre de tours
 
     //right pannel
     QWidget* m_right_panel;
