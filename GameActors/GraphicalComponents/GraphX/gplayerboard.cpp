@@ -22,6 +22,8 @@ GPlayerBoard::GPlayerBoard(NotifiableInterface* tar, QWidget *parent,int size) :
     //addTile(*debugT,deb_x,deb_y);
     // FOR DEBUG ONLY
 
+    tiles.resize(max_size); // On init le tableau pour acceder a tiles[1] par exemple
+
     setAutoFillBackground(true); // Permet de remplir l'arrière-plan
     setGeometry(0, 0, sizeHint().width(), sizeHint().height());  // Fixe la taille du widget
     m_layout = new QVBoxLayout(this);  // Optionnel : peut être utilisé si tu veux gérer des widgets enfants
@@ -103,23 +105,38 @@ void GPlayerBoard::initHexTiles(){
 
             tileLabel->move(x, y);  // Déplacement relatif au widget
             tileLabel->setAttribute(Qt::WA_TransparentForMouseEvents); // permet de skip les cliques souris
-            tiles.push_back(tileLabel);
+            tiles[col].push_back(tileLabel);
+            //setHighlight(col,row);
         }
     }
 }
 
 void GPlayerBoard::updateHexTiles(){
-    int i = 0;
-    int j = 0;
     for (int col = 0; col < max_size; ++col) {
         for (int row = 0; row < max_size; ++row) {
             HexCell::Offset off(row,col);
             HexCell hex (PlayerBoard::offsetToAxial(off));
-            tiles[col * max_size + row]->setPixmap(PixmapFactory::createTile(getTile(hex.getQ(),hex.getR())));
+            tiles[col][row]->setPixmap(PixmapFactory::createTile(getTile(hex.getQ(),hex.getR())));
+            if(getTile(col,row) != nullptr)
+            {
+                //setHighlight(col,row);
+            }
          }
     }
 }
 
+void GPlayerBoard::setHighlight(int col, int row){
+    GameTile* h_tile = getTile(col,row);
+    if(h_tile == nullptr)return;
+    std::vector<GameTile*> neighbord = getNeighborTiles(*h_tile);
+    for (auto &v : neighbord){
+        if (v == nullptr){
+            HexCell h (v->getQ(),v->getR());
+            HexCell::Offset off = HexCell::axialToOffset(h,max_size);
+            tiles[off.getCol()][off.getRow()]->setPixmap(QPixmap(":/Tile/Assets/Tiles/potentialPlacement.png"));
+        }
+    }
+}
 
 
 void GPlayerBoard::addGxTile(int col,int row){
