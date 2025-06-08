@@ -22,6 +22,26 @@ GTokenMenu::GTokenMenu(NotifiableInterface* tar,DeckTile* decktile, Player *call
         QObject::connect(m_btn_multichoice, &QPushButton::clicked, this, &GTokenMenu::chooseMultiple);
     }
 
+    GDeckTile* gdecktile = dynamic_cast<GDeckTile*>(m_decktile);
+    if (gdecktile) {
+        QObject::connect(gdecktile, &GDeckTile::tileClicked, this, [this](int index) {
+            m_spin_tile->setValue(index + 1); // ou autre
+        });
+    }
+
+    //QObject::connect(m_decktile, &GDeckTile::tileClicked, this, &GTokenMenu::onTileClicked);
+
+}
+
+void GTokenMenu::onTileClicked(int index) {
+    qDebug() << "Tuile cliquée dans le menu : " << index;
+
+    // Tu veux probablement simuler ce que fait `pushResults` mais automatiquement :
+    addResult(index);
+    m_target->notifyInterface(3);
+
+    // Optionnel : cacher le menu, désactiver decktile, etc.
+    this->hide();
 }
 
 GTokenMenu::~GTokenMenu(){
@@ -83,6 +103,7 @@ void GTokenMenu::pushResults(){
     }
     m_target->notifyInterface(3);
 }
+
 
 void GTokenMenu::show(){
     m_decktile->show();

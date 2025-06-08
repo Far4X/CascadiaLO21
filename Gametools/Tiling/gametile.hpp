@@ -15,6 +15,7 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     static unsigned int nb_tiles;
     //Hexcell m_position;
     Biome m_biomes[6]; //0 : top, 1 : topright...
+    Biome m_first_biome;
     unsigned char m_rotation = 0; // 0 à 5;
     const WildlifeToken *m_wltoken = nullptr;
     Wildlife *m_possible_wltoken = nullptr;
@@ -39,6 +40,7 @@ public:
     inline unsigned int getId() const {return m_id;}
     const WildlifeToken* getToken() const { return m_wltoken; }
     inline void setWildLifeToken(const WildlifeToken* wlt){m_wltoken = wlt;};
+    inline const Biome& getFirstBiome() const {return m_first_biome;}
     bool matchesType(Wildlife type) const {
         if (m_wltoken != nullptr) {
             return m_wltoken->getWildlifeType() == type;
