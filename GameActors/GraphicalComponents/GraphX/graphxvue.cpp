@@ -56,7 +56,7 @@ GraphXVue* GraphXVue::instance(){
 
 void GraphXVue::addPlayerBoard(GPlayerBoard* board){
     boards.push_back(board);
-    m_onglet->addTab(QString("Joueu %1").arg(boards.size()));
+    m_onglet->addTab(QString("Joueur %1").arg(boards.size()));
 
     //On s'assure que chaque board n'a pas d'autre parent;
     board->setParent(nullptr);

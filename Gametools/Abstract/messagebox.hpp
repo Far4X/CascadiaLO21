@@ -32,8 +32,8 @@ protected :
         inline bool operator!=(const const_iterator& other)const{return m_current_id != other.m_current_id;};
         inline const stringElement* operator->()const{return &(m_box->m_elems[m_current_id]);}
     };
-    inline const_iterator begin()const{return const_iterator(this, 0);};
-    inline const_iterator end()const{return const_iterator(this, m_elems.size());};
+    inline const_iterator begin() const{return const_iterator(this, 0);};
+    inline const_iterator end() const{return const_iterator(this, m_elems.size());};
 
 public:
     MessageBox();

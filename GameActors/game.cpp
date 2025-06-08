@@ -337,7 +337,7 @@ void Game::scoreGame() {
             total_score += m_players[i]->getTilesScores()[j] + m_players[i]->getTokensScores()[j];
         }
         total_score += m_players[i]->getNbNatureToken();
-        m_players[i]->setScore(total_score);
+        m_players[i]->addScore(total_score);
 
         std::vector<double> ti_scores = m_players[i]->getTilesScores();
         std::vector<double> to_scores = m_players[i]->getTokensScores();
