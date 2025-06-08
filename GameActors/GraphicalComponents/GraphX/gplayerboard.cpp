@@ -25,12 +25,12 @@ GPlayerBoard::GPlayerBoard(NotifiableInterface* tar, QWidget *parent,int size) :
     tiles.resize(max_size); // On init le tableau pour acceder a tiles[1] par exemple
 
     setAutoFillBackground(true); // Permet de remplir l'arrière-plan
-    setGeometry(0, 0, sizeHint().width(), sizeHint().height());  // Fixe la taille du widget
+
     m_layout = new QVBoxLayout(this);  // Optionnel : peut être utilisé si tu veux gérer des widgets enfants
     setLayout(m_layout);  // Applique le layout (mais ne sera pas utilisé pour les tuiles)
 
-    // Exemple d'initialisation de tuiles hexagonales (image de démonstration)
     initHexTiles();
+    setGeometry(0, 0, sizeHint().width(), sizeHint().height());  // Fixe la taille du widget
 
     m_manager = GraphXVue::instance();
     m_manager->addPlayerBoard(this);
@@ -61,12 +61,12 @@ GPlayerBoard::GPlayerBoard(NotifiableInterface *tar, const std::string& def, QWi
     // FOR DEBUG ONLY
 
     setAutoFillBackground(true); // Permet de remplir l'arrière-plan
-    setGeometry(0, 0, sizeHint().width(), sizeHint().height());  // Fixe la taille du widget
+
     m_layout = new QVBoxLayout(this);  // Optionnel : peut être utilisé si tu veux gérer des widgets enfants
     setLayout(m_layout);  // Applique le layout (mais ne sera pas utilisé pour les tuiles)
 
-    // Exemple d'initialisation de tuiles hexagonales (image de démonstration)
     initHexTiles();
+    setGeometry(0, 0, sizeHint().width(), sizeHint().height());  // Fixe la taille du widget
 
     m_manager = GraphXVue::instance();
     m_manager->addPlayerBoard(this);
@@ -86,7 +86,7 @@ void GPlayerBoard::initHexTiles(){
     for (int col = 0; col < max_size; ++col) {
         for (int row = 0; row < max_size; ++row) {
             QLabel* tileLabel = new QLabel(this);  // Création d'un QLabel pour chaque tuile
-            HexCell::Offset off(row, col);
+            HexCell::Offset off(col, row);
             HexCell hex (PlayerBoard::offsetToAxial(off));
             QPixmap pixmap = PixmapFactory::createTile(getTile(hex.getQ(),hex.getR()));
             if (pixmap.isNull()) {std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;}
@@ -95,47 +95,52 @@ void GPlayerBoard::initHexTiles(){
             tileLabel->setScaledContents(true);  // Pour que l'image remplisse le QLabel
 
             // Calcul des positions x et y pour chaque tuile en utilisant un décalage
-            int x = (row) * xOffset;    //Easter egg
-            int y = (col) * tileHeight;
+            int x = (col) * xOffset;    //Easter egg
+            int y = (row) * tileHeight;
 
             // Décalage pour les lignes impaires
-            if (row % 2 == 1) {
+            if (col % 2 == 1) {
                 y += yOffset;  // Décalage vertical pour les colonnes impaires
             }
+
+            if(getTile(hex.getQ(),hex.getR()) != nullptr)posed.push_back(getTile(hex.getQ(),hex.getR())); // stockage des tuiles posées
 
             tileLabel->move(x, y);  // Déplacement relatif au widget
             tileLabel->setAttribute(Qt::WA_TransparentForMouseEvents); // permet de skip les cliques souris
             tiles[col].push_back(tileLabel);
-            //setHighlight(col,row);
         }
     }
+
 }
 
 void GPlayerBoard::updateHexTiles(){
+    posed.clear();
     for (int col = 0; col < max_size; ++col) {
         for (int row = 0; row < max_size; ++row) {
-            HexCell::Offset off(row,col);
+            HexCell::Offset off(col,row);
             HexCell hex (PlayerBoard::offsetToAxial(off));
             tiles[col][row]->setPixmap(PixmapFactory::createTile(getTile(hex.getQ(),hex.getR())));
-            if(getTile(col,row) != nullptr)
-            {
-                //setHighlight(col,row);
-            }
+            if(getTile(hex.getQ(),hex.getR()) != nullptr)posed.push_back(getTile(hex.getQ(),hex.getR())); // stockage des tuiles posées
          }
     }
+    setHighlight();
 }
 
-void GPlayerBoard::setHighlight(int col, int row){
-    GameTile* h_tile = getTile(col,row);
-    if(h_tile == nullptr)return;
-    std::vector<GameTile*> neighbord = getNeighborTiles(*h_tile);
-    for (auto &v : neighbord){
-        if (v == nullptr){
-            HexCell h (v->getQ(),v->getR());
-            HexCell::Offset off = HexCell::axialToOffset(h,max_size);
-            tiles[off.getCol()][off.getRow()]->setPixmap(QPixmap(":/Tile/Assets/Tiles/potentialPlacement.png"));
+void GPlayerBoard::setHighlight(){
+    for(auto &p : posed){
+        std::cout<<"Debut tuile"<<p->getQ()<<"."<<p->getR()<<std::endl;
+        for (auto &d : HexCell::directions){
+            HexCell neiH((*p+d).getQ(),(*p+d).getR());
+            std::cout<<(*p+d).getQ()<<"."<<(*p+d).getR()<<std::endl;
+            GameTile* neiG = getTile(neiH.getQ(),neiH.getR());
+            if ( neiG == nullptr){
+                std::cout<<" Examined"<<std::endl;
+                HexCell::Offset off = HexCell::axialToOffset(neiH,max_size);
+                tiles[off.getCol()][off.getRow()]->setPixmap(QPixmap(":/Tile/Assets/Tiles/potentialPlacement.png"));
+            }
         }
     }
+
 }
 
 

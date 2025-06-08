@@ -46,7 +46,8 @@ private:
     QPoint m_last_mouse_pos;
     std::vector<std::vector <QLabel*>> tiles;
     bool m_dragging = false;
-    void setHighlight(int col,int row);
+    void setHighlight();
+    std::vector<GameTile*> posed;
 
 };
 
