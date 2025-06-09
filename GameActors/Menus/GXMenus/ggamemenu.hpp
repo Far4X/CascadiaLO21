@@ -10,6 +10,7 @@
 
 
 class GGameMenu : public GMenu<std::tuple<std::string, std::string>>{
+    /*Classe qui gère le menu au démarrage du*/
     Q_OBJECT
     QGridLayout* m_main_layout = nullptr;
     QLabel* m_label = nullptr;
@@ -30,9 +31,6 @@ public:
     void validate();
     void usePreviousGame();
     void useVariant();
-    /*void quitGame();
-    void restartGame();*/
-
 };
 
 #endif // GGAMEMENU_HPP

@@ -6,6 +6,7 @@
 
 template <typename T>
 class GMenu : public QWidget, public Menu<T>{
+    //Classe abstraite, comme menu. Apporte les éléménts graphique
     unsigned int m_size_x;
     unsigned int m_size_y;
     unsigned int m_pos_x;

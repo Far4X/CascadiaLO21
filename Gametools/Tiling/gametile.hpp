@@ -10,7 +10,9 @@ enum Biome {Forest, Wetland, River, Mountain, Prairie};
 inline std::initializer_list<Biome> Biomes = { Biome::Forest, Biome::Wetland, Biome::River, Biome::Mountain, Biome::Prairie };
 enum Rotation {Trigonometric, Anti_Trigonometric};
 
-class GameTile : public HexCell, public SalvableThing{ //Or inherits public hextile; if not rename HexTile HexTileCoord
+class GameTile : public HexCell, public SalvableThing{ /*Classe qui représente une tuile affichée sur le jeu
+    N'hérite pas de printablething de part la nature spéciale de son affichage en console et en graphique, car on les affiche sur
+    un support: elles ne sont pas un support en elles même*/
     friend class Game;
     static unsigned int nb_tiles;
     //Hexcell m_position;

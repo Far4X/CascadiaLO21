@@ -15,6 +15,7 @@
 #include "../../player.hpp"
 
 class GTokenMenu final : public GMenu<unsigned short int>{
+    //Menu utilisé lors du choix des éléments dans pioche
     Q_OBJECT
     QGridLayout* m_main_layout = nullptr;
     QPushButton* m_btn_validate = nullptr;

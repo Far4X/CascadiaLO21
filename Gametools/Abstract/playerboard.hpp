@@ -7,15 +7,13 @@
 #include "notifiableinterface.hpp"
 
 class PlayerBoard : public TileHolder {
-    //unsigned short int m_q_center;
-    //unsigned short int m_r_center;
+    //Classe qui permet de représenter l'ensemble des tuiles d'un joueur au bon endroit
     HexCell m_pos_last_token = HexCell(MAX_SIZE + 1, MAX_SIZE+1);
     HexCell m_pos_last_tile = HexCell(MAX_SIZE + 1, MAX_SIZE+1);
     std::vector<std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int>> m_required_cards;// Used when ressucite. Store cards with id, posx, posy, rotation, token
 
 protected :
     HexCell m_pointed_cell = HexCell(MAX_SIZE, MAX_SIZE);
-    //bool m_want_use_naturetoken = false;
     NotifiableInterface* m_target = nullptr;
 
 public:
@@ -30,8 +28,6 @@ public:
     PlayerBoard();
     void show() override;
     std::string getSaveString() const override;
-    //inline bool getIntentionToken() const {return m_want_use_naturetoken;};
-    //inline void setIntentionToken(bool val) {m_want_use_naturetoken = val;};
     void addTile(GameTile& tile);
     void addToken(const WildlifeToken* token, HexCell& pos_target);
     void removeLast();

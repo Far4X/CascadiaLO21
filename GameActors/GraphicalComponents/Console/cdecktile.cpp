@@ -37,6 +37,7 @@ void CDeckTile::show(){
             tile_rpr[i][j] = ' ';
         }
     }
+    //On récupère toutes les représentations des tuiles
 
     for (int i = 0; i < 4; i++){
         const GameTile* tile = getTile(i);

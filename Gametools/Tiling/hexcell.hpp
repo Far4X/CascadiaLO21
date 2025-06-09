@@ -6,11 +6,13 @@
 enum Direction {N, NE, SE, S, SW, NW};
 
 class HexCell : public BaseClass {
+    //Classe qui représente une tuile hexagonale
     int m_q;
     int m_r;
 
 public:
     struct Offset {
+        //Coordonnées en x y.
         int getCol() const {return col;}
         int getRow() const {return row;}
         Offset(int c, int r) : col(c), row(r) {};

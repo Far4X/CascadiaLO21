@@ -7,7 +7,6 @@ template <typename T>
 Menu<T>::Menu(NotifiableInterface* target) : Printable(){
     if (target == nullptr){
         throw CustomError("No target found for menu", 300);
-        //std::cout << "STNPTR" << std::endl;
     }
     m_target = target;
 }
@@ -39,5 +38,3 @@ template class Menu<std::string>;
 template class Menu<std::tuple<std::string, std::string>>;
 template class Menu<unsigned short int>;
 template class Menu<bool>;
-
-

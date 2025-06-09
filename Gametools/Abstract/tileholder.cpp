@@ -65,7 +65,6 @@ TileHolder::Iterator& TileHolder::Iterator::operator++(int){
         m_x = 0;
         m_y++;
     }
-    std::cout << "EPS : " << m_x << ", " << m_y << std::endl;
     return *this;
 }
 

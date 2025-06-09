@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 
-//{2;2;AAAAA;AA;{Albert;0;{1111;22;222;222}};{}}
+//{2;2;AAAAA;AA;{Albert;0;{1111;22;222;222}};{}} Exemple de string de sauvegarde
 
 class SalvableThing{
-    /*Classe abstraite qui permet l'enregistrement du jeu*/
+    /*Classe abstraite qui permet l'enregistrement d'un élément du jeu'*/
 public:
     SalvableThing();
     virtual ~SalvableThing() = default;
