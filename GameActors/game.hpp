@@ -8,9 +8,18 @@
 #include "../../scoring/scoringstrategies/tilescoringstrategy.hpp"
 #include "../../scoring/scoringstrategies/wildlifescoringstrategy.hpp"
 #include "../../scoring/score.hpp"
-#include <QObject>
+#include "../Extensions/extensionpaysages.h"
+#include "../Extensions/extension.h"
 
+#include <QObject>
+#include <map>
+#include <functional>
+#include <fstream>
+#include <sstream>
+#include <filesystem>
 #include <vector>
+
+extern Game* global_game;
 
 enum class GameStatus {
     NotStarted,
@@ -50,6 +59,7 @@ class Game : public SalvableThing, public NotifiableInterface, public QObject {
     void endTurn();
 
 
+
 public:
     Game(NotifiableInterface* interface, const bool is_console = false);
     ~Game();
@@ -69,6 +79,17 @@ public:
     void restart();
     void quit();
     const DeckTile* getDeckTile() const {return m_decktile;};
+    void loadExtension(const std::string& name  = "Paysages");
+    bool extensionLoaded = false;
+    bool isExtensionLoaded() const { return extensionLoaded; }
+    void setExtensionLoaded(const bool state) const;
+    void extendMaxPlayers(const size_t nb);
+
+    void loadExtensionTiles(const std::string& path);;    // Ajoute les tuiles de l’extension
+    void loadExtensionFauna(const std::string& path);    // Ajoute les jetons faune
+    void loadExtensionMenu();
+
+
 };
 
 #endif // GAME_H

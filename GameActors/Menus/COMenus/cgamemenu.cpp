@@ -1,9 +1,11 @@
 #include "cgamemenu.hpp"
+#include "GameActors/game.hpp"
 #include <iostream>
 
-CGameMenu::CGameMenu(NotifiableInterface *tar) : CMenu<std::tuple<std::string, std::string>>(tar) {
 
-}
+CGameMenu::CGameMenu(NotifiableInterface *tar) : CMenu<std::tuple<std::string, std::string>>(tar) {}
+CGameMenu::CGameMenu(NotifiableInterface *tar, Game *game) : CMenu<std::tuple<std::string, std::string>>(tar), m_game(game) {}
+
 
 void CGameMenu::show(){
     for (unsigned int i = 0; i < getX(); i++){
@@ -35,6 +37,11 @@ void CGameMenu::show(){
             break;
         case '2':
             this->addResult(std::tuple<std::string, std::string>("Load extension", "true"));
+            if (m_game) {
+                m_game->loadExtensionMenu();
+            } else {
+                std::cout << "Erreur : instance du jeu introuvable." << std::endl;
+            }
             break;
         case '3':
             std::cout << "Merci de rentrer l'identifiant des cartes dans l'ordre Ours, Elan, Aigle, Renard, Saumon (ex : ABCDA)" << std::endl;

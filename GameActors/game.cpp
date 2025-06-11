@@ -6,6 +6,16 @@
 #include <QFile>
 #include <QTextStream>
 
+#include <unistd.h>
+#include <limits.h>
+
+
+
+namespace fs = std::filesystem;
+
+static std::set<std::string> loadedExtensions; // cache
+
+
 
 Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players(0), m_is_console(is_console), m_target(interface){
     std::srand(std::time(0)); // debug
@@ -46,7 +56,7 @@ void Game::init(){
     m_status = GameStatus::Running;
 
     if (m_is_console){
-        m_game_menu = new CGameMenu(this);
+        m_game_menu = new CGameMenu(this, this);
     }
     else {
         m_game_menu = new GGameMenu(this);
@@ -488,4 +498,193 @@ void Game::restart(){
     m_nb_players = 0;
     m_status = GameStatus::Restart;
 
+}
+
+void Game::setExtensionLoaded(const bool state) const {
+    const_cast<Game*>(this)->extensionLoaded = state;
+}
+
+void Game::extendMaxPlayers(const size_t nb) {
+    if (nb > m_players.size())
+        m_nb_players = nb;
+}
+
+
+void Game::loadExtension(const std::string& name) {
+    if (extensionLoaded) {
+        std::cout << "[Extension] Une extension est déjà chargée." << std::endl;
+        return;
+    }
+
+    static const std::map<std::string, std::function<IGameExtension*()>> EXTENSIONS = {
+        {"Paysages", []() { return new ExtensionPaysages(); }}
+    };
+
+    auto it = EXTENSIONS.find(name);
+    if (it != EXTENSIONS.end()) {
+        std::unique_ptr<IGameExtension> extension(it->second());
+        extension->apply(*this);
+        extensionLoaded = true;
+    } else {
+        std::cout << "[Extension] Extension inconnue : " << name << std::endl;
+    }
+}
+
+void Game::loadExtensionTiles(const std::string& path) {
+    std::cout << "[DEBUG] Chargement des tuiles depuis : " << path << std::endl;
+
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        std::cerr << "[Erreur] Impossible d’ouvrir le fichier des tuiles : " << path << std::endl;
+        return;
+    }
+
+    std::string line;
+    int lineNumber = 0;
+    // Lecture ligne par ligne
+    while (std::getline(file, line)) {
+        lineNumber++;
+        if (line.empty()) {
+            std::cout << "[DEBUG] Ligne " << lineNumber << " ignorée (vide)." << std::endl;
+            continue;
+        }
+
+        std::cout << "[DEBUG] Lecture ligne " << lineNumber << " : " << line << std::endl;
+
+        std::stringstream ss(line);
+        std::string part;
+        bool isId = true;
+        int id = 0;
+        int partCount = 0;
+
+        while (std::getline(ss, part, ';')) {
+            partCount++;
+            if (isId) {
+                try {
+                    id = std::stoi(part);
+                    std::cout << "[DEBUG] ID trouvé : " << id << std::endl;
+                } catch (...) {
+                    std::cerr << "[Erreur] ID invalide à la ligne " << lineNumber << " : " << part << std::endl;
+                    isId = true; // rester en mode ID
+                    continue;
+                }
+                isId = false;
+            } else {
+                std::cout << "[DEBUG] Création d'une tuile avec ID " << id << " et données : " << part << std::endl;
+                m_decktile->addTile(std::make_unique<GameTile>(id, part).release());
+                isId = true;
+            }
+        }
+
+        if (!isId) {
+            std::cerr << "[Erreur] Ligne " << lineNumber << " incomplète, il manque une donnée après l'ID." << std::endl;
+        }
+    }
+
+    std::cout << "[DEBUG] Fin du chargement des tuiles." << std::endl;
+}
+
+
+void Game::loadExtensionFauna(const std::string& path) {
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        std::cerr << "[Erreur] Impossible d’ouvrir le fichier des jetons faune : " << path << std::endl;
+        return;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        if (line.empty()) continue;
+
+        Wildlife type;
+        if (line == "Bear") type = Bear;
+        else if (line == "Salmon") type = Salmon;
+        else if (line == "Elk") type = Elk;
+        else if (line == "Hawk") type = Hawk;
+        else if (line == "Fox") type = Fox;
+        else {
+            std::cerr << "[Erreur] Type inconnu ignoré : " << line << std::endl;
+            continue;
+        }
+
+        m_tokens.push_back(new WildlifeToken(type));
+    }
+}
+
+void Game::loadExtensionMenu() {
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        std::cout << "[DEBUG] Répertoire de travail courant : " << cwd << std::endl;
+    };
+
+    std::string extensionPath = "Assets/Extensions/";
+    std::vector<std::string> extensions;
+
+    std::cout << "[DEBUG] Recherche des extensions dans : " << extensionPath << std::endl;
+    for (const auto& entry : fs::directory_iterator(extensionPath)) {
+        std::cout << "[DEBUG] Trouvé : " << entry.path() << (entry.is_directory() ? " (dossier)" : " (fichier)") << std::endl;
+        if (entry.is_directory()) {
+            extensions.push_back(entry.path().filename().string());
+        }
+    }
+
+    if (extensions.empty()) {
+        std::cout << "Aucune extension trouvée." << std::endl;
+        return;
+    }
+
+    std::cout << "Choisissez une extension à charger :" << std::endl;
+    for (size_t i = 0; i < extensions.size(); ++i) {
+        std::cout << i << " : " << extensions[i] << std::endl;
+    }
+    std::cout << "[DEBUG] En attente du choix utilisateur..." << std::endl;
+
+
+    size_t choice;
+    std::cout << "Entrez votre choix : ";
+    if (!(std::cin >> choice)) {
+        std::cerr << "[Erreur] Entrée invalide." << std::endl;
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return;
+    }
+
+    if (choice >= extensions.size()) {
+        std::cout << "[Erreur] Choix invalide." << std::endl;
+        return;
+    }
+
+    std::string selected = extensions[choice];
+    std::string tileFile = extensionPath + selected + "/Tiles.lst";
+    std::string faunaFile = extensionPath + selected + "/Tokens.lst";
+
+    std::cout << "[DEBUG] Fichier tiles attendu : " << tileFile << std::endl;
+    std::cout << "[DEBUG] Fichier tokens attendu : " << faunaFile << std::endl;
+
+    std::ifstream testTile(tileFile);
+    if (!testTile.is_open()) {
+        std::cerr << "[Erreur] Impossible d’ouvrir le fichier des tuiles : " << tileFile << std::endl;
+        return;
+    }
+    testTile.close();
+
+    std::ifstream testFauna(faunaFile);
+    if (!testFauna.is_open()) {
+        std::cerr << "[Erreur] Impossible d’ouvrir le fichier des jetons faune : " << faunaFile << std::endl;
+        return;
+    }
+    testFauna.close();
+
+    std::cout << "[DEBUG] Lancement du chargement des tuiles..." << std::endl;
+    loadExtensionTiles(tileFile);
+    std::cout << "[DEBUG] Chargement des tuiles terminé." << std::endl;
+
+    std::cout << "[DEBUG] Lancement du chargement des jetons faune..." << std::endl;
+    loadExtensionFauna(faunaFile);
+    std::cout << "[DEBUG] Chargement des jetons faune terminé." << std::endl;
+
+    loadedExtensions.insert(selected);
+    extensionLoaded = true;
+
+    std::cout << "Extension " << selected << " chargée avec succès." << std::endl;
 }

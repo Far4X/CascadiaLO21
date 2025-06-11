@@ -23,6 +23,8 @@ private:
     App(int argc, char *argv[]);
     std::deque<unsigned short int> m_id_notification;
     void notifyInterface(unsigned int code) override;
+    void quitGame();
+    void restartGame();
 };
 
 #endif // APP_HPP

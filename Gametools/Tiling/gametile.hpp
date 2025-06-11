@@ -21,13 +21,18 @@ class GameTile : public HexCell, public SalvableThing{ //Or inherits public hext
     const unsigned int m_id;
 
     //GameTile(const unsigned int id, Biome biomes[6], Wildlife *type = nullptr, int num_types = 0, int posx = 0, int posy = 0);
-    GameTile(int id, std::string description);
-    ~GameTile();
     GameTile& operator=(const GameTile& oth) = delete;
     GameTile(const GameTile& oth) = delete;
     std::string getSaveString() const override;
 
 public:
+    ~GameTile();
+    GameTile(int id, std::string description);
+
+    static std::unique_ptr<GameTile> create(int id, const std::string& desc) {
+        return std::unique_ptr<GameTile>(new GameTile(id, desc));
+    }
+
     void setPos(int const &q, int const &r);
     inline int getNbWildlife() const {return m_numtypes;};
     inline Wildlife getWildlife(unsigned short int nb) const {if (nb < m_numtypes) return m_possible_wltoken[nb]; else throw CustomError("Not in range", 104);};

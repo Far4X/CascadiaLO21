@@ -64,6 +64,7 @@ GameTile::~GameTile(){
     delete[] m_possible_wltoken;
 }
 
+
 void GameTile::Rotate(Rotation rota){
     if (rota == Anti_Trigonometric){
         Biome tmp = m_biomes[5];

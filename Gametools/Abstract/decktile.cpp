@@ -17,9 +17,12 @@ DeckTile::DeckTile() : Printable(), SalvableThing() {
     }
 }
 
-DeckTile::~DeckTile(){
-
+DeckTile::~DeckTile() {
+    for (auto tile : m_deck_tiles) {
+        delete tile;
+    }
 }
+
 
 GameTile* DeckTile::getTile(unsigned short int i){
     if (i < 4){

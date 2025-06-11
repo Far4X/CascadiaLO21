@@ -54,3 +54,15 @@ void App::notifyInterface(unsigned int code){
     m_id_notification.push_back(code);
     std::cout << "App received : " << code << std::endl;
 }
+
+void App::quitGame(){
+    if (m_game){
+        m_game->quit();
+    }
+}
+
+void App::restartGame(){
+    if (m_game){
+        m_game->restart();
+    }
+}
