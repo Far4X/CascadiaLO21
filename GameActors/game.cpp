@@ -7,7 +7,7 @@
 #include <QFile>
 #include <QTextStream>
 
-#define NB_TYPE_TILES 20
+#define NB_TYPE_TILES 5
 
 Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players(0), m_is_console(is_console), m_target(interface){
     std::srand(std::time(0));

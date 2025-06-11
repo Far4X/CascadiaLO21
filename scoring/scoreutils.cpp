@@ -472,26 +472,24 @@ namespace ScoreUtils {
             for (const HexCell& dir : HexCell::directions) {
                 int q = q0;
                 int r = r0;
+
                 while (true) {
-                    // on avance d'un pas dans la direction dir
                     q += dir.getQ();
                     r += dir.getR();
+                    GameTile* hit = board.getTile(q, r);
 
-                    GameTile* hit = findTile(tiles, q, r);  // tuile atteinte
                     if (hit == nullptr) {
                         break;
                     }
-                    bool seen = false;
-                    for (const auto& pair : lines) {
-                        if ((pair.first == src && pair.second == hit) || (pair.first == hit && pair.second == src)) {  // si on a déjà vu la paire
-                            seen = true;
-                            break;
-                        }
+
+                    if (hit->getToken() == nullptr || hit->getToken()->getWildlifeType() != filter) {
+                        continue;
                     }
-                    if (!seen) {
+
+                    if (src < hit) {
                         lines.emplace_back(src, hit);
                     }
-                    break;  // on sort pour explorer une autre direction
+                    break;
                 }
             }
         }
@@ -535,7 +533,7 @@ namespace ScoreUtils {
                 break;
             }
             GameTile* tile = board.getTile(cursor.getQ(), cursor.getR());
-            if (tile != nullptr && !tile->matchesType(filter)) {
+            if (tile != nullptr && tile->getToken() != nullptr && !tile->matchesType(filter)) {
                 seen_animals.insert(tile->getToken()->getWildlifeType());
             }
         }

@@ -5,11 +5,14 @@
 
 std::vector<double> FoxScoringCardD::computeScore(const PlayerBoard& board) const {
 
-    ScoreUtils::AdjacencyPolicy fox_d = ScoreUtils::makeNeighborPolicy(board, Fox, 1, [](int count, int threshold){ return count <= threshold; });
+    ScoreUtils::AdjacencyPolicy fox_d = ScoreUtils::makeWildlifePolicy(Fox);
     auto foxes = ScoreUtils::getComponents(board, MAX_SIZE, fox_d);
 
     double final_score = 0;
     for (auto component : foxes) {
+        if (component.size() != 2) {
+            continue;
+        }
         std::unordered_map<Wildlife, int> counts;
         std::unordered_set<GameTile*> neighbors;
         auto fox_1 = component[0];

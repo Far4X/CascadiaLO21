@@ -30,13 +30,22 @@ std::vector<double> FoxScoringCardC::computeScore(const PlayerBoard& board) cons
         case 0:
             break;
         case 1:
-            final_score += 3;
+            final_score += 1;
             break;
         case 2:
+            final_score += 2;
+            break;
+        case 3:
+            final_score += 3;
+            break;
+        case 4:
+            final_score += 4;
+            break;
+        case 5:
             final_score += 5;
             break;
         default:
-            final_score += 7;
+            final_score += 6;
             break;
         }
     }
