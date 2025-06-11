@@ -74,8 +74,8 @@ public:
     void makePlayerTurn();
     void initPlayerboards();
     void getInfoConsole();
-    /*void getInfoGX();
-    void scoreGame();*/
+    void getInfoGX();
+    void scoreGame();
     GameStatus getGameStatus() const;
     void readNotification(unsigned int code);
     void notifyInterface(unsigned int code) override;

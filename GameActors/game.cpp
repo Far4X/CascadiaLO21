@@ -2,7 +2,7 @@
 #include "../Gametools/customerror.hpp"
 #include "GameActors/GraphicalComponents/GraphX/graphxvue.hpp"
 #include "scoring/scoreutils.hpp"
-//#include <iostream>
+#include <iostream>
 #include <random>
 #include <QFile>
 #include <QTextStream>
@@ -71,7 +71,7 @@ void Game::saveGame() const{
         file.close();
     }
     else {
-        throw CustomError("Erreur lors de l'ouverture du fichier :" + file.errorString().toStdString(), 1)
+        throw CustomError("Erreur lors de l'ouverture du fichier :" + file.errorString().toStdString(), 1);
     }
 }
 
