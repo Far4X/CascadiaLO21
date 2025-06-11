@@ -91,7 +91,7 @@ void GPlayerBoard::initHexTiles(){
             QPixmap pixmap = PixmapFactory::createTile(getTile(hex.getQ(),hex.getR()));
             if (pixmap.isNull()) {std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;}
             tileLabel->setPixmap(pixmap);
-            tileLabel->setFixedSize(tileWidth, tileHeight);
+            tileLabel->setFixedSize(tileWidth*1.03, tileHeight*1.16);
             tileLabel->setScaledContents(true);  // Pour que l'image remplisse le QLabel
 
             // Calcul des positions x et y pour chaque tuile en utilisant un décalage
