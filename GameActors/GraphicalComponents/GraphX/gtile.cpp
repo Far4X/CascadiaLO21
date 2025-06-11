@@ -3,19 +3,11 @@
 #include <iostream>
 
 
-QPixmap PixmapFactory::createIconWithOverlay(const QString& basePath, const QString& token1, int rot,const QString& token2,const QString& token3) {
+QPixmap PixmapFactory::createIconWithOverlay(const QString& basePath, const QString& token1,const QString& token2,const QString& token3, int rot) {
     QPixmap base(basePath);
     QPixmap overlay1(token1);
     QPixmap overlay2(token2);
     QPixmap overlay3(token3);
-
-    if (rot != 0) {
-        QTransform transform;
-        transform.rotate(rot * 60);
-        base = base.transformed(transform, Qt::SmoothTransformation);
-        std::cout<<"ROTATION : "<<rot<<std::endl;
-    }
-
     if(!overlay1.isNull()){
     overlay1 = overlay1.scaled(
         overlay1.width() * 0.8,
@@ -165,7 +157,6 @@ QString PixmapFactory::matchToken(const GameTile* tile,int token){
 
 }
 
-
 QPixmap PixmapFactory::createTile(const GameTile* tile){
     int nbtoken = 1;
     const WildlifeToken* token;
@@ -175,22 +166,13 @@ QPixmap PixmapFactory::createTile(const GameTile* tile){
         token = tile->getToken();
     }
     if (nbtoken == 1 || token!=nullptr){
-        return createIconWithOverlay(
-            matchTile(tile),
-            matchToken(tile,0),
-            tile ? tile->getRotation() : 0);
+        return createIconWithOverlay(matchTile(tile),matchToken(tile,0));
     }
     if (nbtoken == 2){
-       return createIconWithOverlay(
-            matchTile(tile),
-            matchToken(tile,0),
-            tile ? tile->getRotation() : 0,matchToken(tile,1));
+       return createIconWithOverlay(matchTile(tile),matchToken(tile,0),matchToken(tile,1));
     }
     if (nbtoken == 3){
-       return createIconWithOverlay(
-            matchTile(tile),
-            matchToken(tile,0),
-            tile ? tile->getRotation() : 0,matchToken(tile,1),matchToken(tile,2));
+       return createIconWithOverlay(matchTile(tile),matchToken(tile,0),matchToken(tile,1),matchToken(tile,2));
     }
     return QPixmap();
 }

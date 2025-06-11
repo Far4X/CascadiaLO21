@@ -7,15 +7,12 @@
 #include <QHBoxLayout>
 #include <QPixmap>
 #include "graphxvue.hpp"
-#include "glabel.hpp"
-#include <QObject>
 
 // Plus tard je mettrai tout dans la factory, je ferai une Label Factory
 
-class GDeckTile : public QObject, public DeckTile{
-    Q_OBJECT
+class GDeckTile : public DeckTile{
 private:
-    GDeckTile(QObject *parent = nullptr);
+    GDeckTile();
 
     GDeckTile(const GDeckTile &tar) = delete;
     GDeckTile &operator=(const GDeckTile &tar) = delete;
@@ -25,9 +22,6 @@ private:
     QVBoxLayout* tokens;
     QHBoxLayout* deck;
     QWidget* widget;
-
-signals:
-    void tileClicked(int index);
 
 public:
     void show() override;

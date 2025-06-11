@@ -72,7 +72,6 @@ void GraphXVue::addPlayerBoard(GPlayerBoard* board){
     proxy->setVisible(false);
     //proxy->setPos(200,100); // a revoir c trop fais main si on change quoi que ce soit ça
     proxies.push_back(proxy);
-    m_view->centerOn(proxies[0]);
     //m_layout->addWidget(board);
 }
 
@@ -81,7 +80,7 @@ void GraphXVue::show(int playerIndex){
 
     if(!boards.empty() && !proxies.empty()){
         proxies[0]->setVisible(true);
-        //m_view->centerOn(proxies[0]);
+        m_view->centerOn(proxies[0]);
     }
     if(playerIndex != -1){ // -1 pour skip l'update d'onglet
     boards[playerIndex]->updateHexTiles();
@@ -159,9 +158,6 @@ void GraphXVue::onRightClickAt(const QPointF& scenePos)
     HexCell hex (PlayerBoard::offsetToAxial(guessed));
     qDebug() << "Clique droit sur q:" << PlayerBoard::offsetToAxial(guessed).getQ() << "r:" << PlayerBoard::offsetToAxial(guessed).getR();
     boards[currentboard]->setPointedCell(hex);
-
-    if(boards[currentboard]->getTile(hex.getQ(),hex.getR())) qDebug() << "Rotation : "<<  boards[currentboard]->getTile(hex.getQ(),hex.getR())->getRotation();
-
     boards[currentboard]->getTarget()->notifyInterface(4); // j'ai cliqué sur le plateau est ce que je peux poser | 3 une fois qu'on a select toekn et carte
     return;
 }
@@ -169,6 +165,7 @@ void GraphXVue::onRightClickAt(const QPointF& scenePos)
 
 void GraphXVue::addMenu(QWidget* menu){
     m_right_panel_layout->addWidget(menu);
+
 }
 
 void GraphXVue::addDeck(QWidget* deck){

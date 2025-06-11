@@ -8,7 +8,6 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QLabel>
-#include "../../GameActors/GraphicalComponents/GraphX/gdecktile.hpp"
 
 #include "gmenu.hpp"
 //#include "../../../Gametools/Tiling/gametile.hpp"
@@ -31,10 +30,6 @@ class GTokenMenu final : public GMenu<unsigned short int>{
     QSpinBox* m_spin_token = nullptr;
     DeckTile* m_decktile = nullptr;
     Player* m_caller = nullptr;
-    GDeckTile* gdecktile = nullptr;
-
-private slots:
-    void onTileClicked(int index);
 
 public:
     GTokenMenu(NotifiableInterface* tar, DeckTile* decktile, Player* caller);
