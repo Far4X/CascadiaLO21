@@ -32,8 +32,6 @@ protected:
         if (event->button() == Qt::RightButton) {
             QPointF scenePos = mapToScene(event->pos());
             emit rightClickAt(scenePos);
-            // Ne pas appeler la base ici pour éviter propagation?
-            // Ou appeller si tu veux permettre d'autres handlers ?
             event->accept();
             return; // on stoppe ici
         }

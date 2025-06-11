@@ -69,15 +69,6 @@ void GDeckTile::construct(){
 }
 
 void GDeckTile::update(){
-    std::cout<<tilesL.size()<<" taille"<<std::endl;
-    std::cout<<tokenL.size()<<" taille"<<std::endl;
-
-    for(int i = 0; i<4;i++){
-        if(tilesL[i] != nullptr) qDebug("wtf");
-        if(tokenL[i] != nullptr) qDebug("ok");
-    }
-
-
     for(int i = 0; i < 4; ++i){
         const GameTile* tile = getTile(i);
         const WildlifeToken* wild = m_displayed_tokens[i];
