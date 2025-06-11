@@ -13,7 +13,7 @@
 
 #include <vector>
 
-#define MAX_TURN 5
+#define MAX_TURN 20
 
 class GraphxVue;
 

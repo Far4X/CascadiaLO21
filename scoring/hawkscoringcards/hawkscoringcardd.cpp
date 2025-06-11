@@ -3,7 +3,6 @@
 
 std::vector<double> HawkScoringCardD::computeScore(const PlayerBoard& board) const {
 
-    auto hawks = ScoreUtils::getComponents(board, MAX_SIZE, ScoreUtils::makeWildlifePolicy(Hawk));
     std::vector<std::pair<GameTile*, GameTile*>> los_pairs = ScoreUtils::getLinesOfSight(board, Hawk);
 
     ScoreUtils::TileGrid candidates;
