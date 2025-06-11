@@ -368,18 +368,18 @@ void Game::scoreGame() {
             throw CustomError("Nobody wins. There is no war, so there is an error", 89);
             break;
         case 1:
-            m_players[tab_max_scores[i].getFirsts()[0]]->addScore(3);
+            m_players[tab_max_scores[i].getFirsts()[0]]->addBonusScore(3, i);
             for (unsigned int pl : tab_max_scores[i].getSeconds()){
-                m_players[pl]->addScore(1);
+                m_players[pl]->addBonusScore(1, i);
             }
             break;
         case 2:
             for (unsigned int pl : tab_max_scores[i].getFirsts()){
-                m_players[pl]->addScore(2);
+                m_players[pl]->addBonusScore(2, i);
             }
         default:
             for (unsigned int pl : tab_max_scores[i].getFirsts()){
-                m_players[pl]->addScore(1);
+                m_players[pl]->addBonusScore(1, i);
             }
         }
     }

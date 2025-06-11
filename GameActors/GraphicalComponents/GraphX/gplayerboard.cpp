@@ -45,7 +45,9 @@ GPlayerBoard::GPlayerBoard(NotifiableInterface* tar, QWidget *parent,int size) :
 }
 
 GPlayerBoard::GPlayerBoard(NotifiableInterface *tar, const std::string& def, QWidget *parent, int size) : PlayerBoard(tar), QWidget{parent}, max_size(size){
+    std::cout << "BF" << std::endl;
     reinterpretString(def);
+    std::cout << "AT" << std::endl;
     // FOR DEBUG ONLY
     Biome deb_biomes[6] = {River,Mountain,Prairie,Forest,Wetland,Wetland};
     //GameTile* debugT = new GameTile(1,deb_biomes);
@@ -91,7 +93,7 @@ void GPlayerBoard::initHexTiles(){
             QPixmap pixmap = PixmapFactory::createTile(getTile(hex.getQ(),hex.getR()));
             if (pixmap.isNull()) {std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;}
             tileLabel->setPixmap(pixmap);
-            tileLabel->setFixedSize(tileWidth, tileHeight);
+            tileLabel->setFixedSize(tileWidth*1.03, tileHeight*1.16);
             tileLabel->setScaledContents(true);  // Pour que l'image remplisse le QLabel
 
             // Calcul des positions x et y pour chaque tuile en utilisant un décalage
