@@ -22,6 +22,9 @@ class GTokenMenu final : public GMenu<unsigned short int>{
     QPushButton* m_btn_clear_tokens = nullptr;
     QPushButton* m_btn_no_token = nullptr;
     QPushButton* m_btn_multichoice = nullptr;
+    QPushButton* m_btn_rotaD = nullptr;
+    QPushButton* m_btn_rotaG = nullptr;
+
     QLabel* m_label = nullptr;
     QLabel* m_label_token = nullptr;
     QLabel* m_label_tile = nullptr;
@@ -31,11 +34,15 @@ class GTokenMenu final : public GMenu<unsigned short int>{
     QSpinBox* m_spin_token = nullptr;
     QSpinBox* m_spin_rota = nullptr;
 
+
+
     DeckTile* m_decktile = nullptr;
     Player* m_caller = nullptr;
     GDeckTile* gdecktile = nullptr;
 
     GameTile* selected_tile = nullptr;
+
+    void rotate(bool droite);
 
 private slots:
     void onTileClicked(int index);
