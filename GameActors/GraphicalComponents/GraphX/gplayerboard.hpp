@@ -33,6 +33,7 @@ public:
     void initHexTiles();
     void updateHexTiles();
     void addGxTile(int x,int y); // x,y de la matrice pas q,r !
+    void scoreScree();
 
     QSize sizeHint() const override;
     void show() override;
@@ -47,7 +48,7 @@ private:
     std::vector<std::vector <QLabel*>> tiles;
     bool m_dragging = false;
     void setHighlight();
-    std::vector<GameTile*> posed;
+    std::vector<GameTile*> posed; // toutes les tuiles posées (utile pour avoir les voisins dans le highlight)
 
 };
 

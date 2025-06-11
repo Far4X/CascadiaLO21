@@ -25,10 +25,11 @@ GTokenMenu::GTokenMenu(NotifiableInterface* tar,DeckTile* decktile, Player *call
 
     // On connect a gdecktile
     QObject::connect(&GDeckTile::getInstance(), &GDeckTile::tileClicked, this, [this](int index) {
-        m_spin_tile->setValue(index + 1); // ou autre
+        if(m_spin_tile)m_spin_tile->setValue(index + 1);
+
     });
     QObject::connect(&GDeckTile::getInstance(), &GDeckTile::tokenClicked, this, [this] (int index){
-        m_spin_token->setValue(index +1);
+       if(m_spin_token)m_spin_token->setValue(index +1);
     });
 
     //QObject::connect(m_decktile, &GDeckTile::tileClicked, this, &GTokenMenu::onTileClicked);
