@@ -30,6 +30,15 @@ void Player::setTokensScores(const std::vector<double>& scores) {
     m_tokens_scores = scores;
 }
 
+void Player::addBonusScore(unsigned short int points, unsigned short int biome){
+    if (biome > 5){
+        throw 1;
+    }
+    addScore(points);
+    m_bonuses[biome] = points;
+}
+
+
 /*void Player::addTile(GameTile* tile){
     m_tiles.push_back(tile);
 };
