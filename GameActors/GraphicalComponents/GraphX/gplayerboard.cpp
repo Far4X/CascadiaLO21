@@ -91,7 +91,7 @@ void GPlayerBoard::initHexTiles(){
             QPixmap pixmap = PixmapFactory::createTile(getTile(hex.getQ(),hex.getR()));
             if (pixmap.isNull()) {std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;}
             tileLabel->setPixmap(pixmap);
-            tileLabel->setFixedSize(tileWidth*1.03, tileHeight*1.16);
+            tileLabel->setFixedSize(tileWidth*1.03, tileHeight*1.16); // il faut zoom car c'est des carrés les valeurs sont choisie pour un bon rendu
             tileLabel->setScaledContents(true);  // Pour que l'image remplisse le QLabel
 
             // Calcul des positions x et y pour chaque tuile en utilisant un décalage
@@ -121,6 +121,26 @@ void GPlayerBoard::updateHexTiles(){
             HexCell hex (PlayerBoard::offsetToAxial(off));
             tiles[col][row]->setPixmap(PixmapFactory::createTile(getTile(hex.getQ(),hex.getR())));
             if(getTile(hex.getQ(),hex.getR()) != nullptr)posed.push_back(getTile(hex.getQ(),hex.getR())); // stockage des tuiles posées
+            if(GameTile* tile = getTile(hex.getQ(),hex.getR())){
+                int rot = tile->getRotation();
+                std::cout<<"HELLO";
+                if(rot == 1 || rot == 2 || rot == 4 || rot == 5)
+                {
+                    int newW = tileWidth * 1.38; // 1.03*1.41 car une tuile c'est 116px ansi la diag = sqrt(2)*116,
+                    int newH = tileHeight * 1.58; // enfin on veut retrouver 116 donc sqrt(2)*116* x = 116, on obtient x = 1.41
+                    tiles[col][row]->setFixedSize(newW, newH);
+
+                    int x = col * xOffset;
+                    int y = row * tileHeight;
+                    if (col % 2 == 1) y += yOffset;
+
+                    // Décalage pour recentrer localement la tuile
+                    int dx = (newW - tileWidth * 1.03) / 2;
+                    int dy = (newH - tileHeight * 1.16) / 2;
+                    tiles[col][row]->move(x - dx, y - dy);
+                }
+
+            }
          }
     }
     setHighlight();
@@ -134,6 +154,8 @@ void GPlayerBoard::setHighlight(){
             if ( neiG == nullptr){
                 HexCell::Offset off = HexCell::axialToOffset(neiH,max_size);
                 tiles[off.getCol()][off.getRow()]->setPixmap(QPixmap(":/Tile/Assets/Tiles/potentialPlacement.png"));
+                tiles[off.getCol()][off.getRow()]->setFixedSize(tileWidth*1.03, tileHeight*1.19); // il faut zoom car c'est des carrés
+                tiles[off.getCol()][off.getRow()]->setScaledContents(true);  // Pour que l'image remplisse le QLabel
             }
         }
     }

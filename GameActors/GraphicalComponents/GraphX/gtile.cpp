@@ -2,7 +2,6 @@
 #include <Qt>
 #include <iostream>
 
-
 QPixmap PixmapFactory::createIconWithOverlay(const QString& basePath, const QString& token1, int rot,const QString& token2,const QString& token3) {
     QPixmap base(basePath);
     QPixmap overlay1(token1);
@@ -171,6 +170,7 @@ QPixmap PixmapFactory::createTile(const GameTile* tile){
     const WildlifeToken* token;
     if (tile!=nullptr)
     {
+        std::cout<<"JE SUIS PAS LA"<<std::endl;
         nbtoken = tile->getNbWildlife();
         token = tile->getToken();
     }
