@@ -28,6 +28,7 @@ std::vector<GameTile*> PlayerBoard::getNeighborTiles(const GameTile& tile) const
 }
 
 int PlayerBoard::getNbNeighbors(const GameTile& tile) const {
+    //Retourne les voisins d'une tuile, dans le contexte d'un plateau de joueurs.
     std::vector<GameTile*> neighbors = getNeighborTiles(tile);
     int count = 0;
     for (size_t i = 0; i < neighbors.size(); i++) {
@@ -50,7 +51,6 @@ int PlayerBoard::getNbSameNeighbors(const GameTile& tile, Wildlife animal) const
 }
 
 std::string PlayerBoard::getSaveString() const { // genere un string qui permet de déchiffrer l'affichage
-    std::cout << "PB svg" << std::endl;
     std::string desc = "{";
     for (int i = 0; i < MAX_SIZE; i++){
         for (int j = 0; j < MAX_SIZE; j++){
@@ -66,21 +66,19 @@ std::string PlayerBoard::getSaveString() const { // genere un string qui permet 
             }
         }
     }
-    std::cout << "PB svg out" << std::endl;
     desc += "}";
     return desc;
 }
 
 
 void PlayerBoard::reinterpretString(const std::string &desc){
+    //Permet de ressuciter le tableau d'un joueur à partir de la chaine de caractère descriptive enregistrée
     std::vector<std::string> params = separateParams(desc);
-    std::cout << "Def " << desc << std::endl;
     for (size_t i = 0; i < params.size(); i++){
         std::vector<std::string> tile_params = separateParams(params[i], ',');
         if (tile_params.size() != 5){
-            throw std::string("AAZ");
+            throw CustomError("Parameter number for ressuciting PlayerBoard not good : "  + desc, 99);
         }
-        std::cout << "Added needed tile" << std::endl;
         m_required_cards.push_back(std::tuple(stringToInt(tile_params[0]), stringToInt(tile_params[1]), stringToInt(tile_params[2]), stringToInt(tile_params[3]), stringToInt(tile_params[4])));
     }
 } 

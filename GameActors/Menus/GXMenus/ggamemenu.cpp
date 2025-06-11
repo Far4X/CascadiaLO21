@@ -1,6 +1,7 @@
 #include "ggamemenu.hpp"
 
 GGameMenu::GGameMenu(NotifiableInterface *tar) : GMenu<std::tuple<std::string, std::string>>(tar, nullptr, 300, 200, 200, 200){
+    //On initialise toute les coposantes graphiques du menu
     m_main_layout = new QGridLayout(this);
 
     m_label = new QLabel(QString("Veuillez choisir les options de la partie: "), this);
@@ -12,10 +13,6 @@ GGameMenu::GGameMenu(NotifiableInterface *tar) : GMenu<std::tuple<std::string, s
     m_btn_recover = new QPushButton(QString("Récupérer"), this);
     m_btn_use_variant = new QPushButton(QString("Utiliser la variante"), this);
     m_btn_validate = new QPushButton(QString("Valider"), this);
-
-
-    //m_btn_restart = new QPushButton(QString("Recommencer"), this);
-    //m_btn_quit = new QPushButton(QString("Quitter"), this);
 
 
     m_line_edit_cards = new QLineEdit(QString("AAAAA"), this);
@@ -37,19 +34,13 @@ GGameMenu::GGameMenu(NotifiableInterface *tar) : GMenu<std::tuple<std::string, s
 
     m_main_layout->addWidget(m_btn_validate, 5, 1, 1, 1);
 
-    //m_main_layout->addWidget(m_btn_restart, 5, 0, 1, 1);
-    //m_main_layout->addWidget(m_btn_quit, 5, 1, 1, 1);
-
     QObject::connect(m_btn_validate, &QPushButton::clicked, this, &GGameMenu::validate);
     QObject::connect(m_btn_use_variant, &QPushButton::clicked, this, &GGameMenu::useVariant);
     QObject::connect(m_btn_recover, &QPushButton::clicked, this, &GGameMenu::usePreviousGame);
-    //QObject::connect(m_btn_restart, &QPushButton::clicked, this, &GGameMenu::restartGame);
-    //QObject::connect(m_btn_quit, &QPushButton::clicked, this, &GGameMenu::quitGame);
-
-
 }
 
 void GGameMenu::validate(){
+    //Slot appelé lors de la validation des éléments sélectionnés.
     this->addResult(std::tuple<std::string, std::string>("Use cards", m_line_edit_cards->text().toStdString()));
     this->hide();
     if (m_target != nullptr){
@@ -57,6 +48,7 @@ void GGameMenu::validate(){
     }
 }
 void GGameMenu::usePreviousGame(){
+    //Slot appelé lors de la validation du choix de réanimer la partie précédente
     this->addResult(std::tuple<std::string, std::string>("Recover", "true"));
     this->hide();
     if (m_target != nullptr){
@@ -71,22 +63,6 @@ void GGameMenu::useVariant(){
     }
 }
 
-
-/*void GGameMenu::restartGame(){
-    this->addResult(std::tuple<std::string, std::string>("Restart", "true"));
-    this->hide();
-    if (m_target != nullptr){
-        m_target->notify(2);
-    }
-}
-void GGameMenu::quitGame(){
-    this->addResult(std::tuple<std::string, std::string>("Quit", "true"));
-    this->hide();
-    if (m_target != nullptr){
-        m_target->notify(2);
-    }
-}*/
-
 void GGameMenu::show(){
-    QWidget::show();
+    QWidget::show(); //Utile
 }

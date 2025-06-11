@@ -12,7 +12,6 @@ void MessageBox::ordonateElems(){
 }
 
 void MessageBox::reset(){
-    std::cout << "MBR" << std::endl;
     while(m_elems.size() > 0){
         m_elems.pop_back();
     }

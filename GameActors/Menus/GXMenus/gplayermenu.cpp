@@ -26,13 +26,7 @@ GPlayerMenu::GPlayerMenu(NotifiableInterface* tar) : GMenu(tar, nullptr, 300, 20
 }
 
 GPlayerMenu::~GPlayerMenu(){
-    /*delete m_main_layout;
-    delete m_btn_quit;
-    delete m_btn_validate;
-    delete m_label;
-    delete m_spinbox;*/
-
-    for (int i = 0; i < m_nb_player; i++){
+for (int i = 0; i < m_nb_player; i++){
         delete m_lines_names[i];
         delete m_label_names[i];
     }
@@ -50,6 +44,7 @@ GPlayerMenu::~GPlayerMenu(){
 }
 
 void GPlayerMenu::validateNumber(){
+    //Slot appelé lorsque l'on valide le nombre de joueurs.
     QObject::disconnect(m_btn_validate, &QPushButton::clicked, this, &GPlayerMenu::validateNumber);
     m_nb_player = m_spinbox->value();
 
@@ -69,11 +64,10 @@ void GPlayerMenu::validateNumber(){
 }
 
 void GPlayerMenu::validateNames(){
+    //Slot appelé lorsque l'on valide le nom des joueurs.
     for (unsigned short i = 0; i < m_nb_player; i++){
         QString name = m_lines_names[i]->text();
-        /*for (int j = 0; j < txt.size(); j++){
-            name += std::to_string(txt[j].toLatin1());
-        }*/
+
         this->addResult(name.toStdString());
     }
     this->hide();

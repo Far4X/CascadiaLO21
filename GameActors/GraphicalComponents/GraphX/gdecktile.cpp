@@ -10,7 +10,7 @@ GDeckTile& GDeckTile::getInstance(){
 }
 
 void GDeckTile::construct(){
-    if(widget != nullptr) delete widget;
+    if(widget)return; // on ne construit qu'une fois
     widget = new QWidget;
 
     deck = new QHBoxLayout(widget);
@@ -21,51 +21,84 @@ void GDeckTile::construct(){
     tokens = new QVBoxLayout(widget);
     deck->addLayout(tokens);
 
+    ti1 = new ClickableLabel(widget);
+    ti2 = new ClickableLabel(widget);
+    ti3 = new ClickableLabel(widget);
+    ti4 = new ClickableLabel(widget);
+    tilesL.push_back(ti1);
+    tilesL.push_back(ti2);
+    tilesL.push_back(ti3);
+    tilesL.push_back(ti4);
+
+    to1 = new ClickableLabel(widget);
+    to2 = new ClickableLabel(widget);
+    to3 = new ClickableLabel(widget);
+    to4 = new ClickableLabel(widget);
+    tokenL.push_back(to1);
+    tokenL.push_back(to2);
+    tokenL.push_back(to3);
+    tokenL.push_back(to4);
+
     for(int i = 0; i<4;i++)
     {
-        const GameTile* tile = getTile(i);
-        const WildlifeToken* wild = m_displayed_tokens[i];
-        if (tile == nullptr){
-            throw CustomError("Tile doesn't exists", 999);
-        }
-        ClickableLabel* labelTi = new ClickableLabel(widget);
-        ClickableLabel* labelTo = new ClickableLabel(widget);
-        QPixmap pixmap = PixmapFactory::createTile(tile);
-        QPixmap token(PixmapFactory::matchToken(wild->getWildlifeType()));
+        tilesL[i]->setParent(widget); // ils seront donc libéré a la liberation du widget (je crois)
+        tokenL[i]->setParent(widget);
 
-        labelTi->setPixmap(pixmap);
-        labelTi->setFixedSize(64, 55);
-        labelTi->setScaledContents(true);  // Pour que l'image remplisse le QLabel
+        tiles->addWidget(tilesL[i]);
+        tokens->addWidget(tokenL[i]);
 
-        labelTo->setPixmap(token);
-        labelTo->setFixedSize(50, 50);
-        labelTo->setScaledContents(true);  // Pour que l'image remplisse le QLabel
-
-
-        tiles->addWidget(labelTi);
-        tokens->addWidget(labelTo);
-
-        connect(labelTi, &ClickableLabel::clicked, [i]() {
+        connect(tilesL[i], &ClickableLabel::clicked, [i]() {
             qDebug() << "Tuile " << i << " cliquée !";
             // Appelle ici la fonction pour prendre la tuile `i` dans la pioche
         });
 
-        connect(labelTo, &ClickableLabel::clicked, [i]() {
+        connect(tokenL[i], &ClickableLabel::clicked, [i]() {
             qDebug() << "Jeton " << i << " cliqué !";
             // Pareil pour le jeton si tu veux
         });
 
-        connect(labelTi, &ClickableLabel::clicked, this, [this, i]() {
+        connect(tilesL[i], &ClickableLabel::clicked, this, [this, i]() {
             emit tileClicked(i);  // Émet le signal quand la tuile est cliquée
+        });
+
+        connect(tokenL[i], &ClickableLabel::clicked, this, [this, i](){
+            emit tokenClicked(i);
         });
     }
 
 }
 
+void GDeckTile::update(){
+    std::cout<<tilesL.size()<<" taille"<<std::endl;
+    std::cout<<tokenL.size()<<" taille"<<std::endl;
+
+    for(int i = 0; i<4;i++){
+        if(tilesL[i] != nullptr) qDebug("wtf");
+        if(tokenL[i] != nullptr) qDebug("ok");
+    }
+
+
+    for(int i = 0; i < 4; ++i){
+        const GameTile* tile = getTile(i);
+        const WildlifeToken* wild = m_displayed_tokens[i];
+        if (!tile || !wild) continue;
+
+        QPixmap pixmap = PixmapFactory::createTile(tile);
+        QPixmap token = QPixmap(PixmapFactory::matchToken(wild->getWildlifeType()));
+
+        tilesL[i]->setPixmap(pixmap);
+        tilesL[i]->setFixedSize(64, 55);
+        tilesL[i]->setScaledContents(true);  // Pour que l'image remplisse le QLabel
+
+        tokenL[i]->setPixmap(token);
+        tokenL[i]->setFixedSize(50, 50);
+        tokenL[i]->setScaledContents(true);  // Pour que l'image remplisse le QLabel
+    }
+}
+
 void GDeckTile::show(){
-    std::cout<<"k";
     construct();
+    update();
     GraphXVue::instance()->addDeck(widget);
     widget->show();
-    std::cout<<"ok";
 }

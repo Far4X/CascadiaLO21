@@ -2,7 +2,7 @@
 #include "../Gametools/customerror.hpp"
 #include "GameActors/GraphicalComponents/GraphX/graphxvue.hpp"
 #include "scoring/scoreutils.hpp"
-#include <iostream>
+//#include <iostream>
 #include <random>
 #include <QFile>
 #include <QTextStream>
@@ -10,7 +10,7 @@
 #define NB_TYPE_TILES 5
 
 Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players(0), m_is_console(is_console), m_target(interface){
-    std::srand(std::time(0)); // debug
+    std::srand(std::time(0));
     m_cards = new GameTile*;
     readCards();
     if (m_is_console){
@@ -23,7 +23,6 @@ Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players
 }
 
 Game::~Game(){
-    std::cout << "Game deleted" << std::endl;
     for (int i = 0; i < m_nb_cards; i++){
         delete m_cards[i];
     }
@@ -68,21 +67,19 @@ void Game::saveGame() const{
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
         QTextStream out(&file);
-        std::cout << "Bf entering" << std::endl;
         out <<QString::fromStdString(getSaveString());
-        std::cout << "After" << std::endl;
         file.close();
     }
     else {
-        std::cout << "Erreur lors de l'ouverture du fichier :" << file.errorString().toStdString();
+        throw CustomError("Erreur lors de l'ouverture du fichier :" + file.errorString().toStdString(), 1)
     }
 }
 
 
 void Game::interpretString(std::string &def){
+    //Permet de régénérer le contenu de game après la lecture d'une sauvegarde
     std::vector<std::string> params = SalvableThing::separateParams(def);
     m_nb_players = SalvableThing::stringToInt(params[0]);
-    std::cout << "NB : " << m_nb_players << std::endl;
     m_extension = SalvableThing::stringToInt(params[1]);
     m_desc_cards = params[2];
     current_tour = SalvableThing::stringToInt(params[3]);
@@ -99,26 +96,25 @@ void Game::interpretString(std::string &def){
     for (size_t i = 0; i < params.size(); i++){
     }
     m_decktile->reinterpetString(params.back());
-
 }
 
 void Game::resurrectGame(){
+    //Permet de recharger une partie à partrir du fichier de sauvegarde
     QFile file(QString::fromStdString("cache.svp"));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        throw CustomError("Fnf", 800);
+        throw CustomError("File not found", 800);
         return;
     }
-
+    //On lit le contenu du fichier
     QTextStream in(&file);
     std::string content = in.readAll().toStdString();
-    std::cout << content << std::endl;
     file.close();
     interpretString(content);
 
     std::vector<GameTile*> m_available_tiles;
     std::vector<const WildlifeToken*> m_available_tokens;
-    std::cout << "0" << std::endl;
 
+    //On restaure les tokens
     for (size_t i = 0; i < m_nb_cards; i++){
         m_available_tiles.push_back(m_cards[i]);
     }
@@ -131,24 +127,19 @@ void Game::resurrectGame(){
         m_available_tokens.push_back(m_tokens[i]);
     }
 
+    //On les attribue aux différents joueurs
     for (size_t i = 0; i < m_players.size(); i++){
         std::tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int> params; // Used when ressucite. Store cards with id, posx, posy, rotation, token
         while (!m_players[i]->getBoard()->hasAllCards()){
             params = m_players[i]->getBoard()->getNextNeededCard();
             for (size_t j = 0; j < m_available_tiles.size(); j++){
-                //std::cout << "Scanned : " << m_available_tiles[j]->getId() << std::endl;;
                 if (m_available_tiles[j]->getId() == std::get<0>(params)){
                     HexCell pos = PlayerBoard::offsetToAxial(HexCell::Offset(std::get<1>(params), std::get<2>(params)));
                     m_available_tiles[j]->setPos(pos.getQ(), pos.getR());
-                    /*for (unsigned int k = 0; k < std::get<3>(params); k++){
-                        std::cout << "R" << std::endl;
-                        m_available_tiles[j]->Rotate();
-                    }*/
                     while (m_available_tiles[j]->getRotation() != std::get<3>(params)){
                         m_available_tiles[j]->Rotate();
                     }
                     for (unsigned int k = 0; k < m_available_tokens.size(); k++){
-                        //std::cout << static_cast<unsigned int>(m_available_tokens[i]->getWildlifeType()) << ", " << std::get<4>(params) << std::endl;
                         if (static_cast<unsigned int>(m_available_tokens[k]->getWildlifeType()) == std::get<4>(params)){
                             m_available_tiles[j]->setWildLifeToken(m_available_tokens[k]);
                             m_available_tokens.erase(m_available_tokens.begin() + k);
@@ -163,6 +154,7 @@ void Game::resurrectGame(){
         }
     }
 
+    //On remplit la pioche face visible. On récupére les cartes
     std::vector<unsigned short int> things_to_add_to_decktile = m_decktile->getCardsToAdd();
     for (size_t i = 0; i < 4; i ++) {
         for (size_t j = 0; j < m_available_tiles.size(); j++){
@@ -173,6 +165,7 @@ void Game::resurrectGame(){
             }
         }
     }
+    //On récupère maintenant les tokens
     things_to_add_to_decktile = m_decktile->getTokensToAdd();
     for (size_t i = 0; i < 4; i ++) {
         for (size_t j = 0; j < m_available_tokens.size(); j++){
@@ -184,6 +177,7 @@ void Game::resurrectGame(){
         }
     }
 
+    //On ajoute ce qu'il manque dans le sac de la pioche
     for (size_t i = 0; i < m_available_tokens.size(); i ++){
         m_decktile->addToken(m_available_tokens[i]);
     }
@@ -206,25 +200,24 @@ void Game::init(){
     m_game_menu->show();
 }
 
-void Game::play(){
+/*void Game::play(){
     for (int i = 0; i < MAX_TURN; i++){
         for (int j = 0; j < m_nb_players; j++){
             makePlayerTurn();
         }
     }
-}
+}*/
 
-void Game::getInfoConsole(){
+/*void Game::getInfoConsole(){
 
 }
 
 void Game::getInfoGX(){
 
-}
+}*/
 
 void Game::initPlayerboards(){
-    std::cout << "Init playerboard : " << m_nb_players << std::endl;
-
+    //Permet d'initialiser les plateaux des joueurs
     std::random_device rd;
     std::mt19937 rng(rd());
     for (int i = 0; i < m_nb_players; i++){
@@ -243,13 +236,13 @@ void Game::initPlayerboards(){
 void Game::getTileAndToken(unsigned short int pos_tile, unsigned short int pos_token){
     m_is_waiting_for_position = true;
     m_is_waiting_to_place_tile = true;
-    std::cout << "Pos tile : " << pos_tile << ", pos token : " << pos_token << std::endl;
+    //std::cout << "Pos tile : " << pos_tile << ", pos token : " << pos_token << std::endl;
 
     std::tuple<GameTile*, const WildlifeToken*> tmp = m_decktile->getCouple(pos_tile, pos_token);
     m_tile_to_add = std::get<0>(tmp);
     m_token_to_add = std::get<1>(tmp);
-    std::cout << "Token : " << m_token_to_add->getWildlifeType() << std::endl;
-    std::cout << "Tile : " << m_tile_to_add << std::endl;
+    //std::cout << "Token : " << m_token_to_add->getWildlifeType() << std::endl;
+    //std::cout << "Tile : " << m_tile_to_add << std::endl;
 }
 
 void Game::makePlayerTurn(){
@@ -258,7 +251,7 @@ void Game::makePlayerTurn(){
     }
     m_message_box->addMessage( "----- \nTour de " + m_players[current_player]->getName(), 1, 0);
     // m_message_box->show();
-    std::cout << "----- \nTour de " << m_players[current_player]->getName()<< " -- Tour : " << current_tour << std::endl;
+    //std::cout << "----- \nTour de " << m_players[current_player]->getName()<< " -- Tour : " << current_tour << std::endl;
 
     if (m_is_console){
         m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
@@ -269,13 +262,13 @@ void Game::makePlayerTurn(){
         GTokenMenu* gMenu = new GTokenMenu(this, m_decktile, m_players[current_player]);
         m_menu_token = gMenu;
         GraphXVue::instance()->addMenu(gMenu);
-
     }
     return m_menu_token->show();
 }
 
 
 void Game::scoreGame() {
+    //Permet de calculer le score des joueurs de la partie
     class maxScore final{
         std::vector<unsigned int> fst_players; //First players
         std::vector<unsigned int> snd_players; //Second ones
@@ -395,6 +388,7 @@ void Game::scoreGame() {
 }
 
 void Game::notifyInterface(unsigned int code){
+    //Fonction qui permet de faire l'interface entre game et le reste. On dissocie graphique et console de part la boucle qt
     if (!m_is_console){
         return readNotification(code);
     }
@@ -402,6 +396,7 @@ void Game::notifyInterface(unsigned int code){
 }
 
 void Game::endTurn(){
+    //Permet de valider le tour d'un joueur. Pose les jetons et tuile, et les enlève de la pioche.
     m_token_to_add = nullptr;
     m_is_waiting_for_position = false;
 
@@ -419,10 +414,11 @@ void Game::endTurn(){
 
 
 void Game::readNotification(unsigned int code){
+    //Coeur de game. C'est elle qui gère les notifications venant des autres objets et acteurs du programme
     if (code == 1){
+        //Code envoyé lorsque le menu de création des joueurs est validé. On créé donc les joueurs en conséquence.
         Player *pl = nullptr;
         for (Menu<std::string>::Iterator it = m_player_menu->getIterator(); !it.isDone(); it++){
-            std::cout << it.getValue() << std::endl;
             PlayerBoard* bd;
             if (m_is_console){
                 bd = new CPlayerBoard(this);
@@ -432,7 +428,6 @@ void Game::readNotification(unsigned int code){
             }
             pl = new Player(it.getValue(), bd);
             m_players.push_back(pl);
-            //std::cout << m_players.back()->getName() << std::endl;
         }
         m_nb_players = m_players.size();
         initPlayerboards();
@@ -440,26 +435,26 @@ void Game::readNotification(unsigned int code){
     }
 
     if (code == 2){
-        for (Menu<std::tuple<std::string,std::string>>::Iterator it = m_game_menu->getIterator(); !it.isDone(); it++) {
+        //Code reçu lorsque le menu de création du jeu est validé (Oui, 2 vient avant 1...).
+        for (Menu<std::tuple<std::string,std::string>>::Iterator it = m_game_menu->getIterator(); !it.isDone(); it++){
             auto tup = it.getValue();
             const std::string& key = std::get<0>(tup);
             const std::string& value = std::get<1>(tup);
             if (key == "Use variant") {
                 m_desc_cards = value;
-                std::cout << "cartes des variantes configurees avec succes";
             }
             else if (key == "Use cards") {
                 m_scorer.configureCards(value);
                 m_desc_cards = value;
-                std::cout << "cartes configurees avec succes";
             }
             if (key == "Test scroring") {
+                //Debug from Zwaka el BG
                 readCards();
                 scoreGame();
             }
             if (key == "Recover"){
+                //Dans ce cas, on veut recharger la partie. On agit en conséquence.
                 return resurrectGame();
-                //return play();
             }
 
         }
@@ -478,22 +473,21 @@ void Game::readNotification(unsigned int code){
         for (int i = 0; i < m_nb_cards; i++){
             m_decktile->addTile(m_cards[i]);
         }
+        //On remplit les cartes visibles de la pioche puis on affiche le menu de sélection des joueurs.
         m_decktile->fillPlate();
         return m_player_menu->show();
-        //return play();
     }
 
     if (code == 3){
-        std::cout << "Received code 3" << std::endl;
+        //Message reçu lorsque l'on a choisi le pion et la tuile à rajouter.
         if (m_menu_token != nullptr){
-            //throw CustomError("Menu token not initialized", 1);
-            std::cout << "Game notified with code 3" << std::endl;
             std::vector<unsigned short int> params;
             for (Menu<unsigned short int>::Iterator it = m_menu_token->getIterator(); !it.isDone(); it++){
                 params.push_back(it.getValue());
             }
             delete m_menu_token;
             m_menu_token = nullptr;
+            //On récupère les tuiles et pions correspondants.
             if (params.size() == 2){
                 getTileAndToken(params[0], params[1]);
             }
@@ -502,8 +496,7 @@ void Game::readNotification(unsigned int code){
             }
         }
         if (m_players[current_player]->getBoard() == nullptr){
-            std::cout << "Cooked man" << std::endl;
-            //throw CustomError();
+            throw CustomError("No board for player. He is not allowed to play anymore");
         }
         m_players[current_player]->getBoard()->resetPointedCell();
 
@@ -513,11 +506,12 @@ void Game::readNotification(unsigned int code){
     }
 
     if (code == 4){
-        std::cout << "Received code 4" << std::endl;
+        //Message reçu lorsqu'une case est pointée par le joueur.
         if (m_is_waiting_for_position == false){
             return;
         }
         if (m_is_waiting_to_place_tile){ // Faut il traiter le clic
+            //Cas où on attend un emplacement vide pour une tuile
             HexCell target = HexCell(m_players[current_player]->getBoard()->getPointedCell());
             if (target != HexCell(MAX_SIZE, MAX_SIZE) && (m_players[current_player]->getBoard()->hasNeighbour(target)) && m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR()) == nullptr){
                 m_is_waiting_to_place_tile = false;
@@ -541,7 +535,7 @@ void Game::readNotification(unsigned int code){
                 }
 
                 */
-                std::cout << "Merci de choisir l'emplacement pour le pion faune : ";
+                //std::cout << "Merci de choisir l'emplacement pour le pion faune : ";
 
 
                 m_players[current_player]->getBoard()->addTile(*m_tile_to_add);
@@ -549,7 +543,6 @@ void Game::readNotification(unsigned int code){
 
                 //Checks if token can be placed
                 bool has_place = false;
-                std::cout << "Testing it : " << std::endl;
                 const GameTile* ct = nullptr;
                 for (PlayerBoard::Iterator it = m_players[current_player]->getBoard()->getIterator(); !it.isDone() && !has_place; it++){
                     ct = it.getValue();
@@ -560,6 +553,7 @@ void Game::readNotification(unsigned int code){
                     }
                 }
                 if (!has_place){
+                    //On ne peut pas; on termine le tour.
                     return endTurn();
                 }
 
@@ -583,18 +577,19 @@ void Game::readNotification(unsigned int code){
                         //m_players[current_player]->getBoard()->getTile(target.getQ(), target.getR())->setWildLifeToken(m_token_to_add);
                         m_players[current_player]->getBoard()->addToken(m_token_to_add, target);
                         if (m_is_console){
-                            std::cout << "Le token a bien été placé." << std::endl;
+                            m_message_box->addMessage("Le token a bien été placé.", 0, 0);
+                            m_message_box->show();
                         }
                         return endTurn();
                     }
                 }
 
-                std::cout << "Token not good" << std::endl;
+                //std::cout << "Token not good" << std::endl;
                 m_players[current_player]->getBoard()->resetPointedCell();
                 return m_players[current_player]->getBoard()->show();
             }
             else {
-                std::cout << "Pos not good" << std::endl;
+                //std::cout << "Pos not good" << std::endl;
                 m_players[current_player]->getBoard()->resetPointedCell();
                 return m_players[current_player]->getBoard()->show();
             }
@@ -602,8 +597,9 @@ void Game::readNotification(unsigned int code){
     }
 
     else if (code == 5){
+        //Code reçu lorsque l'on valide les actions du joueurs.
         if (m_menu_validate == nullptr){
-            std::cout << "Validate menu not good" << std::endl;
+            //std::cout << "Validate menu not good" << std::endl;
             return;
         }
         unsigned short int control = 0;
@@ -643,6 +639,7 @@ void Game::readNotification(unsigned int code){
 }
 
 void Game::readCards(std::string path){
+    //On génère les cartes de départ
     m_starter_cards[0][0] = new GameTile("2223333245");
     m_starter_cards[0][1] = new GameTile("55555515");
     m_starter_cards[0][2] = new GameTile("444111213");
@@ -680,7 +677,7 @@ void Game::readCards(std::string path){
     }
 
     if (path == ""){
-        // debug
+        // debug cards
         m_cards = new GameTile*[9];
         m_nb_cards = 9;
         m_cards[0] = new GameTile("11111111");
@@ -695,7 +692,7 @@ void Game::readCards(std::string path){
 
         return;
     }
-
+    //On lit le reste
     QFile file(QString::fromStdString(path));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         throw CustomError("Fnf", 800);
@@ -716,39 +713,9 @@ void Game::readCards(std::string path){
     for (int i = 1; i <= m_nb_cards && i < parts.size(); ++i) {
         m_cards[i - 1] = new GameTile(parts[i].toStdString());
     }
-
-
-    /*char chr;
-    int tmp_nb = 0;
-    unsigned short int current_m_tiles = 0;
-    std::string desc_tile;
-    while (istream.get(chr)){
-        std::cout << "Here" << std::endl;
-
-        if (m_nb_cards == 0){
-            if (chr >= '0' && chr <= '9'){
-                tmp_nb *= 10;
-                tmp_nb += chr - '0';
-            }
-            else if (chr == ';'){
-                std::cout << "Nb chr : " << tmp_nb << std::endl;
-                m_nb_cards = tmp_nb;
-                m_cards = new GameTile*[m_nb_cards];
-            }
-        }
-        else {
-            if (chr == ';'){
-                m_cards[current_m_tiles] = new GameTile(current_m_tiles, desc_tile);
-                current_m_tiles++;
-            }
-            else {
-                desc_tile += std::to_string(chr);
-            }
-        }
-    }*/
 }
 
-void Game::quit(){
+/*void Game::quit(){
     std::cout<<"Partie terminée"<<std::endl;
     m_status = GameStatus::Quit;
 
@@ -765,3 +732,4 @@ void Game::restart(){
     m_status = GameStatus::Restart;
 
 }
+*/

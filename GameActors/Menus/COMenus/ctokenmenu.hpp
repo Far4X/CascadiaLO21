@@ -7,6 +7,7 @@
 
 
 class CTokenMenu : public CMenu<unsigned short int>{
+    //Menu utilisé lors du choix des pions et tuiles
     DeckTile* m_deck_tile;
     Player* const m_caller;
     unsigned short int m_nb_tokens;

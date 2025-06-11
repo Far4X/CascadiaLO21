@@ -4,6 +4,7 @@
 #include "cmenu.hpp"
 
 class CGameMenu : public CMenu<std::tuple<std::string, std::string>> {
+    //Menu utilisé lors du choix des paramètre du jeu
 public:
     CGameMenu(NotifiableInterface *tar);
     void show() override;

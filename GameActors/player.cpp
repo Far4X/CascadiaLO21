@@ -42,6 +42,7 @@ void Player::setBoard(PlayerBoard* board){
 };
 
 std::string Player::getSaveString() const{
+    //Permet de pouvoir sauvegarder un joueur
     std::string rt = "{";
     rt += m_name;
     rt += ";" + std::to_string(m_nb_nature_token) + ";" + m_board->getSaveString()  + ";}";
@@ -49,8 +50,8 @@ std::string Player::getSaveString() const{
 }
 
 Player::Player(const std::string& def, const bool is_console, NotifiableInterface* tar_board) : m_id(++nb_players), m_tiles_scores(5, 0.0), m_tokens_scores(5, 0.0){
+    //Permet de pouvoir ressusuter un joueur grâce à sa trace laissée dans l'histoire
     std::vector<std::string> params = SalvableThing::separateParams(def);
-    std::cout << "Player def : " << def << std::endl;
     for (const auto &a : params){
         std::cout << a << std::endl;
     }

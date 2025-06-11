@@ -52,6 +52,7 @@ int HexCell::floorDiv(int n) {
 }
 
 HexCell::Offset HexCell::axialToOffset(const HexCell& hex, unsigned int size){
+    //Permet de passer d'un système de coordonnées à un autre
     int q = hex.getQ();
     int r = hex.getR();
     int col = q + size/2;
@@ -61,6 +62,7 @@ HexCell::Offset HexCell::axialToOffset(const HexCell& hex, unsigned int size){
 
 
 HexCell HexCell::offsetToAxial(const Offset& off, unsigned int size){
+    //Permet de passer d'un système de coordonnées à un autre
     int col = off.getCol();
     int row = off.getRow();
     int q = col - size/2;
@@ -120,6 +122,7 @@ std::vector<HexCell> HexCell::getNeighbors() const {
 }
 
 char** getRepresentationCell(const HexCell* cell, unsigned short int size, unsigned int max_size){
+    //Permet de générer le tableau de caractères qui représente la tuile
     unsigned short int height = 2*size+1;
     unsigned short int width = 4*size;
     char **rt = new char*[height];

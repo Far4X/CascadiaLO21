@@ -63,25 +63,24 @@ class Game : public SalvableThing, public NotifiableInterface, public QObject {
     void saveGame() const;
 
 
-
 public:
     Game(NotifiableInterface* interface, const bool is_console = false);
     ~Game();
     std::string getSaveString() const override;
     void readCards(std::string path = ":/Assets/Assets/ListTiles.lst");
-    void play();
+    //void play();
     void init();
     void getTileAndToken(unsigned short int pos_tile, unsigned short int pos_token = -1);
     void makePlayerTurn();
     void initPlayerboards();
     void getInfoConsole();
-    void getInfoGX();
-    void scoreGame();
+    /*void getInfoGX();
+    void scoreGame();*/
     GameStatus getGameStatus() const;
     void readNotification(unsigned int code);
     void notifyInterface(unsigned int code) override;
-    void restart();
-    void quit();
+    //void restart();
+    //void quit();
     const DeckTile* getDeckTile() const {return m_decktile;};
 };
 

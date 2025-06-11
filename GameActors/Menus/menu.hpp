@@ -17,7 +17,7 @@ protected :
     NotifiableInterface* m_target = nullptr;
 
 public:
-    class Iterator {
+    class Iterator { //Classe qui permet d'itérer les résultats d'un menu.
         const Menu& m_menu;
         int m_nb;
     public :

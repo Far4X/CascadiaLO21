@@ -1,7 +1,6 @@
 #include "decktile.hpp"
 #include <algorithm>
 #include <random>
-#include <iostream>
 
 DeckTile &DeckTile::getInstance(){
     throw CustomError("Virtual class got called", 301);
@@ -22,7 +21,7 @@ DeckTile::~DeckTile(){
 }
 
 void DeckTile::reinterpetString(const std::string& def){
-    //std::cout << "Decktile " << def << std::endl;
+    //Permet de récupérer la pioche à partir de son élément de sauvegarde
     std::vector<std::string> params = SalvableThing::separateParams(def);
     if (params.size() != 4){
         throw 99;
@@ -38,6 +37,7 @@ void DeckTile::reinterpetString(const std::string& def){
 
 
 std::string DeckTile::getSaveString() const {
+    //Permet de générer l'élément de sauvegarde d'une pioche
     std::string rt = "{";
     for (unsigned char i = 0; i < 4; i++){
         rt += std::to_string(m_displayed_tokens[i]->getWildlifeType()) + ",";
@@ -66,7 +66,7 @@ void DeckTile::validateChanges(){
 
 
 void DeckTile::addTile(GameTile* tile){
-    //std::cout << "Added tile : " << tile << std::endl;
+    //Ajoute une tuile (cf google trad). On l'ajoute dans le "sac de tuiles" dans lequel on prend pour générer la pioche face visible.
     m_deck_tiles.push_back(tile);
     shuffle();
 }
@@ -77,7 +77,7 @@ void DeckTile::addToken(const WildlifeToken* token){
 }
 
 void DeckTile::shuffle(){
-    //std::cout << "Shuffling" << std::endl;
+    //Mélange les tuiles faces cachée. C'est l'équivalent de secouer le sac avant de piocher
     std::random_device rd;
     std::default_random_engine rng(rd());
     std::shuffle(std::begin(m_deck_tiles), std::end(m_deck_tiles), rng);
@@ -85,6 +85,7 @@ void DeckTile::shuffle(){
 }
 
 void DeckTile::clearTokens(){
+    //Permet de changer les pions faune dans le cas où ils sont trop nombreux.
     for (int i = 0; i < 4; i++){
         m_deck_token.push_back(m_displayed_tokens[i]);
         m_displayed_tokens[i] = nullptr;

@@ -28,7 +28,7 @@ public:
     ~GPlayerMenu();
     void validateNumber();
     void validateNames();
-    void show();
+    void show() override;
 };
 
 #endif // GPLAYERMENU_HPP
