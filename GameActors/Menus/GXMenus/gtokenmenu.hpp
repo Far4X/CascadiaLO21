@@ -25,12 +25,17 @@ class GTokenMenu final : public GMenu<unsigned short int>{
     QLabel* m_label = nullptr;
     QLabel* m_label_token = nullptr;
     QLabel* m_label_tile = nullptr;
+    QLabel* m_label_rota = nullptr;
 
     QSpinBox* m_spin_tile = nullptr;
     QSpinBox* m_spin_token = nullptr;
+    QSpinBox* m_spin_rota = nullptr;
+
     DeckTile* m_decktile = nullptr;
     Player* m_caller = nullptr;
     GDeckTile* gdecktile = nullptr;
+
+    GameTile* selected_tile = nullptr;
 
 private slots:
     void onTileClicked(int index);

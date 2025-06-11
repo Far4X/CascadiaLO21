@@ -28,6 +28,7 @@ private:
 
 signals:
     void tileClicked(int index);
+    void tokenClicked(int index);
 
 public:
     void show() override;

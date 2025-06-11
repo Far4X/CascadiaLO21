@@ -58,6 +58,10 @@ void GDeckTile::construct(){
         connect(labelTi, &ClickableLabel::clicked, this, [this, i]() {
             emit tileClicked(i);  // Émet le signal quand la tuile est cliquée
         });
+
+        connect(labelTo, &ClickableLabel::clicked, this, [this, i](){
+            emit tokenClicked(i);
+        });
     }
 
 }
