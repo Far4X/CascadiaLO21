@@ -85,7 +85,7 @@ void GraphXVue::show(int playerIndex){
     }
     if(playerIndex != -1){ // -1 pour skip l'update d'onglet
         boards[playerIndex]->updateHexTiles();
-        if(m_lcd->value() == 18)boards[playerIndex]->scoreScree(); // test pour afficher le score
+        //if(m_lcd->value() == 18)boards[playerIndex]->scoreScree(); // test pour afficher le score
         m_onglet->setCurrentIndex(playerIndex);
     }
     m_window->show();
