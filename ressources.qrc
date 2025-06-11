@@ -22,6 +22,7 @@
         <file>Assets/set5/set5_2.png</file>
         <file>Assets/set5/set5_3.png</file>
         <file>Assets/cache.svp</file>
+        <file>Assets/Scoring/full-scoring-table.jpg</file>
     </qresource>
     <qresource prefix="/Tile">
         <file>Assets/Tiles/desert+lake.png</file>

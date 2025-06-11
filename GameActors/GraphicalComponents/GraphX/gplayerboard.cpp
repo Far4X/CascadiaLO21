@@ -128,19 +128,27 @@ void GPlayerBoard::updateHexTiles(){
 
 void GPlayerBoard::setHighlight(){
     for(auto &p : posed){
-        std::cout<<"Debut tuile"<<p->getQ()<<"."<<p->getR()<<std::endl;
         for (auto &d : HexCell::directions){
             HexCell neiH((*p+d).getQ(),(*p+d).getR());
-            std::cout<<(*p+d).getQ()<<"."<<(*p+d).getR()<<std::endl;
             GameTile* neiG = getTile(neiH.getQ(),neiH.getR());
             if ( neiG == nullptr){
-                std::cout<<" Examined"<<std::endl;
                 HexCell::Offset off = HexCell::axialToOffset(neiH,max_size);
                 tiles[off.getCol()][off.getRow()]->setPixmap(QPixmap(":/Tile/Assets/Tiles/potentialPlacement.png"));
             }
         }
     }
 
+}
+
+void GPlayerBoard::scoreScree(){
+    for (int col = 0; col < max_size; ++col) {
+        for (int row = 0; row < max_size; ++row) {
+            tiles[col][row]->clear();
+        }
+    }
+    QLabel* score = new QLabel(this);
+    score->setPixmap(QPixmap(":/Assets/Assets/Scoring/full-scoring-table.jpg"));
+    m_layout->addWidget(score);
 }
 
 
