@@ -44,9 +44,9 @@ int App::exec(){
         m_game->readNotification(m_id_notification.front());
         m_id_notification.pop_front();
     }
-    m_game->init();
+    // m_game->init();
     std::cout << "Game Over" << std::endl;
-    return QApplication::exec();
+    return 0;
 }
 
 

@@ -45,6 +45,7 @@ Game::~Game(){
     m_message_box = nullptr;
 }
 
+
 GameStatus Game::getGameStatus() const {
     return m_status;
 }
@@ -113,6 +114,11 @@ void Game::resurrectGame(){
 
     std::vector<GameTile*> m_available_tiles;
     std::vector<const WildlifeToken*> m_available_tokens;
+
+    //On restaure les cartes de marquage
+    if (m_desc_cards.size() == 5) {
+        m_scorer.configureCards(m_desc_cards);
+    }
 
     //On restaure les tokens
     for (size_t i = 0; i < m_nb_cards; i++){
@@ -184,6 +190,15 @@ void Game::resurrectGame(){
     for (size_t i = 0; i < m_available_tiles.size(); i++){
         m_decktile->addTile(m_available_tiles[i]);
     }
+
+    if (m_desc_cards.size() > 1) {
+        m_scorer.configureCards(m_desc_cards);
+        if (current_tour >= MAX_TURN) {
+            scoreGame();
+        }
+        m_status = GameStatus::Finished;
+    }
+
     makePlayerTurn();
 }
 
@@ -246,25 +261,33 @@ void Game::getTileAndToken(unsigned short int pos_tile, unsigned short int pos_t
 }
 
 void Game::makePlayerTurn(){
-    if (current_tour >= MAX_TURN){
-        scoreGame();
+    if (current_tour >= MAX_TURN) {  // si on reload une partie deja terminee
+        if (m_is_console) {
+            m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
+            m_players[current_player]->getBoard()->show();
+        }
+        else {
+            GraphXVue::instance()->show(current_player);
+        }
     }
-    m_message_box->addMessage( "----- \nTour de " + m_players[current_player]->getName(), 1, 0);
-    // m_message_box->show();
-    //std::cout << "----- \nTour de " << m_players[current_player]->getName()<< " -- Tour : " << current_tour << std::endl;
-
-    if (m_is_console){
-        m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
-        m_players[current_player]->getBoard()->show();
+    else {  // si c'est une partie normale
+        m_message_box->addMessage("----- \nTour de " + m_players[current_player]->getName(), 1, 0);
+        if (m_is_console) {
+            m_players[current_player]->getBoard()->show();
+            m_menu_token = new CTokenMenu(this, m_decktile, m_players[current_player]);
+            m_menu_token->show();
+        }
+        else {
+            GraphXVue::instance()->show(current_player); // Update l'affichage
+            GTokenMenu* gMenu = new GTokenMenu(this, m_decktile, m_players[current_player]);
+            m_menu_token = gMenu;
+            GraphXVue::instance()->addMenu(gMenu);
+            gMenu->show();
+        }
     }
-    else {
-        GraphXVue::instance()->show(current_player); // Update l'affichage
-        GTokenMenu* gMenu = new GTokenMenu(this, m_decktile, m_players[current_player]);
-        m_menu_token = gMenu;
-        GraphXVue::instance()->addMenu(gMenu);
-    }
-    return m_menu_token->show();
+    return;
 }
+
 
 
 void Game::scoreGame() {
@@ -621,7 +644,9 @@ void Game::readNotification(unsigned int code){
                     if (current_tour == MAX_TURN){
                         delete m_menu_validate;
                         m_menu_validate = nullptr;
-                        return scoreGame();
+                        scoreGame();
+                        m_status = GameStatus::Finished;
+                        return;
                     }
                 }
             }
@@ -642,21 +667,21 @@ void Game::readCards(std::string path){
     //On génère les cartes de départ
     m_starter_cards[0][0] = new GameTile("2223333245");
     m_starter_cards[0][1] = new GameTile("55555515");
-    m_starter_cards[0][2] = new GameTile("444111213");
+    m_starter_cards[0][2] = new GameTile("111444213");  // fait
 
-    m_starter_cards[1][0] = new GameTile("3331113423");
+    m_starter_cards[1][0] = new GameTile("1113333423");  // fait
     m_starter_cards[1][1] = new GameTile("22222214");
     m_starter_cards[1][2] = new GameTile("444555215");
 
     m_starter_cards[2][0] = new GameTile("1112223354");
     m_starter_cards[2][1] = new GameTile("44444411");
-    m_starter_cards[2][2] = new GameTile("333555212");
+    m_starter_cards[2][2] = new GameTile("555333212");  // fait
 
-    m_starter_cards[3][0] = new GameTile("5551113123");
+    m_starter_cards[3][0] = new GameTile("1115553123"); // fait
     m_starter_cards[3][1] = new GameTile("33333312");
     m_starter_cards[3][2] = new GameTile("444222245");
 
-    m_starter_cards[4][0] = new GameTile("4443333134");
+    m_starter_cards[4][0] = new GameTile("3334443134");  // fait
     m_starter_cards[4][1] = new GameTile("11111113");
     m_starter_cards[4][2] = new GameTile("555222252");
 

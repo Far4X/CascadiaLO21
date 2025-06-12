@@ -21,13 +21,14 @@ enum class GameStatus {
     NotStarted,
     Running,
     Quit,
-    Restart
+    Restart,
+    Finished
 };
 
 class Game : public SalvableThing, public NotifiableInterface, public QObject {
     /*Classe qui représente le déroulement de la partie*/
     unsigned short m_extension = 0;
-    std::string m_desc_cards = "AAAAA"; //Not implemented yet
+    std::string m_desc_cards = "AAAAA";
     unsigned short m_nb_players = 0;
     bool m_is_console;
 
@@ -41,7 +42,7 @@ class Game : public SalvableThing, public NotifiableInterface, public QObject {
     bool m_is_waiting_to_place_tile = false;
     GameTile* m_tile_to_add = nullptr; //Stocke la tuile en attente
     const WildlifeToken* m_token_to_add = nullptr;
-    Score m_scorer;
+    Score m_scorer;  // l'objet s'occupant du scoring
 
     std::vector<Player*> m_players;
     DeckTile* m_decktile = nullptr;
