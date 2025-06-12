@@ -60,6 +60,7 @@ QString PixmapFactory::matchTile(const GameTile* tile){
     {
         return ":/Assets/Assets/tileOutline.png";
     }
+
     // Stock les infos d'une tuile
     for (int i = 0; i<6; i++){
         if(tile->getBiome(i) == Prairie) desert++;
@@ -68,12 +69,14 @@ QString PixmapFactory::matchTile(const GameTile* tile){
         if(tile->getBiome(i) == Mountain) montains++;
         if(tile->getBiome(i) == Forest) forest++;
     }
+
     // Desert :
     if(desert == 6) return ":/Assets/Assets/Tiles/desert.png";
     if(desert == 3){
         if(lake == 3) return ":/Tile/Assets/Tiles/desert+lake.png";
         if(swamp == 3) return ":/Tile/Assets/Tiles/desert+swamp.png";
     }
+
     // Lake :
     if(lake == 6) return ":/Assets/Assets/Tiles/lake.png";
     if(lake == 3 && montains == 3) return ":/Tile/Assets/Tiles/lake+mountain.png";
@@ -104,7 +107,6 @@ QString PixmapFactory::matchTile(const GameTile* tile){
 }
 
 QString PixmapFactory::matchToken(Wildlife wild){
-
     if(wild == Bear)
     {
         return ":/Token/Assets/Token/bear.png";
@@ -170,7 +172,6 @@ QPixmap PixmapFactory::createTile(const GameTile* tile){
     const WildlifeToken* token;
     if (tile!=nullptr)
     {
-        std::cout<<"JE SUIS PAS LA"<<std::endl;
         nbtoken = tile->getNbWildlife();
         token = tile->getToken();
     }

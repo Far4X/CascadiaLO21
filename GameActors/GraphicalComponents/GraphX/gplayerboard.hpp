@@ -34,6 +34,7 @@ public:
     void updateHexTiles();
     void addGxTile(int x,int y); // x,y de la matrice pas q,r !
     void scoreScree();
+    void construct();
 
     QSize sizeHint() const override;
     void show() override;
