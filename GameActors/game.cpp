@@ -667,7 +667,8 @@ void Game::readCards(std::string path){
     //On génère les cartes de départ
     m_starter_cards[0][0] = new GameTile("2223333245");
     m_starter_cards[0][1] = new GameTile("55555515");
-    m_starter_cards[0][2] = new GameTile("111444213");  // fait
+    //m_starter_cards[0][2] = new GameTile("111444213");  // fait
+    m_starter_cards[0][2] = new GameTile("444111213");  // fait
 
     m_starter_cards[1][0] = new GameTile("1113333423");  // fait
     m_starter_cards[1][1] = new GameTile("22222214");
