@@ -7,6 +7,7 @@ package Data_types {
     enum Biome
     enum Direction
     enum Rotation
+    enum Variant
     struct Offset {
         + getCol() const : int
         + getRow() const : int
@@ -510,9 +511,16 @@ package Scoring {
     }
 
     abstract WildlifeScoringStrategy {
-        + {abstract} void score(Cards card, Wildlife type)
-
+        + ~WildlifeScoringStrategy() = default;
     }
+
+    class VariantScoringStrategy {
+        - variant: Variant
+        + VariantScoringStrategy(v: Variant)
+        + computeScore(board: const PlayerBoard&) const: std::vector<double>
+        + getVariant() const: Variant
+    }
+
 
     class BearScoringCardA {
         + void score(Cards card, Wildlife type)
