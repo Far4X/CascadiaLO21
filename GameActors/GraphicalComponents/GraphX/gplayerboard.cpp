@@ -18,7 +18,7 @@ GPlayerBoard::GPlayerBoard(NotifiableInterface *tar, const std::string& def, QWi
 void GPlayerBoard::construct(){
     tiles.resize(max_size); // On init le tableau pour acceder a tiles[1] par exemple
 
-    setAutoFillBackground(true); // Permet de remplir l'arrière-plan
+    //setAutoFillBackground(true); // Permet de remplir l'arrière-plan
 
     m_layout = new QVBoxLayout(this);  // Optionnel : peut être utilisé si tu veux gérer des widgets enfants
     setLayout(m_layout);  // Applique le layout (mais ne sera pas utilisé pour les tuiles)
@@ -49,9 +49,9 @@ void GPlayerBoard::initHexTiles(){
             QPixmap pixmap = PixmapFactory::createTile(getTile(hex.getQ(),hex.getR()));
             if (pixmap.isNull()) {std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;}
             tileLabel->setPixmap(pixmap);
-            tileLabel->setFixedSize(tileWidth*1.03, tileHeight*1.16); // il faut zoom car c'est des carrés les valeurs sont choisie pour un bon rendu
+            //tileLabel->adjustSize();  // taille exacte du pixmap (incluant rotation et zoom)
+            tileLabel->setFixedSize(tileWidth*1.03, tileHeight*1.16); // il faut zoom car ce sont des carrés les valeurs sont choisie pour un bon rendu
             tileLabel->setScaledContents(true);  // Pour que l'image remplisse le QLabel
-
             // Calcul des positions x et y pour chaque tuile en utilisant un décalage
             int x = (col) * xOffset;    //Easter egg
             int y = (row) * tileHeight;
@@ -81,7 +81,6 @@ void GPlayerBoard::updateHexTiles(){
             if(getTile(hex.getQ(),hex.getR()) != nullptr)posed.push_back(getTile(hex.getQ(),hex.getR())); // stockage des tuiles posées
             if(GameTile* tile = getTile(hex.getQ(),hex.getR())){
                 int rot = tile->getRotation();
-                std::cout<<"HELLO";
                 if(rot == 1 || rot == 2 || rot == 4 || rot == 5)
                 {
                     int newW = tileWidth * 1.38; // 1.03*1.41 car une tuile c'est 116px ansi la diag = sqrt(2)*116,
@@ -120,15 +119,39 @@ void GPlayerBoard::setHighlight(){
 
 }
 
-void GPlayerBoard::scoreScree(){
-    for (int col = 0; col < max_size; ++col) {
-        for (int row = 0; row < max_size; ++row) {
-            tiles[col][row]->clear();
-        }
-    }
+void GPlayerBoard::scoreScree(std::vector<double>& ti_scores,std::vector<double>& to_scores,int nb_nature_tokens){
     QLabel* score = new QLabel(this);
-    score->setPixmap(QPixmap(":/Assets/Assets/Scoring/full-scoring-table.jpg"));
+    QPixmap scoreimg(":/Assets/Assets/Scoring/full-scoring-table.jpg");
+    QPainter painter(&scoreimg);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(QColorConstants::Svg::brown); // Couleur du texte
+    painter.setFont(QFont("Arial", 30, QFont::Bold)); // Police, taille, style
+    QPoint position(105, 45);
+    painter.drawText(position,QString::number(nb_nature_tokens));
+    int i = 1;
+    double to_score_L[5]{to_scores[0],to_scores[1],to_scores[3],to_scores[2],to_scores[4]}; // inversion en code par rapport aux visuels sur le site
+    double ti_score_L[5]{ti_scores[3],ti_scores[0],ti_scores[4],ti_scores[1],ti_scores[2]};
+    for(auto &e : to_score_L){
+        int pos = (i++)*60;
+        QPoint position(105, pos+45);
+        painter.drawText(position,QString::number(e));
+    }
+    painter.drawText(QPoint(105, 405),QString::number(to_score_L[0]+to_score_L[1]+to_score_L[2]+to_score_L[3]+to_score_L[4]+nb_nature_tokens));
+
+    i = 1;
+    for(auto &e : ti_score_L){
+        int pos = (i++)*60;
+        QPoint position(255, pos+45);
+        painter.drawText(position,QString::number(e));
+    }
+    painter.drawText(QPoint(255, 405),QString::number(ti_score_L[0]+ti_score_L[1]+ti_score_L[2]+ti_score_L[3]+ti_score_L[4]));
+
+    score->setPixmap(scoreimg);
     m_layout->addWidget(score);
+
+
+    //this->adjustSize();
+
 }
 
 
@@ -161,7 +184,7 @@ void GPlayerBoard::show(){
 }
 
 QSize GPlayerBoard::sizeHint() const {
-    return QSize(41*tileWidth,42*tileHeight);
+    return QSize(33*tileWidth,42*tileHeight);
 }
 
 

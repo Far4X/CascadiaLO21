@@ -1,6 +1,8 @@
 #include "graphxvue.hpp"
 #include "gplayerboard.hpp"
+#include "../../player.hpp"
 #include <iostream>
+#include "gmessagebox.hpp"
 
 
 GraphXVue* GraphXVue::s_instance = nullptr;
@@ -21,7 +23,6 @@ GraphXVue::GraphXVue(QObject *parent)
     m_lcd->setDigitCount(2);
     m_lcd->setSegmentStyle(QLCDNumber::Filled);
     m_lcd->setFixedHeight(40);
-    m_lcd->display(m_turn_count);
     m_left_panel_layout->addWidget(m_lcd, 0);
 
     m_main_layout->addWidget(m_left_panel);
@@ -62,9 +63,21 @@ GraphXVue* GraphXVue::instance(){
 
 }
 
+
+void GraphXVue::gameStart(int rounds,std::vector<Player*>& p){
+    std::cout<<"GAME START"<<std::endl;
+    players = p;
+    m_lcd->display(rounds);
+    m_turn_count = rounds; // pas sur de l'utilite de cette variable
+    for (auto &e : p)
+    {
+        m_onglet->addTab(QString::fromStdString(e->getName()));
+    }
+
+}
+
 void GraphXVue::addPlayerBoard(GPlayerBoard* board){
     boards.push_back(board);
-    m_onglet->addTab(QString("Joueur %1").arg(boards.size()));
 
     //On s'assure que chaque board n'a pas d'autre parent;
     board->setParent(nullptr);
@@ -85,10 +98,19 @@ void GraphXVue::show(int playerIndex){
     }
     if(playerIndex != -1){ // -1 pour skip l'update d'onglet
         boards[playerIndex]->updateHexTiles();
-        //if(m_lcd->value() == 18)boards[playerIndex]->scoreScree(); // test pour afficher le score
         m_onglet->setCurrentIndex(playerIndex);
     }
     m_window->show();
+}
+
+void GraphXVue::onScoreEvent(){
+    for(int i=0;i<players.size();i++)
+    {
+        std::vector<double> ti_scores = players[i]->getTilesScores();
+        std::vector<double> to_scores = players[i]->getTokensScores();
+        int nb_nature_tokens = players[i]->getNbNatureToken();
+        boards[i]->scoreScree(ti_scores,to_scores,nb_nature_tokens);
+    }
 }
 
 void GraphXVue::onTabChanged(int index)
