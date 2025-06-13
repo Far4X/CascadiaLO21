@@ -78,7 +78,7 @@ public:
     void gameStart(int compteur,std::vector<Player*>& players);
     void setScore();
 
-    void onScoreEvent();
+    void onScoreEvent(int player);
 
 private slots:
     void onTabChanged(int index);

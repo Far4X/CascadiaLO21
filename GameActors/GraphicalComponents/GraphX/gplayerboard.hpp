@@ -33,7 +33,7 @@ public:
     void initHexTiles();
     void updateHexTiles();
     void addGxTile(int x,int y); // x,y de la matrice pas q,r !
-    void scoreScree(std::vector<double>& ti_scores,std::vector<double>& to_scores,int nb_nature_tokens);
+    void scoreScree(std::vector<double>& ti_scores,std::vector<double>& to_scores,int nb_nature_tokens,std::vector<unsigned short int> m_bonuses);
     void construct();
 
     QSize sizeHint() const override;

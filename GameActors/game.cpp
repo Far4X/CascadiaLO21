@@ -360,7 +360,7 @@ void Game::scoreGame() {
         total_score += m_players[i]->getNbNatureToken();
         m_players[i]->addScore(total_score);
 
-        GraphXVue::instance()->onScoreEvent();
+
 
         std::vector<double> ti_scores = m_players[i]->getTilesScores();
         std::vector<double> to_scores = m_players[i]->getTokensScores();
@@ -386,6 +386,7 @@ void Game::scoreGame() {
         }
     }
 
+
     for (unsigned short i = 0; i < NB_TYPE_TILES; i++){
         unsigned int nb_firsts = tab_max_scores[i].getFirsts().size();
         switch (nb_firsts) {
@@ -407,8 +408,9 @@ void Game::scoreGame() {
                 m_players[pl]->addBonusScore(1, i);
             }
         }
-    }
 
+    }
+    if(!m_is_console)for(int i=0;i<m_players.size();i++)GraphXVue::instance()->onScoreEvent(i);
     delete[] tab_max_scores;
 }
 

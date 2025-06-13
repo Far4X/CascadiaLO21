@@ -103,14 +103,19 @@ void GraphXVue::show(int playerIndex){
     m_window->show();
 }
 
-void GraphXVue::onScoreEvent(){
-    for(int i=0;i<players.size();i++)
-    {
-        std::vector<double> ti_scores = players[i]->getTilesScores();
-        std::vector<double> to_scores = players[i]->getTokensScores();
-        int nb_nature_tokens = players[i]->getNbNatureToken();
-        boards[i]->scoreScree(ti_scores,to_scores,nb_nature_tokens);
-    }
+void GraphXVue::onScoreEvent(int player){
+        std::cout<<"Score : "<<player<<std::endl;
+        std::vector<double> ti_scores = players[player]->getTilesScores();
+        std::vector<double> to_scores = players[player]->getTokensScores();
+        int nb_nature_tokens = players[player]->getNbNatureToken();
+        std::vector<unsigned short int> bonus;
+        bonus.push_back(players[player]->getBonusScore(3));
+        bonus.push_back(players[player]->getBonusScore(0));
+        bonus.push_back(players[player]->getBonusScore(4));
+        bonus.push_back(players[player]->getBonusScore(1));
+        bonus.push_back(players[player]->getBonusScore(2));
+
+        boards[player]->scoreScree(ti_scores,to_scores,nb_nature_tokens,bonus);
 }
 
 void GraphXVue::onTabChanged(int index)
