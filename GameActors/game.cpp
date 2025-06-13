@@ -10,7 +10,7 @@
 #define NB_TYPE_TILES 5
 
 Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players(0), m_is_console(is_console), m_target(interface){
-    std::srand(std::time(0));
+    std::srand(std::time(0)); // besoin d'aléatoire pour debug
     m_cards = new GameTile*;
     readCards();
     if (m_is_console){
@@ -301,6 +301,7 @@ void Game::scoreGame() {
         maxScore() = default;
         ~maxScore() = default;
         const std::vector<unsigned int>& getFirsts() const {return fst_players;}
+        unsigned int getMaxVal() const {return max_val;};
         const std::vector<unsigned int>& getSeconds() const {return snd_players;}
         void considerateScore(const unsigned int &val, const unsigned int &pl){
             if (val > max_val){
@@ -360,6 +361,8 @@ void Game::scoreGame() {
         total_score += m_players[i]->getNbNatureToken();
         m_players[i]->addScore(total_score);
 
+
+
         std::vector<double> ti_scores = m_players[i]->getTilesScores();
         std::vector<double> to_scores = m_players[i]->getTokensScores();
         int nb_nature_tokens = m_players[i]->getNbNatureToken();
@@ -384,6 +387,7 @@ void Game::scoreGame() {
         }
     }
 
+
     for (unsigned short i = 0; i < NB_TYPE_TILES; i++){
         unsigned int nb_firsts = tab_max_scores[i].getFirsts().size();
         switch (nb_firsts) {
@@ -391,22 +395,51 @@ void Game::scoreGame() {
             throw CustomError("Nobody wins. There is no war, so there is an error", 89);
             break;
         case 1:
-            m_players[tab_max_scores[i].getFirsts()[0]]->addBonusScore(3, i);
-            for (unsigned int pl : tab_max_scores[i].getSeconds()){
-                m_players[pl]->addBonusScore(1, i);
+            //m_players[tab_max_scores[i].getFirsts()[0]]->addBonusScore(3, i);
+            switch (m_nb_players){
+            case 1 :
+                if (tab_max_scores[i].getMaxVal() >= 7){
+                    m_players[tab_max_scores[i].getFirsts()[0]]->addBonusScore(2, i);
+                }
+                break;
+            case 2 :
+                m_players[tab_max_scores[i].getFirsts()[0]]->addBonusScore(2, i);
+                break;
+            default :
+                m_players[tab_max_scores[i].getFirsts()[0]]->addBonusScore(3, i);
+                if (tab_max_scores[i].getSeconds().size() == 1){
+                    m_players[tab_max_scores[i].getSeconds()[0]]->addBonusScore(2, i);
+                }
+                else {
+                    for (unsigned int pl : tab_max_scores[i].getSeconds()){
+                        m_players[pl]->addBonusScore(1, i);
+                    }
+                }
+                break;
             }
             break;
         case 2:
-            for (unsigned int pl : tab_max_scores[i].getFirsts()){
-                m_players[pl]->addBonusScore(2, i);
+            switch (m_nb_players) {
+            case 2:
+                for (unsigned int pl : tab_max_scores[i].getFirsts()){
+                    m_players[pl]->addBonusScore(1, i);
+                }
+                break;
+            default:
+                for (unsigned int pl : tab_max_scores[i].getFirsts()){
+                    m_players[pl]->addBonusScore(2, i);
+                }
+                break;
             }
+            break;
         default:
             for (unsigned int pl : tab_max_scores[i].getFirsts()){
                 m_players[pl]->addBonusScore(1, i);
             }
         }
-    }
 
+    }
+    if(!m_is_console)for(int i=0;i<m_players.size();i++)GraphXVue::instance()->onScoreEvent(i);
     delete[] tab_max_scores;
 }
 
@@ -454,6 +487,7 @@ void Game::readNotification(unsigned int code){
         }
         m_nb_players = m_players.size();
         initPlayerboards();
+        if(!m_is_console)GraphXVue::instance()->gameStart(MAX_TURN,m_players);
         return makePlayerTurn();
     }
 
@@ -488,6 +522,7 @@ void Game::readNotification(unsigned int code){
         else {
             m_player_menu = new GPlayerMenu(this);
             m_decktile = &GDeckTile::getInstance();
+
         }
 
         for (size_t i = 0; i < m_tokens.size(); i++){

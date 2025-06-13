@@ -5,6 +5,9 @@ unsigned int Player::nb_players = 0;
 
 Player::Player(const std::string& name, PlayerBoard* bd) : m_name(name), m_id(++nb_players), m_tiles_scores(5, 0.0), m_tokens_scores(5, 0.0) {
     this->setBoard(bd);
+    for (unsigned short int i = 0; i < 5; i++){
+        m_bonuses[i] = 0;
+    }
 }
 
 Player::~Player() {

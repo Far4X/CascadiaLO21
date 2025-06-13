@@ -15,6 +15,7 @@
 #include <QMouseEvent>
 
 
+class Player;
 class GPlayerBoard;
 
 
@@ -74,6 +75,10 @@ public:
     void addMenu(QWidget* menu);
     void addDeck(QWidget* deck);
     void nextTurn();
+    void gameStart(int compteur,std::vector<Player*>& players);
+    void setScore();
+
+    void onScoreEvent(int player);
 
 private slots:
     void onTabChanged(int index);
@@ -85,6 +90,8 @@ private:
     explicit GraphXVue(QObject *parent = nullptr);
     static GraphXVue* s_instance;
 
+    std::vector<QWidget*> proxyWidget;
+
     //Fenetre principal :
     QWidget* m_window;
     QHBoxLayout* m_main_layout;
@@ -93,7 +100,7 @@ private:
     QWidget* m_left_panel; // la pioche
     QVBoxLayout* m_left_panel_layout; //
 
-    int m_turn_count = 20;
+    int m_turn_count;
     QLCDNumber* m_lcd;  // nombre de tours
 
     //right pannel
@@ -110,6 +117,8 @@ private:
     QGraphicsProxyWidget* proxy;
     std::vector<QGraphicsProxyWidget*> proxies;
 
+    std::vector<Player*> players;
+
     //detection :
 
     bool isPointInHex(QPointF point, QPointF center, float radius) {
@@ -124,6 +133,8 @@ private:
     }
 
     void onRightClickAt(const QPointF& scenePos);
+
+
 
 };
 
