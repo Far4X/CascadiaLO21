@@ -42,9 +42,17 @@ QPixmap PixmapFactory::createIconWithOverlay(const QString& basePath, const QStr
 
     QPainter painter(&result);
     painter.drawPixmap(0, 0, base);
-    painter.drawPixmap(30, 0, overlay1);
-    painter.drawPixmap(10, 30, overlay2);
-    painter.drawPixmap(50, 30, overlay3);
+    if(rot == 0 || rot == 3){
+    painter.drawPixmap(35, 10, overlay1);
+    painter.drawPixmap(15, 45, overlay2);
+    painter.drawPixmap(55, 45, overlay3);
+    }
+    else{
+        int rotoffset = 20; // la rotation implique un zoom
+        painter.drawPixmap(35+rotoffset, 10+rotoffset, overlay1);
+        painter.drawPixmap(15+rotoffset, 45+rotoffset, overlay2);
+        painter.drawPixmap(55+rotoffset, 45+rotoffset, overlay3);
+    }
     painter.end();
 
     return result;

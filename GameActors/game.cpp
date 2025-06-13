@@ -10,7 +10,7 @@
 #define NB_TYPE_TILES 5
 
 Game::Game(NotifiableInterface* interface, const bool is_console) : m_nb_players(0), m_is_console(is_console), m_target(interface){
-    std::srand(std::time(0));
+    std::srand(std::time(0)); // besoin d'aléatoire pour debug
     m_cards = new GameTile*;
     readCards();
     if (m_is_console){
@@ -360,6 +360,8 @@ void Game::scoreGame() {
         total_score += m_players[i]->getNbNatureToken();
         m_players[i]->addScore(total_score);
 
+        GraphXVue::instance()->onScoreEvent();
+
         std::vector<double> ti_scores = m_players[i]->getTilesScores();
         std::vector<double> to_scores = m_players[i]->getTokensScores();
         int nb_nature_tokens = m_players[i]->getNbNatureToken();
@@ -454,6 +456,7 @@ void Game::readNotification(unsigned int code){
         }
         m_nb_players = m_players.size();
         initPlayerboards();
+        if(!m_is_console)GraphXVue::instance()->gameStart(MAX_TURN,m_players);
         return makePlayerTurn();
     }
 
@@ -488,6 +491,7 @@ void Game::readNotification(unsigned int code){
         else {
             m_player_menu = new GPlayerMenu(this);
             m_decktile = &GDeckTile::getInstance();
+
         }
 
         for (size_t i = 0; i < m_tokens.size(); i++){
