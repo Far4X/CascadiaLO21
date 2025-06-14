@@ -21,7 +21,6 @@ void CGameMenu::show(){
         std::cout << "1 : Charger la dernière partie" << std::endl;
         std::cout << "2 : Utiliser une variante " << std::endl;
         std::cout << "3 : Choisir les cartes de marquage points" << std::endl;
-        std::cout << "4 : Tester le scoring" << std::endl;
 
         std::string res;
         std::cin >> res;
@@ -54,10 +53,6 @@ void CGameMenu::show(){
             else {
                 std::cout << "Valeur entrée non valide, les changements n'ont pas été pris en compte." << std::endl;
             }
-            break;
-        case '4':
-            continue_menu = false;
-            this->addResult(std::tuple<std::string, std::string>("Test scoring", res));
             break;
         default:
             std::cout << "Action non reconnue, merci de recommençer" << std::endl;
