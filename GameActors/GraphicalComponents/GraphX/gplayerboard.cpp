@@ -18,13 +18,11 @@ GPlayerBoard::GPlayerBoard(NotifiableInterface *tar, const std::string& def, QWi
 void GPlayerBoard::construct(){
     tiles.resize(max_size); // On init le tableau pour acceder a tiles[1] par exemple
 
-    //setAutoFillBackground(true); // Permet de remplir l'arrière-plan
+    m_layout = new QVBoxLayout(this);
 
-    m_layout = new QVBoxLayout(this);  // Optionnel : peut être utilisé si tu veux gérer des widgets enfants
-    setLayout(m_layout);  // Applique le layout (mais ne sera pas utilisé pour les tuiles)
-
+    setLayout(m_layout);  // Applique le layout (mais ne sera pas utilisé pour les tuiles, c'était pour le score)
     initHexTiles();
-    setGeometry(0, 0, sizeHint().width(), sizeHint().height());  // Fixe la taille du widget
+    setGeometry(0, 0, 33*tileWidth,42*tileHeight);  // Fixe la taille du widget
 
     m_manager = GraphXVue::instance();
     m_manager->addPlayerBoard(this);
@@ -33,7 +31,6 @@ void GPlayerBoard::construct(){
         if (board == this) {
             // Traiter clic droit ici avec pos
             qDebug() << "Clic droit sur ce GPlayerBoard à " << pos;
-            // Ton code ici
         }
     });
 }
@@ -49,9 +46,10 @@ void GPlayerBoard::initHexTiles(){
             QPixmap pixmap = PixmapFactory::createTile(getTile(hex.getQ(),hex.getR()));
             if (pixmap.isNull()) {std::cerr << "Erreur : l'image n'a pas pu être chargée !" << std::endl;}
             tileLabel->setPixmap(pixmap);
-            //tileLabel->adjustSize();  // taille exacte du pixmap (incluant rotation et zoom)
             tileLabel->setFixedSize(tileWidth*1.03, tileHeight*1.16); // il faut zoom car ce sont des carrés les valeurs sont choisie pour un bon rendu
             tileLabel->setScaledContents(true);  // Pour que l'image remplisse le QLabel
+
+
             // Calcul des positions x et y pour chaque tuile en utilisant un décalage
             int x = (col) * xOffset;    //Easter egg
             int y = (row) * tileHeight;
@@ -78,13 +76,13 @@ void GPlayerBoard::updateHexTiles(){
             HexCell::Offset off(col,row);
             HexCell hex (PlayerBoard::offsetToAxial(off));
             tiles[col][row]->setPixmap(PixmapFactory::createTile(getTile(hex.getQ(),hex.getR())));
-            if(getTile(hex.getQ(),hex.getR()) != nullptr)posed.push_back(getTile(hex.getQ(),hex.getR())); // stockage des tuiles posées
+            if(getTile(hex.getQ(),hex.getR()) != nullptr)posed.push_back(getTile(hex.getQ(),hex.getR())); // stockage des tuiles posée
             if(GameTile* tile = getTile(hex.getQ(),hex.getR())){
                 int rot = tile->getRotation();
                 if(rot == 1 || rot == 2 || rot == 4 || rot == 5)
                 {
-                    int newW = tileWidth * 1.38; // 1.03*1.41 car une tuile c'est 116px ansi la diag = sqrt(2)*116,
-                    int newH = tileHeight * 1.58; // enfin on veut retrouver 116 donc sqrt(2)*116* x = 116, on obtient x = 1.41
+                    int newW = tileWidth * 1.38; // 1.03*1.41 car une tuile c'est 116px ansi la diag = sqrt(2)*116, // on a du ajuster la valeurs car c'est pas exactement le bon calculs
+                    int newH = tileHeight * 1.58; // enfin on veut retrouver 116 donc sqrt(2)*116* x = 116, on obtient x = 1.41 // ''
                     tiles[col][row]->setFixedSize(newW, newH);
 
                     int x = col * xOffset;
@@ -113,6 +111,13 @@ void GPlayerBoard::setHighlight(){
                 tiles[off.getCol()][off.getRow()]->setPixmap(QPixmap(":/Tile/Assets/Tiles/potentialPlacement.png"));
                 tiles[off.getCol()][off.getRow()]->setFixedSize(tileWidth*1.03, tileHeight*1.19); // il faut zoom car c'est des carrés
                 tiles[off.getCol()][off.getRow()]->setScaledContents(true);  // Pour que l'image remplisse le QLabel
+
+                int x = (off.getCol()) * xOffset;    // on doit remettre à sa position la tuile pour prevenir le cas ou on annulerai un action, en effet sinon
+                int y = (off.getRow()) * tileHeight; // une tuile qui aurait été tourné puis enlevé produirait un déclage sur le highlight
+                if (off.getCol() % 2 == 1) {
+                    y += yOffset;
+                }
+                tiles[off.getCol()][off.getRow()]->move(x,y);
             }
         }
     }

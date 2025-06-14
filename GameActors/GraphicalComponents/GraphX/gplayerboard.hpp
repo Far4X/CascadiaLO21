@@ -28,13 +28,14 @@ public:
     GPlayerBoard(NotifiableInterface* tar, QWidget *parent = nullptr,int size = 41);
     GPlayerBoard(NotifiableInterface *tar, const std::string& def, QWidget *parent = nullptr,int size = 41);
 
-    ~GPlayerBoard() = default;;
+    ~GPlayerBoard() = default;
 
     void initHexTiles();
     void updateHexTiles();
     void addGxTile(int x,int y); // x,y de la matrice pas q,r !
     void scoreScree(std::vector<double>& ti_scores,std::vector<double>& to_scores,int nb_nature_tokens,std::vector<unsigned short int> m_bonuses);
     void construct();
+
 
     QSize sizeHint() const override;
     void show() override;
@@ -50,6 +51,8 @@ private:
     bool m_dragging = false;
     void setHighlight();
     std::vector<GameTile*> posed; // toutes les tuiles posées (utile pour avoir les voisins dans le highlight)
+
+
 
 };
 

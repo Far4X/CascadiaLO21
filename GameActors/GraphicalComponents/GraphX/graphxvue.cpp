@@ -46,8 +46,7 @@ GraphXVue::GraphXVue(QObject *parent)
     m_view->setRenderHint(QPainter::SmoothPixmapTransform); // éviter la pixellisation
     m_view->setTransformationAnchor(GraphXView::AnchorUnderMouse);
     m_right_panel_layout->addWidget(m_view);
-    //QRectF sceneRect(0, 0, 2600, 2600);
-    //m_scene->setSceneRect(sceneRect);
+
     connect(m_view, &GraphXView::rightClickAt, this, &GraphXVue::onRightClickAt);
 
     currentboard = 0;
@@ -61,6 +60,16 @@ GraphXVue* GraphXVue::instance(){
     }
     return s_instance;
 
+}
+
+GraphXVue::~GraphXVue(){
+    delete m_window;
+    delete m_scene;
+    delete m_view;
+
+    for (auto proxy : proxies) {
+        delete proxy;
+    }
 }
 
 
@@ -83,10 +92,8 @@ void GraphXVue::addPlayerBoard(GPlayerBoard* board){
     board->setParent(nullptr);
     QGraphicsProxyWidget* proxy = m_scene->addWidget(board);
     proxy->setVisible(false);
-    //proxy->setPos(200,100); // a revoir c trop fais main si on change quoi que ce soit ça
     proxies.push_back(proxy);
     m_view->centerOn(proxies[0]);
-    //m_layout->addWidget(board);
 }
 
 void GraphXVue::show(int playerIndex){
@@ -94,7 +101,7 @@ void GraphXVue::show(int playerIndex){
 
     if(!boards.empty() && !proxies.empty()){
         proxies[0]->setVisible(true);
-        //m_view->centerOn(proxies[0]);
+        //m_view->centerOn(proxies[0]); // ne rend pas bien a l'utilisation
     }
     if(playerIndex != -1){ // -1 pour skip l'update d'onglet
         boards[playerIndex]->updateHexTiles();

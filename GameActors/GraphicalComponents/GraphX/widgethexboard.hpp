@@ -1,6 +1,10 @@
 #ifndef WIDGETHEXBOARD_H
 #define WIDGETHEXBOARD_H
 
+
+/* --- Deprecated Class --- */
+
+
 //#include <QWidget>
 //#include <QLabel>
 //#include <QPixmap>

@@ -89,6 +89,7 @@ signals:
 private:
     explicit GraphXVue(QObject *parent = nullptr);
     static GraphXVue* s_instance;
+    ~GraphXVue();
 
     std::vector<QWidget*> proxyWidget;
 
