@@ -1,0 +1,111 @@
+/*
+ * #ifndef PAUSEDIALOG_HPP
+#define PAUSEDIALOG_HPP
+
+#include <QDialog>
+#include "GameActors/GraphicalComponents/GraphX/graphxvue.hpp"
+
+class QPushButton;
+
+class PauseDialog : public QDialog {
+    Q_OBJECT
+
+public:
+    explicit PauseDialog(QWidget *parent = nullptr);
+
+signals:
+    void quitRequested();
+    void restartRequested();
+public slots :
+    void restartGame();
+
+
+private:
+    QPushButton* m_btn_restart = nullptr;
+    QPushButton* m_btn_quit = nullptr;
+    QPushButton* m_btn_resume = nullptr;
+
+};
+
+#endif // PAUSEDIALOG_HPP
+*/
+
+#include "pausedialog.hpp"
+/*
+ * #include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QApplication>
+
+
+PauseDialog::PauseDialog(QWidget *parent)
+    : QDialog(parent) {
+    setWindowTitle("Pause");
+    setModal(true);
+    setFixedSize(250, 120);
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->addWidget(new QLabel("Jeu en pause", this));
+
+    m_btn_restart = new QPushButton("Restart", this);
+    m_btn_quit = new QPushButton("Quitter", this);
+    m_btn_resume = new QPushButton("Reprendre", this);
+
+    layout->addWidget(m_btn_restart);
+    layout->addWidget(m_btn_quit);
+    layout->addWidget(m_btn_resume);
+
+    connect(m_btn_resume, &QPushButton::clicked, this, &QWidget::hide);
+
+    connect(m_btn_quit, &QPushButton::clicked, QApplication::instance(), &QApplication::quit);
+    GraphXVue* vue = GraphXVue::instance();
+    connect(m_btn_restart, &QPushButton::clicked, this, [this]() {
+        qDebug() << "Restart button clicked, emitting restartRequested.";
+        emit restartRequested();
+        accept();
+    });
+
+}
+*/
+/*
+ * #include "gpausequitmenu.hpp"
+
+GPauseQuitMenu::GPauseQuitMenu(QWidget* parent)
+    : QWidget(parent)
+{
+    m_pause_button = new QPushButton("Pause");
+    m_quit_button = new QPushButton("Quitter");
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->addWidget(m_pause_button);
+    layout->addWidget(m_quit_button);
+
+    connect(m_pause_button, &QPushButton::clicked, this, &GPauseQuitMenu::pauseClicked);
+    connect(m_quit_button, &QPushButton::clicked, this, &GPauseQuitMenu::quitClicked);
+}
+*/
+/*
+ * #ifndef GPAUSEQUITMENU_HPP
+#define GPAUSEQUITMENU_HPP
+
+#include <QWidget>
+#include <QPushButton>
+#include <QVBoxLayout>
+
+class GPauseQuitMenu : public QWidget {
+    Q_OBJECT
+
+public:
+    explicit GPauseQuitMenu(QWidget* parent = nullptr);
+
+signals:
+    void pauseClicked();
+    void quitClicked();
+
+private:
+    QPushButton* m_pause_button;
+    QPushButton* m_quit_button;
+};
+
+#endif // GPAUSEQUITMENU_HPP
+*/
