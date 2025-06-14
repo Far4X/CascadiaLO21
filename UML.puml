@@ -1,5 +1,4 @@
-
-@startuml UML
+@startuml
 scale 0.5
 
 package Data_types {
@@ -8,21 +7,22 @@ package Data_types {
     enum Direction
     enum Rotation
     enum Variant
+
     struct Offset {
-        + getCol() const : int
-        + getRow() const : int
+        + getCol() : int
+        + getRow() : int
         + Offset(int c, int r)
         - col : int
         - row : int
     }
 }
 
-
 package GameActors {
     package Menus {
-        abstract Menu {
+
+        abstract class Menu<T> {
             - T* m_results
-            - int m_nb_result;
+            - int m_nb_result
 
             + Iterator getIterator() const
             + Menu()
@@ -30,66 +30,72 @@ package GameActors {
             + addResult(const T& tar) : void
             + {abstract} void show()
         }
-        class Menu::Iterator{
-            - const Menu& m_menu
+
+        class Iterator<T> {
+            - const Menu<T>& m_menu
             - int m_nb
 
-            + Iterator(const Menu& tar)
+            + Iterator(const Menu<T>& tar)
             + bool isDone() const
-            + Iterator& operator++(int a)
+            + Iterator& operator++(int)
             + T getValue() const
         }
 
-        Menu <|-- Menu::Iterator
+        Menu <|-- Iterator
+
+        interface NotifiableInterface
+
         Menu <|-- NotifiableInterface
         Menu <|-- GMenu
         Menu <|-- CMenu
 
         package COMenus {
-            abstract CMenu {
+            abstract class CMenu {
                 - unsigned int m_x_size
                 + {abstract} void show()
                 + void setX(unsigned int x)
                 + unsigned int getX() const
             }
-            class CGameMenu{
-                + CGameMenu(NotifiableInterface *tar);
-                + void show() override;
+            class CGameMenu {
+                + CGameMenu(NotifiableInterface* tar)
+                + void show() override
             }
-            class CPlayerMenu{
-                - int m_result 
+            class CPlayerMenu {
+                - int m_result
                 + CPlayerMenu()
-                + void show()
+                + void show() override
             }
             class CTokenMenu {
-                - m_deck_tile : DeckTile*
-                - m_caller : Player* const
-                - m_nb_tokens : unsigned short int 
-                + CTokenMenu(NotifiableInterface* tar, DeckTile* decktile, Player* caller);
+                - DeckTile* m_deck_tile
+                - Player* const m_caller
+                - unsigned short int m_nb_tokens
+                + CTokenMenu(NotifiableInterface* tar, DeckTile* decktile, Player* caller)
                 + ~CTokenMenu()
-                + show() : void
+                + void show()
             }
             class CValidateMenu {
                 + CValidateMenu(NotifiableInterface* tar)
                 + ~CValidateMenu()
-                + show() : void
+                + void show()
             }
+
             CMenu <|-- CGameMenu
             CMenu <|-- CPlayerMenu
             CMenu <|-- CTokenMenu
             CMenu <|-- CValidateMenu
         }
+
         package GXMenus {
-            abstract GMenu {
+            abstract class GMenu {
                 - unsigned int m_size_x
                 - unsigned int m_size_y
                 - unsigned int m_pos_x
                 - unsigned int m_pos_y
-                ~ NotifiableInterface* m_target
+                # NotifiableInterface* m_target
 
                 + GMenu(NotifiableInterface* target, QWidget* parent, unsigned int size_x, unsigned int size_y, unsigned int pos_x, unsigned int pos_y)
-                + void actualize();
-                + void show();
+                + void actualize()
+                + void show()
                 + void setSizeX(unsigned int x)
                 + void setSizeY(unsigned int y)
                 + void setPosX(unsigned int x)
@@ -99,25 +105,27 @@ package GameActors {
                 + unsigned int getPosX() const
                 + unsigned int getPosY() const
             }
+
             class GGameMenu {
-                - m_main_layout: QGridLayout* = nullptr
-                - m_label: QLabel* = nullptr
-                - m_label_exp_recover: QLabel* = nullptr
-                - m_label_exp_load_extension: QLabel* = nullptr
-                - m_label_exp_cards: QLabel* = nullptr
+                - QGridLayout* m_main_layout = nullptr
+                - QLabel* m_label = nullptr
+                - QLabel* m_label_exp_recover = nullptr
+                - QLabel* m_label_exp_load_extension = nullptr
+                - QLabel* m_label_exp_cards = nullptr
 
-                - m_btn_recover: QPushButton* = nullptr
-                - m_btn_load_extension: QPushButton* = nullptr
-                - m_btn_validate: QPushButton* = nullptr
+                - QPushButton* m_btn_recover = nullptr
+                - QPushButton* m_btn_load_extension = nullptr
+                - QPushButton* m_btn_validate = nullptr
 
-                - m_line_edit_cards: QLineEdit* = nullptr
+                - QLineEdit* m_line_edit_cards = nullptr
 
-                + GGameMenu(tar: NotifiableInterface*)
-                + show(): void
-                + validate(): void
-                + usePreviousGame(): void
-                + loadExtension(): void
+                + GGameMenu(NotifiableInterface* tar)
+                + void show()
+                + void validate()
+                + void usePreviousGame()
+                + void loadExtension()
             }
+
             class GPlayerMenu {
                 - QGridLayout* m_main_layout
                 - QPushButton* m_btn_quit
@@ -126,7 +134,7 @@ package GameActors {
                 - QSpinBox* m_spinbox
                 - QLineEdit** m_lines_names
                 - QLabel** m_label_names
-            -  unsigned short m_nb_player
+                - unsigned short m_nb_player
 
                 + GPlayerMenu(NotifiableInterface* tar)
                 + ~GPlayerMenu()
@@ -157,37 +165,40 @@ package GameActors {
                 + void pushResults()
                 + void show()
             }
+
             class GValidateMenu {
                 - QLabel* m_label
                 - QGridLayout* m_layout
                 - QPushButton* m_btn_validate
-                - QPushButton *m_btn_reject
+                - QPushButton* m_btn_reject
 
-                + GValidateMenu(NotifiableInterface* tar);
-                + ~GValidateMenu();
-                + void show() override;
-                + void validate();
-                + void reject();
+                + GValidateMenu(NotifiableInterface* tar)
+                + ~GValidateMenu()
+                + void show() override
+                + void validate()
+                + void reject()
             }
 
             GMenu <|-- GGameMenu
-            GMenu  <|-- GPlayerMenu
+            GMenu <|-- GPlayerMenu
+            GMenu <|-- GTokenMenu
+            GMenu <|-- GValidateMenu
         }
     }
 
     package GraphicalComponents {
         package Console {
             class CPlayerBoard {
-                - m_max_height: const unsigned short int = 42
-                - m_max_width: const unsigned short int = 140
-                - m_x_swift: unsigned short int = 0
-                - m_y_swift: unsigned short int = 0
+                - const unsigned short m_max_height = 42
+                - const unsigned short m_max_width = 140
+                - unsigned short m_x_swift = 0
+                - unsigned short m_y_swift = 0
                 + CPlayerBoard()
-                + show(): void
+                + void show()
             }
             class CDeckTile {
-                - unsigned short int const m_max_height
-                - unsigned short int const m_max_width
+                - const unsigned short m_max_height
+                - const unsigned short m_max_width
                 + CDeckTile()
                 + void show()
             }
@@ -197,114 +208,71 @@ package GameActors {
             class GDeckCard {
                 + GDeckCard()
             }
-            class GPlayerBoard{
+            class GPlayerBoard {
                 + GPlayerBoard()
-            } 
+            }
             class WidgetHexBoard {
-                - max_size: int
-                - m_layout: QVBoxLayout*
-                + WidgetHexBoard(parent: QWidget* = nullptr, size: int = 41)
+                - int max_size
+                - QVBoxLayout* m_layout
+                + WidgetHexBoard(QWidget* parent = nullptr, int size = 41)
                 + ~WidgetHexBoard() = default
-                + initHexTiles(): void
-                + addTile(x: int, y: int): void
+                + void initHexTiles()
+                + void addTile(int x, int y)
                 <<signal>>
             }
-        }
-    }
+            class GDeckTile {
+                - GDeckTile(QObject* parent = nullptr)
+                - void construct()
+                - GDeckTile(const GDeckTile&) = delete
+                - GDeckTile& operator=(const GDeckTile&) = delete
+                - ~GDeckTile() = default
+                - QVBoxLayout* tiles
+                - QVBoxLayout* tokens
+                - QHBoxLayout* deck
+                - QWidget* widget
+                - ClickableLabel* ti1
+                - ClickableLabel* ti2
+                - ClickableLabel* ti3
+                - ClickableLabel* ti4
+                - std::vector<ClickableLabel*> tilesL
+                - ClickableLabel* to1
+                - ClickableLabel* to2
+                - ClickableLabel* to3
+                - ClickableLabel* to4
+                - std::vector<ClickableLabel*> tokenL
 
-    class Player {
-        - m_name: std::string
-        - m_id: const unsigned int
-        - m_score: unsigned int = 0
-        - nb_players: static unsigned int
-        - m_tiles: std::vector<GameTile*>
-        - m_tokens: std::vector<WildlifeToken*>
-        - m_board: PlayerBoard* = nullptr
-        - m_tiles_scores: std::vector<double>
-        - m_tokens_scores: std::vector<double>
+                + void update()
+                + void show()
+                + static GDeckTile& getInstance()
+                --
+                + signal tileClicked(int index)
+                + signal tokenClicked(int index)
+            }
+            class ClickableLabel {
+                + ClickableLabel(QWidget* parent = nullptr)
+                --
+                + signal clicked()
+                # void mousePressEvent(QMouseEvent* event)
+            }
+            class GraphXView {
+                + GraphXView(QGraphicsScene* scene, QWidget* parent = nullptr)
+                --
+                + signal rightClickAt(QPointF scenePos)
+                # void mousePressEvent(QMouseEvent* event)
+                # void wheelEvent(QWheelEvent* event)
+            }
+            class PixmapFactory {
+                - PixmapFactory() = delete
+                --
+                + static QPixmap createTile(const GameTile* tile)
+                + static QString matchToken(Wildlife wild)
+                --
+                - static QPixmap createIconWithOverlay(QString basePath, QString token1, int rot = 0, QString token2 = QString(), QString token3 = QString())
+                - static QString matchTile(const GameTile* tile)
+                - static QString matchToken(const GameTile* tile, int token)
+            }
 
-        + Player(name: const std::string&)
-        + Player(const Player&) = default
-        + getNbPlayers(): static int
-        + getName() const: const std::string
-        + getId() const: unsigned int
-        + getScore() const: unsigned int
-        + getBoard() const: PlayerBoard*
-        + getTilesScores() const: std::vector<double>
-        + getTokensScores() const: std::vector<double>
-
-        + setName(name: const std::string&): void
-        + addScore(points: unsigned int): void
-        + setTilesScores(scores: const std::vector<double>&): void
-        + setTokensScores(scores: const std::vector<double>&): void
-        + addTile(tile: GameTile*): void
-        + addToken(token: WildlifeToken*): void
-        + setBoard(board: PlayerBoard*): void
-        + ~Player()
-        + getSaveString() const:
-    }
-
-    class Game {
-        - m_nb_players: unsigned short
-        - m_player_menu: Menu<std::string>*
-        - m_game_menu: Menu<std::tuple<std::string, std::string>>*
-        - m_is_console: const bool
-        - m_players: std::vector<Player*>
-        - m_cards: GameTile**
-        - m_nb_cards: unsigned short int
-        - m_status: GameStatus
-        - m_scorer: Score
-
-        - Menu<unsigned short int>* m_menu_token
-        - Menu<bool>* m_menu_validate
-        - DeckTile* m_decktile
-        - bool m_is_waiting_for_position
-        - bool m_is_waiting_to_place_tile
-        - GameTile* m_tile_to_add
-        - const WildlifeToken* m_token_to_add
-        - PlayerBoard* m_board_before_change
-        - std::vector<const WildlifeToken*> m_tokens
-        - GameTile* m_starter_cards[5][3];
-        - unsigned short int current_tour = 0;
-        - unsigned short int current_player = 0;
-        - std::vector <void *> throwaway;
-        - NotifiableInterface* const m_target;
-        - void endTurn();
-
-        + Game(is_console: const bool = false)
-        + ~Game()
-        + getSaveString() const: std::string
-        + readCards(path: std::string): void
-        + play(): void
-        + init(): void
-        + getInfoConsole(): void
-        + getInfoGX(): void
-        + scoreGame(): void
-        + getGameStatus() const: GameStatus
-        + notify(code: unsigned int): void
-        + restart(): void
-        + quit(): void
-
-        + getTileAndToken(unsigned short int pos_tile, unsigned short int pos_token = -1) : void
-        + makePlayerTurn() : void
-        + initPlayerboards() : void
-        + notifyInterface(unsigned int code) : void
-        + const DeckTile* getDeckTile() const : : void
-    }
-
-    Player *-- "0..1" PlayerBoard
-    Player *-- "0..*" GameTile
-    Player *-- "0..*" WildlifeToken
-
-    Game --|> SalvableThing
-    Game --|> NotifiableInterface
-    Game *-- "1..4" Player
-    Game *-- PlayerBoard
-    Game *-- "41..81" GameTile
-    Game *-- Score
-    Game *-- Menu
-}
-
+            GDeckTile --|> DeckTile
 package Gametools {
     package Abstract {
         abstract BaseClass{
@@ -313,26 +281,39 @@ package Gametools {
         }
 
     abstract class DeckTile {
-        -m_deck_tiles : std::vector<GameTile*> 
-        -m_deck_token : std::vector<const WildlifeToken*> 
-        -m_tiles[4] : GameTile* 
-        -m_displayed_tokens[4] :  const WildlifeToken* 
-        -getInstance() : static DeckTile& 
-        -DeckTile();
+        - m_deck_tiles : std::vector<GameTile*>
+        - m_deck_token : std::vector<const WildlifeToken*>
+        - m_tiles[4] : GameTile*
+        - m_displayed_tokens[4] :  const WildlifeToken*
+        - m_expected_card : vector<unsigned short int>
+        - m_expected_token : vector<unsigned short int>
+        - getInstance() : static DeckTile&
+        - DeckTile();
         - {abstract} ~DeckTile()
-        -m_id_token_to_rm : unsigned short int 
-        -m_can_flush : bool
-        -m_id_card_to_rm : unsigned short int 
+        - m_id_token_to_rm : unsigned short int
+        - m_can_flush : bool
+        - m_id_card_to_rm : unsigned short int
 
         + getTile(unsigned short int i) : GameTile*
         + fillPlate() : int
-        + canFlushWithoutNaturetoken() const : bool 
+        + canFlushWithoutNaturetoken() const : bool
         + addTile(GameTile* tile) : void
         + addToken(const WildlifeToken* token) : void
         + shuffle() : void
         + clearTokens() : void
         + validateChanges() : void
-        + getCouple(int id_card, int id_token = -1) : std::tuple<GameTile*, const WildlifeToken*> 
+        + reinterpetString(def: const std::string&) : void
+        + getSaveString() const : std::string
+        + getCouple(id_card: int, id_token=-1) : tuple<GameTile*, const WildlifeToken*>
+        + getCardsToAdd() : vector<unsigned short int>&
+        + getTokensToAdd() : vector<unsigned short int>&
+        + clear() : void
+
+        # DeckTile()
+        # ~DeckTile()
+        # DeckTile(const DeckTile&) = delete
+        # operator=(const DeckTile&) = delete
+        + static getInstance() : DeckTile&
         }
 
         abstract NotifiableInterface {
@@ -372,20 +353,36 @@ package Gametools {
             + resetPointedCell() : void
             + setPointedCell(HexCell cell) : void
             + getTarget()const : NotifiableInterface*
-            + getTile(int const &q, int const &r) const : GameTile* 
+            + getTile(int const &q, int const &r) const : GameTile*
             + pointCell(int q, int r) : void
         }
 
-        abstract TileHolder {
-            - GameTile ***m_tiles
-            - int m_size_x
-            - int m_size_y
+       abstract class TileHolder extends Printable, SalvableThing {
+            - m_tiles : GameTile***
+            - m_size_x : int
+            - m_size_y : int
 
-            + TileHolder(int size_x, int size_y)
+            + TileHolder(size_x : int, size_y : int)
             + ~TileHolder()
-            + GameTile* getTile(int posx, int posy) const
-            + void addTile(GameTile& tile, unsigned int* q, unsigned int* r, bool overwrite)
-            + {abstract} void print();
+            + getTile(posx : int, posy : int) const : GameTile*
+            + addTile(tile : GameTile&, x : int, y : int, overwrite : bool = false) : void
+            + removeTile(x : int, y : int) : void
+            + getFilledTilePositions() const : vector<pair<int, int>>
+            + getFreeAdjacentCells(max_size : int) const : vector<HexCell>
+            + getIterator() const : Iterator
+            + show() = 0
+
+            class Iterator {
+                - m_holder : const TileHolder*
+                - m_x : ushort
+                - m_y : ushort
+
+                + Iterator(tar : const TileHolder*)
+                - Iterator(const Iterator&) = delete
+                - operator=(const Iterator&) = delete
+                + operator++(int) : Iterator&
+                + getValue() const : const GameTile*
+                + isDone() const : bool
         }
 
         BaseClass <|-- Printable
@@ -402,22 +399,34 @@ package Gametools {
         SalvableThing <|-- PlayerBoard
         SalvableThing <|-- Player
 
-        PlayerBoard <|-- TileHolder 
+        PlayerBoard <|-- TileHolder
         PlayerBoard <|-- CPlayerBoard
         PlayerBoard <|-- GPlayerBoard
         PlayerBoard o--  "1..1" Player
+        PlayerBoard --> NotifiableInterface
+        PlayerBoard --> GameTile
+        PlayerBoard --> WildlifeToken
+        PlayerBoard --> HexCell
+        PlayerBoard --> Wildlife
 
-        TileHolder <|-- DeckTile 
+        TileHolder <|-- DeckTile
+
+        DeckTile ..|> Printable
+        DeckTile ..|> SalvableThing
+        Game --> DeckTile : friend
     }
+
     package Tiling {
         class GameTile {
             - Biome m_biomes[6]
+            - Biome m_first_biome
             - unsigned char m_rotation
-            - WildlifeToken *m_wltoken
+            - const WildlifeToken *m_wltoken
             - Wildlife *m_possible_wltoken
             - int m_numtypes
             - const unsigned int m_id
-            - GameTile(const unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy)
+
+            - GameTile(std::string)
             - ~GameTile()
             - GameTile& operator=(const GameTile& oth)
             - GameTile(const GameTile& oth)
@@ -426,19 +435,22 @@ package Gametools {
             + draw() : int
             + getID() const : unsigned int
 
-            + setPos(int const &q, int const &r) : void 
+            + setPos(int const &q, int const &r) : void
             + getNbWildlife() const : int
-            + getWildlife(unsigned short int nb) const : Wildlife 
+            + getWildlife(unsigned short int nb) const : Wildlife
             + GameTile(unsigned int id, Biome biomes[6], Wildlife *type, int num_types, int posx, int posy)
             + getBiome(unsigned short int number) const : Biome
             + getId() const : unsigned int
-            + getToken() const : const WildlifeToken* 
-            + setWildLifeToken(const WildlifeToken* wlt) : inline void 
+            + getToken() const : const WildlifeToken*
+            + setWildLifeToken(const WildlifeToken* wlt) : inline void
             + matchesType(Wildlife type) const : bool
             + matchesType(Biome biome) const : bool
-            + isKeystone(const std::string& description) const : bool 
+            + isKeystone(const std::string& description) const : bool
             + show(unsigned short int size = 4) const : void
-
+            + getFirstBiome() const : const Biome&
+            + showCmd(unsigned short int = 4) const : void
+            + std::string getSaveString() const
+            + unsigned int getRotation() const
         }
         class HexCell {
             - int m_q
@@ -471,7 +483,10 @@ package Gametools {
             + getNeighbors() const : std::vector<HexCell>
         }
 
-        GameTile --> Background
+        GameTile ..> Wildlife
+        GameTile ..> WildlifeToken
+        GameTile --|> HexCell
+        GameTile --|> SalvableThing
 
         HexCell <|-- GameTile
     }
@@ -481,6 +496,8 @@ package Gametools {
         - int m_xdprintpos
         - int m_ydprintpos
         + WildlifeToken(Wildlife type, int x_dpos, int y_dpos)
+        + getWildlifeType() const : Wildlife
+
     }
 }
 
@@ -504,36 +521,156 @@ package Scoring {
         + computeScore(board: const PlayerBoard&) const: std::vector<double>
         + ~ScoringStrategy() = default
     }
+    package ScoreUtils {
 
-    class TileScoringStrategy { 
-        + TileScoringStrategy()
-        + computeScore(board: const PlayerBoard&) const: std::vector<double>
+      class UnionFind {
+        - std::vector<int> parent
+        - std::vector<int> rank
+        + UnionFind(int n)
+        + int find(int x)
+        + void unite(int a, int b)
+        + bool areConnected(int a, int b)
+      }
+
+      struct AdjacencyPolicy {
+        + KeepTile shouldKeep
+        + UniteTile shouldUnite
+        + AdjacencyPolicy(KeepTile k, UniteTile u)
+      }
+
+      class Match {
+        + int matchId
+        + std::vector<GameTile*> tiles
+      }
+
+      ' typedefs / alias
+      interface KeepTile <<functional>> {
+        + bool operator()(GameTile*)
+      }
+      interface UniteTile <<functional>> {
+        + bool operator()(GameTile*, GameTile*)
+      }
+      interface CompareFunction <<functional>> {
+        + bool operator()(int, int)
+      }
+
+      ' Fonctions principales (signatures simplifiées)
+      ' Pas de relations directes car fonctions libres dans le namespace
+      class Functions {
+        + std::unique_ptr<WildlifeScoringStrategy> makeWildlifeStrategy(const std::string&, char)
+        + TileGrid gatherAllTiles(const PlayerBoard&, int size = MAX_SIZE)
+        + TileGrid pruneTiles(const PlayerBoard&, std::vector<GameTile*>, std::function<bool(int,int)>, int threshold)
+        + UnionFind buildUnionFind(const PlayerBoard&, int, const AdjacencyPolicy&, TileGrid&)
+        + TileGrid buildBuckets(const TileGrid&, UnionFind)
+        + TileGrid extractGroups(TileGrid)
+        + TileGrid getComponents(const PlayerBoard&, int, const AdjacencyPolicy&)
+        + AdjacencyPolicy makeBiomePolicy(const PlayerBoard&, Biome)
+        + AdjacencyPolicy makeWildlifePolicy(Wildlife)
+        + AdjacencyPolicy makeNeighborPolicy(const PlayerBoard&, Wildlife, int, CompareFunction)
+        + AdjacencyPolicy makeSingletonPolicy(Wildlife)
+        + AdjacencyPolicy combinePolicies(const AdjacencyPolicy&, const AdjacencyPolicy&)
+        + std::vector<GameTile*> flatten(const std::vector<std::vector<GameTile*>>&)
+        + GameTile* findTile(const std::vector<GameTile*>&, int q, int r)
+        + void getLineFormations(const PlayerBoard&, int, Wildlife, TileGrid&, std::vector<int>&, const std::vector<int>&)
+        + void getRingFormations(const PlayerBoard&, int, Wildlife, TileGrid&, std::vector<int>&, const std::vector<int>&)
+        + void getShapeFormations(const PlayerBoard&, int, Wildlife, TileGrid&, std::vector<int>&, const std::vector<int>&)
+        + void dfs(int idx, int curr_score, int& best_score, const std::vector<int>& points, const TileGrid& candidates, std::unordered_set<GameTile*>& used)
+        + std::vector<std::pair<GameTile*, GameTile*>> getLinesOfSight(const PlayerBoard&, Wildlife)
+        + std::vector<std::vector<HexCell>> getOrientations(const std::vector<HexCell>&)
+        + std::vector<std::vector<HexCell>> getAllTemplates(const std::vector<std::vector<HexCell>>&)
+        + int countUniqueTokensBetween(const PlayerBoard&, GameTile*, GameTile*, Wildlife)
+      }
+
+    }
+    package ScoringStrategies {
+        class TileScoringStrategy {
+            + TileScoringStrategy()
+            + computeScore(board: const PlayerBoard&) const: std::vector<double>
+        }
+
+        abstract WildlifeScoringStrategy {
+            + ~WildlifeScoringStrategy() = default;
+        }
+
+        class VariantScoringStrategy {
+            - variant: Variant
+            + VariantScoringStrategy(v: Variant)
+            + computeScore(board: const PlayerBoard&) const: std::vector<double>
+            + getVariant() const: Variant
+        }
+
+    }
+    package BearScoringCards {
+        class BearScoringCardA {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class BearScoringCardB {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class BearScoringCardC {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class BearScoringCardD {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+    }
+    package ElkScoringCards {
+        class ElkScoringCardA {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class ElkScoringCardB {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class ElkScoringCardC {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class ElkScoringCardD {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+    }
+    package FoxScoringCards {
+        class FoxScoringCardA {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class FoxScoringCardB {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class FoxScoringCardC {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class FoxScoringCardD {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+    }
+    package HawkScoringCards {
+        class HawkScoringCardA {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class HawkScoringCardB {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class HawkScoringCardC {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class HawkScoringCardD {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+    }
+    package SalmonScoringCards {
+        class SalmonScoringCardA {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class SalmonScoringCardB {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class SalmonScoringCardC {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
+        class SalmonScoringCardD {
+            + std::vector<double> computeScore(const PlayerBoard& board) const
+        }
     }
 
-    abstract WildlifeScoringStrategy {
-        + ~WildlifeScoringStrategy() = default;
-    }
-
-    class VariantScoringStrategy {
-        - variant: Variant
-        + VariantScoringStrategy(v: Variant)
-        + computeScore(board: const PlayerBoard&) const: std::vector<double>
-        + getVariant() const: Variant
-    }
-
-
-    class BearScoringCardA {
-        + void score(Cards card, Wildlife type)
-    }
-    class BearScoringCardB {
-        + void score(Cards card, Wildlife type)
-    }
-    class BearScoringCardC {
-        + void score(Cards card, Wildlife type)
-    }
-    class BearScoringCardD {
-        + void score(Cards card, Wildlife type)
-    }
 
     ScoringStrategy <|-- TileScoringStrategy
     ScoringStrategy <|-- WildlifeScoringStrategy
@@ -543,6 +680,27 @@ package Scoring {
     WildlifeScoringStrategy --|> BearScoringCardB
     WildlifeScoringStrategy --|> BearScoringCardC
     WildlifeScoringStrategy --|> BearScoringCardD
+
+    WildlifeScoringStrategy --|> ElkScoringCardA
+    WildlifeScoringStrategy --|> ElkScoringCardB
+    WildlifeScoringStrategy --|> ElkScoringCardC
+    WildlifeScoringStrategy --|> ElkScoringCardD
+
+    WildlifeScoringStrategy --|> HawkScoringCardA
+    WildlifeScoringStrategy --|> HawkScoringCardB
+    WildlifeScoringStrategy --|> HawkScoringCardC
+    WildlifeScoringStrategy --|> HawkScoringCardD
+
+    WildlifeScoringStrategy --|> SalmonScoringCardA
+    WildlifeScoringStrategy --|> SalmonScoringCardB
+    WildlifeScoringStrategy --|> SalmonScoringCardC
+    WildlifeScoringStrategy --|> SalmonScoringCardD
+
+    WildlifeScoringStrategy --|> FoxScoringCardA
+    WildlifeScoringStrategy --|> FoxScoringCardB
+    WildlifeScoringStrategy --|> FoxScoringCardC
+    WildlifeScoringStrategy --|> FoxScoringCardD
+
 
 }
 
