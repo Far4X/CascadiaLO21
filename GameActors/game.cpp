@@ -193,12 +193,14 @@ void Game::resurrectGame(){
 
     if (m_desc_cards.size() > 1) {
         m_scorer.configureCards(m_desc_cards);
-        if (current_tour >= MAX_TURN) {
-            scoreGame();
-        }
-        m_status = GameStatus::Finished;
     }
 
+    if(!m_is_console)GraphXVue::instance()->gameStart(MAX_TURN-current_tour,m_players); // on initialise les variables de la vue
+
+    if (current_tour >= MAX_TURN) {
+        scoreGame();
+        m_status = GameStatus::Finished;
+    }
     makePlayerTurn();
 }
 

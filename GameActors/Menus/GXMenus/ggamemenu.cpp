@@ -18,6 +18,8 @@ GGameMenu::GGameMenu(NotifiableInterface *tar) : GMenu<std::tuple<std::string, s
     m_line_edit_cards = new QLineEdit(QString("AAAAA"), this);
     m_line_edit_variant = new QLineEdit(QString("F"), this);
 
+    QLineEdit* lien = new QLineEdit(QString("les regles : bit.ly/444pnGZ"),this);
+
     m_main_layout->addWidget(m_label, 0, 0, 1, 4);
 
     m_main_layout->addWidget(m_label_exp_recover, 1, 0, 1, 1);
@@ -33,6 +35,7 @@ GGameMenu::GGameMenu(NotifiableInterface *tar) : GMenu<std::tuple<std::string, s
     m_main_layout->addWidget(m_line_edit_cards, 4, 1, 1, 1);
 
     m_main_layout->addWidget(m_btn_validate, 5, 1, 1, 1);
+    m_main_layout->addWidget(lien,5,0,1,1);
 
     QObject::connect(m_btn_validate, &QPushButton::clicked, this, &GGameMenu::validate);
     QObject::connect(m_btn_use_variant, &QPushButton::clicked, this, &GGameMenu::useVariant);
